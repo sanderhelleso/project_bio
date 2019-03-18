@@ -7,7 +7,6 @@ package models
 import (
 	"errors"
 	"os"
-	"fmt"
 	"../lib"
 
 	"github.com/jinzhu/gorm"
@@ -25,17 +24,10 @@ var (
 	ErrInvalidID = errors.New("models: The provided user ID was invalid")
 )
 
-// User represent a user in the project
-type User struct {
-	gorm.Model          // `ID`, `CreatedAt`, `UpdatedAt`, `DeletedAt`
-	Username     string `gorm:"size:30;not null;unique_index"`
-	InstagramURL string `gorm:"unique"`
-}
-
-// UserService represents a connection layer
-// between the user model and database ops
-type UserService struct {
-	db *gorm.DB
+// Create will create the provided user and backfill
+// data with ID, CreatedAt and UpdatedAt fields
+func (us *UserService) Create(user *User) error {
+	return us.db.Create(user).Error
 }
 
 // NewUserService creates a connection to the database
@@ -76,18 +68,12 @@ func (us *UserService) Close() error {
 	return us.db.Close()
 }
 
-func connectionInfo() string {
-	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-	os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME"))
-	return psqlInfo
-}
-
 // ConnectToDB will attempt to connect to the database
 // using the variables sat in the .env configuration
 // returns a pointer to a 'UserService' or 
 // the function will panic with error and kill app
 func ConnectToDB() (*UserService) {
-	us, err := NewUserService(connectionInfo())
+	us, err := NewUserService(lib.ConnectionInfo())
 	lib.Must(err)
 	defer us.Close()
 
@@ -95,4 +81,17 @@ func ConnectToDB() (*UserService) {
 	us.AutoMigrate()
 
 	return us
+}
+
+// User represent a user in the project
+type User struct {
+	gorm.Model          // `ID`, `CreatedAt`, `UpdatedAt`, `DeletedAt`
+	Username     string `gorm:"size:30;not null;unique_index"`
+	InstagramURL string `gorm:"unique"`
+}
+
+// UserService represents a connection layer
+// between the user model and database ops
+type UserService struct {
+	db *gorm.DB
 }
