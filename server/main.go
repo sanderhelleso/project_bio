@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"./models"
+	"./controllers"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -18,13 +19,15 @@ func main() {
 	}
 
 	// connecto to database
-	models.ConnectToDB()
+	uS := models.ConnectToUserServiceDB()
 
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	r.Run() // listen and serve on 0.0.0.0:5000
+	// create user controller
+	uC := controllers.NewUserController(uS)
+
+	router := gin.Default()
+	v1 := router.Group("/api/v1") 
+	{
+		v1.POST("/signup", uC.Create)
+	}
+	router.Run() // listen and serve on 0.0.0.0:5000
 }

@@ -5,6 +5,7 @@
 package models
 
 import (
+	"fmt"
 	"errors"
 	"os"
 	"../lib"
@@ -68,11 +69,11 @@ func (us *UserService) Close() error {
 	return us.db.Close()
 }
 
-// ConnectToDB will attempt to connect to the database
-// using the variables sat in the .env configuration
-// returns a pointer to a 'UserService' or 
-// the function will panic with error and kill app
-func ConnectToDB() (*UserService) {
+// ConnectToUserServiceDB will attempt to connect to 
+// the database using the variables sat in the .env 
+// configuration returns a pointer to a 'UserService'
+// or the function will panic with error and kill app
+func ConnectToUserServiceDB() (*UserService) {
 	us, err := NewUserService(lib.ConnectionInfo())
 	lib.Must(err)
 	defer us.Close()
@@ -80,6 +81,7 @@ func ConnectToDB() (*UserService) {
 	//us.DestructiveReset()
 	us.AutoMigrate()
 
+	fmt.Println("Connected to database...")
 	return us
 }
 

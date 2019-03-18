@@ -1,11 +1,17 @@
 package controllers
 
 import (
-	"github.com/gorilla/schema"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"../models"
-	"../lib"
 )
+
+// NewUserController is used to create a new User controller
+func NewUserController(us *models.UserService) *UserController {
+	return &UserController {
+		us: us,
+	}
+}
 
 // Create is used to process the signuo form
 // when a suer subits the form. This is used to
@@ -15,29 +21,32 @@ import (
 // ROUTE:	/signup
 //
 // BODY:	SignupForm
-func (u *UserController) Create(w http.ResponseWriter, req *http.Request) {
-
-	// inti decoder
-	dec := schema.NewDecoder()
-	var form SignupForm
+func (u *UserController) Create(c *gin.Context) {
 
 	// decode form
-	err := dec.Decode(&form, req.PostForm)
-	lib.Must(err)
+	un := c.PostForm("username")
 
 	// create user struct
 	user := models.User {
-		Username: form.Username,
+		Username: un,
 	}
 
 	// attempt to create and store user in DB
-	err = u.us.Create(&user); 
-	if err != nil {
+	err := u.us.Create(&user); if err != nil {
 
 		// if any error occured, send back 500 (internal server error)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": http.StatusInternalServerError,
+			"message": "Something went wrong when attempting to signup",
+		})
 		return
 	}
+
+	// send back status created
+	c.JSON(http.StatusCreated, gin.H{
+		"status": http.StatusCreated,
+		"message": "Signup successfull!",
+	})
 }
 
 // SignupForm represents the request body
