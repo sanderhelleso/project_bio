@@ -1,8 +1,14 @@
+// Package models contains models, every model has an addional 'service' layer
+// that meditates communication between the releated controller layer.
+// The 'service' layer contains the business logic, in particular validation
+// and util methods for the database
 package models
 
 import (
 	"errors"
 	"os"
+	"fmt"
+	"../lib"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -40,7 +46,7 @@ type UserService struct {
 // - If the connection was not successfull, return nil for 'UserService'
 //	and the error that occured during initialization of method
 func NewUserService(connectionInfo string) (*UserService, error) {
-	db, err := gorm.Open(os.Getenv("db"), connectionInfo)
+	db, err := gorm.Open(os.Getenv("DB_TYPE"), connectionInfo)
 	if err != nil {
 		return nil, err
 	}
@@ -68,4 +74,25 @@ func (us *UserService) DestructiveReset() error {
 // Close will close the user service connection to the database
 func (us *UserService) Close() error {
 	return us.db.Close()
+}
+
+func connectionInfo() string {
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+	os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME"))
+	return psqlInfo
+}
+
+// ConnectToDB will attempt to connect to the database
+// using the variables sat in the .env configuration
+// returns a pointer to a 'UserService' or 
+// the function will panic with error and kill app
+func ConnectToDB() (*UserService) {
+	us, err := NewUserService(connectionInfo())
+	lib.Must(err)
+	defer us.Close()
+
+	//us.DestructiveReset()
+	us.AutoMigrate()
+
+	return us
 }
