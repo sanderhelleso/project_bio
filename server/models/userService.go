@@ -38,7 +38,7 @@ func (us *UserService) Create(user *User) error {
 		return nil 
 	}
 
-	user.PasswordHash = string(hashedBytes)
+	user.PasswordHash = string(hashedBytes) // byteslice -> string
 	user.Password = ""
 
 	return us.db.Create(user).Error
