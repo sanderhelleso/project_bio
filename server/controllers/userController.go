@@ -35,8 +35,7 @@ func (u *UserController) Create(c *gin.Context) {
 
 	// create user struct
 	user := models.User {
-		Username: c.PostForm("username"),
-		InstagramURL: c.PostForm("instagramURL"),
+		Email: c.PostForm("email"),
 	}
 
 	// attempt to create and store user in DB
@@ -60,8 +59,7 @@ func (u *UserController) Create(c *gin.Context) {
 // SignupForm represents the request body
 // to the endpoint /signup. 
 type SignupForm struct {
-	Username 	 string `form:"username" binding:"required"`
-	InstagramURL string `form:"instagramURL" binding:"required"`
+	Email string `form:"email" binding:"required"`
 }
 
 // UserController represents the controller

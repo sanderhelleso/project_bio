@@ -9,6 +9,8 @@ import (
 	"errors"
 	"os"
 	"../lib"
+	"golang.org/x/crypto/bcrypt"
+
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -28,6 +30,17 @@ var (
 // Create will create the provided user and backfill
 // data with ID, CreatedAt and UpdatedAt fields
 func (us *UserService) Create(user *User) error {
+
+	// encrypt password
+	pwBytes := []byte(user.Password + os.Getenv("USER_PWD_PEPPER"))
+	hashedBytes, err := bcrypt.GenerateFromPassword(pwBytes, bcrypt.DefaultCost)
+	if err != nil { 
+		return nil 
+	}
+
+	user.PasswordHash = string(hashedBytes)
+	user.Password = ""
+
 	return us.db.Create(user).Error
 }
 
@@ -77,7 +90,7 @@ func ConnectToUserServiceDB() (*UserService) {
 	us, err := NewUserService(lib.ConnectionInfo())
 	lib.Must(err)
 
-	//us.DestructiveReset()
+	us.DestructiveReset()
 	us.AutoMigrate()
 
 	fmt.Println("Connected to database...")
@@ -87,8 +100,9 @@ func ConnectToUserServiceDB() (*UserService) {
 // User represent a user in the project
 type User struct {
 	gorm.Model          // `ID`, `CreatedAt`, `UpdatedAt`, `DeletedAt`
-	Username     string `gorm:"size:30;not null;unique_index"`
-	InstagramURL string `gorm:"unique"`
+	Email	    	string `gorm:"size:30;not null;unique_index"`
+	Password		string `gorm:"-"` // ignore in DB
+	PasswordHash	string `gorm:"not null"`
 }
 
 // UserService represents a connection layer
