@@ -23,27 +23,35 @@ func NewUserController(us *models.UserService) *UserController {
 // BODY:	SignupForm
 func (u *UserController) Create(c *gin.Context) {
 
-	// decode form
-	un := c.PostForm("username")
+	// validate form data
+	var form SignupForm
+	if c.Bind(&form) != nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H {
+			"status": http.StatusUnprocessableEntity,
+			"message": "Unable to process form data due to invalid format",
+		})
+		return
+	}
 
 	// create user struct
 	user := models.User {
-		Username: un,
+		Username: c.PostForm("username"),
+		InstagramURL: c.PostForm("instagramURL"),
 	}
 
 	// attempt to create and store user in DB
 	err := u.us.Create(&user); if err != nil {
 
 		// if any error occured, send back 500 (internal server error)
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusInternalServerError, gin.H {
 			"status": http.StatusInternalServerError,
 			"message": "Something went wrong when attempting to signup",
 		})
 		return
 	}
 
-	// send back status created
-	c.JSON(http.StatusCreated, gin.H{
+	// send back status created (201)
+	c.JSON(http.StatusCreated, gin.H {
 		"status": http.StatusCreated,
 		"message": "Signup successfull!",
 	})
@@ -51,10 +59,9 @@ func (u *UserController) Create(c *gin.Context) {
 
 // SignupForm represents the request body
 // to the endpoint /signup. 
-//
-// Params: username: string
 type SignupForm struct {
-	Username string `schema:"username"`
+	Username 	 string `form:"username" binding:"required"`
+	InstagramURL string `form:"instagramURL" binding:"required"`
 }
 
 // UserController represents the controller

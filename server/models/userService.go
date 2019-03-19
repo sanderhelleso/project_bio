@@ -76,7 +76,6 @@ func (us *UserService) Close() error {
 func ConnectToUserServiceDB() (*UserService) {
 	us, err := NewUserService(lib.ConnectionInfo())
 	lib.Must(err)
-	defer us.Close()
 
 	//us.DestructiveReset()
 	us.AutoMigrate()
