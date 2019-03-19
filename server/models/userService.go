@@ -9,6 +9,8 @@ import (
 	"errors"
 	"os"
 	"../lib"
+	"../lib/hash"
+	"../lib/rand"
 	"golang.org/x/crypto/bcrypt"
 
 
@@ -38,9 +40,24 @@ func (us *UserService) Create(user *User) error {
 		return nil 
 	}
 
+	// set password in hashed representation & clear from struct
 	user.PasswordHash = string(hashedBytes) // byteslice -> string
 	user.Password = ""
 
+	// if user has no remember token, generate new,
+	// the token is required to map the correct passwords
+	// encrypted by the HMAC algo for decrypting and compare
+	if user.Remember == "" {
+		token, err := rand.RememberToken()
+		user.RememberHash = us.hmac.Hash(token)
+		if err != nil {
+			return err
+		}
+
+		user.Remember = token
+	}
+
+	user.RememberHash = us.hmac.Hash(user.Remember)
 	return us.db.Create(user).Error
 }
 
@@ -57,8 +74,10 @@ func NewUserService(connectionInfo string) (*UserService, error) {
 		return nil, err
 	}
 
+	hmac := hash.NewHMAC(os.Getenv("HMAC_SECRET_KEY"))
 	return &UserService{
-		db,
+		db: 	db,
+		hmac: 	hmac,
 	}, nil
 }
 
@@ -103,10 +122,13 @@ type User struct {
 	Email	    	string `gorm:"size:30;not null;unique_index"`
 	Password		string `gorm:"-"` // ignore in DB
 	PasswordHash	string `gorm:"not null"`
+	Remember 	 string `gorm:"-"` // ignore in DB
+	RememberHash string `gorm:"not null;unique_index"`
 }
 
 // UserService represents a connection layer
 // between the user model and database ops
 type UserService struct {
 	db *gorm.DB
+	hmac hash.HMAC
 }
