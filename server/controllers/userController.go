@@ -6,6 +6,7 @@ import (
 	"../models"
 	"fmt"
 	"../lib/jwt"
+	"../lib/response"
 )
 
 // NewUserController is used to create a new User controller
@@ -27,7 +28,10 @@ func (u *UserController) Create(c *gin.Context) {
 
 	var form SignupForm
 	if c.Bind(&form) != nil {
-		invalidReqBodyRes(c)
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			"Unable to process form data due to invalid format")
 		return
 	}
 
@@ -38,17 +42,17 @@ func (u *UserController) Create(c *gin.Context) {
 
 	// attempt to create and store user in DB
 	err := u.us.Create(&user); if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H {
-			"status": http.StatusInternalServerError,
-			"message": "Something went wrong when attempting to signup",
-		})
+		response.RespondWithError(
+			c, 
+			http.StatusInternalServerError, 
+			"Something went wrong when attempting to signup")
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H {
-		"status": http.StatusCreated,
-		"message": "Signup successfull!",
-	})
+	response.RespondWithSuccess(
+		c,
+		http.StatusCreated,
+		"Signup successfull!")
 }
 
 // Login is used to verify the provided email address and password
@@ -62,7 +66,10 @@ func (u *UserController) Login(c *gin.Context) {
 
 	var form LoginForm
 	if c.Bind(&form) != nil {
-		invalidReqBodyRes(c)
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			"Unable to process form data due to invalid format")
 		return
 	}
 
@@ -71,17 +78,20 @@ func (u *UserController) Login(c *gin.Context) {
 	if err != nil {
 		switch err {
 			case models.ErrNotFound:
-				c.JSON(http.StatusUnprocessableEntity, gin.H {
-					"status": http.StatusUnprocessableEntity,
-					"message": "The email provided was invalid",
-				})
+				response.RespondWithError(
+					c, 
+					http.StatusUnprocessableEntity,
+					"The email provided was invalid")
 			case models.ErrInvalidPassword:
-				c.JSON(http.StatusUnprocessableEntity, gin.H {
-					"status": http.StatusUnprocessableEntity,
-					"message": "The password provided was invalid",
-				})
+				response.RespondWithError(
+					c, 
+					http.StatusUnprocessableEntity,
+					"The password provided was invalid")
 			default:
-				internalServerErrRes(c)
+				response.RespondWithError(
+					c, 
+					http.StatusUnprocessableEntity,
+					"Something went wrong when performing action")
 		}
 		return
 	}
@@ -89,7 +99,10 @@ func (u *UserController) Login(c *gin.Context) {
 	// generate valid JWT
 	validToken, err := jwt.GenerateJWT(user.ID)
 	if err != nil {
-		internalServerErrRes(c)
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity,
+			"Something went wrong when performing action")
 		return
 	}
 
@@ -98,24 +111,6 @@ func (u *UserController) Login(c *gin.Context) {
 		"status": 	http.StatusFound,
 		"message": 	"Login successfull!",
 		"token":	validToken,
-	})
-}
-
-// internalServerErrRes sends back response message about an,
-// internal server error with the status code of 500
-func internalServerErrRes(c *gin.Context) {
-	c.JSON(http.StatusInternalServerError, gin.H {
-		"status": http.StatusInternalServerError,
-		"message": "Something went wrong when performing action",
-	})
-}
-
-// invalidReqBodyRes sends back response message, notifying
-// users about the error that there was problems with req body
-func invalidReqBodyRes(c *gin.Context) {
-	c.JSON(http.StatusUnprocessableEntity, gin.H {
-		"status": http.StatusUnprocessableEntity,
-		"message": "Unable to process form data due to invalid format",
 	})
 }
 

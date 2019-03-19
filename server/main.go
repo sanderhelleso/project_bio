@@ -4,6 +4,7 @@ import (
 	"log"
 	"./models"
 	"./controllers"
+	"./lib/middelware"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -26,7 +27,8 @@ func main() {
 
 	// connect router and API v1
 	router := gin.Default()
-	v1 := router.Group("/api/v1") 
+	v1 := router.Group("/api/v1")
+	v1.Use(middelware.RequireToken)
 	{
 		v1.POST("/signup", uC.Create)
 		v1.POST("/login", uC.Login)
