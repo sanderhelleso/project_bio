@@ -12,6 +12,7 @@ func AuthRoutes(router *gin.Engine, uc *controllers.UserController) {
 	{
 		v1.POST("/signup", uc.Create)
 		v1.POST("/login", uc.Login)
+		
 		v1.Use(middelware.RequireToken)
 		v1.DELETE("/delete", uc.Delete)
 	}

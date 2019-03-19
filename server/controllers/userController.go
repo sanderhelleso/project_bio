@@ -37,8 +37,11 @@ func (u *UserController) Create(c *gin.Context) {
 	}
 
 	user := models.User {
-		Email: 		c.PostForm("email"),
-		Password:	c.PostForm("password"),
+		Email: 			c.PostForm("email"),
+		Password:		c.PostForm("password"),
+		FirstName: 		c.PostForm("firstName"),
+		LastName:		c.PostForm("lastName"),
+		InstagramURL:	c.PostForm("instagramURL"),
 	}
 
 	// attempt to create and store user in DB
@@ -151,8 +154,11 @@ func (u *UserController) Login(c *gin.Context) {
 
 // SignupForm represents the request body to the endpoint /signup. 
 type SignupForm struct {
-	Email 		string `form:"email" binding:"required"`
-	Password 	string `form:"password" binding:"required"`
+	Email 			string `form:"email" binding:"required"`
+	Password 		string `form:"password" binding:"required"`
+	FirstName 		string `form:"firstName" binding:"required"`
+	LastName 		string `form:"lastName" binding:"required"`
+	InstagramURL 	string `form:"instagramURL"`
 }
 
 // LoginForm represents the request body to the endpoint /login 
