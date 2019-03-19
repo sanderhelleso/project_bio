@@ -28,6 +28,8 @@ var (
 	// to a method where a valid ID is required for the method to proccess
 	ErrInvalidID = errors.New("models: The provided user ID was invalid")
 
+	// ErrInvalidPassword is returned when an invalid password
+	// is used when attempting to authenticate a user
 	ErrInvalidPassword = errors.New("models: incorrect password provided")
 )
 
@@ -40,19 +42,16 @@ var (
 // - If the email and password are both valid, this will return user, nil
 //
 // Otherwise if another error is encountered this will return nil, error
-func (us *UserService) Autheticate(email, password string) (*User, error) {
+func (us *UserService) Authenticate(email, password string) (*User, error) {
 
 	// find user by provided email
-	foundUser, err := ByEmail(email)
+	foundUser, err := us.ByEmail(email)
 	if err != nil {
 		return nil, err
 	}
 
 	// compare found users passwordHash, with decrypted provided password
-	err = bcrypt.CompareHashAndPassword(
-		[]byte(foundUser.PasswordHash),
-		[]byte(password + os.Getenv("USER_PWD_PEPPER"))
-	)
+	err = bcrypt.CompareHashAndPassword([]byte(foundUser.PasswordHash), []byte(password + os.Getenv("USER_PWD_PEPPER")))
 
 	// handle errors after case occured
 	if err != nil {

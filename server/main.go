@@ -24,11 +24,12 @@ func main() {
 	// create user controller
 	uC := controllers.NewUserController(uS)
 
+	// connect router and API v1
 	router := gin.Default()
 	v1 := router.Group("/api/v1") 
 	{
 		v1.POST("/signup", uC.Create)
-		v1.POST("/login", uC.Authenticate)
+		v1.POST("/login", uC.Login)
 	}
 	router.Run() // listen and serve on 0.0.0.0:5000
 }
