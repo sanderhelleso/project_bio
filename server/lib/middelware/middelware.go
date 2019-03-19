@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"github.com/gin-gonic/gin"
 	"../response"
+	"../jwt"
 	"strings"
 )
 
@@ -19,9 +20,12 @@ func RequireToken(c *gin.Context) {
 		return
 	}
 
+	// get the token from the bearer header
 	token := strings.Split(bearer, "Bearer ")[1]
-	response.RespondWithError(c, http.StatusForbidden, token)
-	return
-
+	if !jwt.CompareJWT(token) {
+		response.RespondWithError(c, http.StatusForbidden, "Invalid authentication token")
+		return
+	}
+	
 	c.Next()
 }  
