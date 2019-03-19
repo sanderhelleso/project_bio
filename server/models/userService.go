@@ -27,7 +27,45 @@ var (
 	// ErrInvalidID is returned when an invalid user ID is provided
 	// to a method where a valid ID is required for the method to proccess
 	ErrInvalidID = errors.New("models: The provided user ID was invalid")
+
+	ErrInvalidPassword = errors.New("models: incorrect password provided")
 )
+
+// Authenticate is used to authenticate a user with the provided email and password. 
+//
+// - If the email address provided is invald, this will return nil, ErrNotFound
+//
+// - If the password provided is invalid, this will return nil, ErrInvalidPassword
+//
+// - If the email and password are both valid, this will return user, nil
+//
+// Otherwise if another error is encountered this will return nil, error
+func (us *UserService) Autheticate(email, password string) (*User, error) {
+
+	// find user by provided email
+	foundUser, err := ByEmail(email)
+	if err != nil {
+		return nil, err
+	}
+
+	// compare found users passwordHash, with decrypted provided password
+	err = bcrypt.CompareHashAndPassword(
+		[]byte(foundUser.PasswordHash),
+		[]byte(password + os.Getenv("USER_PWD_PEPPER"))
+	)
+
+	// handle errors after case occured
+	if err != nil {
+		switch err {
+			case bcrypt.ErrMismatchedHashAndPassword:
+				return nil, ErrInvalidPassword
+			default:
+				return nil, err
+		}
+	}
+
+	return foundUser, nil
+}
 
 // Create will create the provided user and backfill
 // data with ID, CreatedAt and UpdatedAt fields
@@ -59,6 +97,32 @@ func (us *UserService) Create(user *User) error {
 
 	user.RememberHash = us.hmac.Hash(user.Remember)
 	return us.db.Create(user).Error
+}
+
+// ByEmail looks up a user with the given email address
+// and returns that user
+//
+// 1 - user, nil 		- User found
+// 2 - nil, ErrNotFound	- User not found
+// 3 - nil, otherError  - Database error
+func (us *UserService) ByEmail(email string) (*User, error) {
+	var user User 
+	db := us.db.Where("email = ?", email)
+	err := first(db, &user)
+	return &user, err
+}
+
+// first will query using the provided gorm.DB and it will get the
+// first item returned and place it into dst (provided struct). 
+// If nothing is found in the query, it will return ErrNotFound
+func first(db *gorm.DB, dst interface{}) error {
+	err := db.First(dst).Error
+	
+	if err == gorm.ErrRecordNotFound {
+		return ErrNotFound
+	}
+
+	return err
 }
 
 // NewUserService creates a connection to the database

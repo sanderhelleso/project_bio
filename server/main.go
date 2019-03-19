@@ -28,6 +28,7 @@ func main() {
 	v1 := router.Group("/api/v1") 
 	{
 		v1.POST("/signup", uC.Create)
+		v1.POST("/login", uC.Authenticate)
 	}
 	router.Run() // listen and serve on 0.0.0.0:5000
 }
