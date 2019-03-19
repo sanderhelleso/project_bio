@@ -198,10 +198,10 @@ func ConnectToUserServiceDB() (*UserService) {
 	us, err := NewUserService(lib.ConnectionInfo())
 	lib.Must(err)
 
-	//us.DestructiveReset()
+	us.DestructiveReset()
 	us.AutoMigrate()
 
-	fmt.Println("Connected to database...")
+	fmt.Println("Connected to <USER> database...")
 	return us
 }
 
@@ -211,8 +211,12 @@ type User struct {
 	Email	    	string `gorm:"size:30;not null;unique_index"`
 	Password		string `gorm:"-"` // ignore in DB
 	PasswordHash	string `gorm:"not null"`
-	Remember 	 string `gorm:"-"` // ignore in DB
-	RememberHash string `gorm:"not null;unique_index"`
+	Remember 	 	string `gorm:"-"` // ignore in DB
+	RememberHash 	string `gorm:"not null;unique_index"`
+	FirstName	    string `gorm:"size:35;not null"`
+	LastName	   	string `gorm:"size:35;not null"`
+	InstagramURL	string `gorm:"size:255"`
+
 }
 
 // UserService represents a connection layer
