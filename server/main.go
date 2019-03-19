@@ -12,7 +12,6 @@ import (
 func main() {
 
 	// ! REMEMBER TO ADD TO .gitigore IF EVER GOING PUBLIC REPO !
-	// load .env variables
 	err := godotenv.Load()
 	lib.Must(err)
 

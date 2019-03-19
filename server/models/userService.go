@@ -98,6 +98,19 @@ func (us *UserService) Create(user *User) error {
 	return us.db.Create(user).Error
 }
 
+// Delete will remove the provided user from the database,
+// removing all traces of the user and its data
+func (us *UserService) Delete(uid uint) error {
+	
+	// find user by provided ID 
+	user, err := us.ByID(uid)
+	if err != nil {
+		return err
+	}
+	
+	return us.db.Delete(user).Error
+}
+
 // ByEmail looks up a user with the given email address
 // and returns that user
 //
@@ -107,6 +120,19 @@ func (us *UserService) Create(user *User) error {
 func (us *UserService) ByEmail(email string) (*User, error) {
 	var user User 
 	db := us.db.Where("email = ?", email)
+	err := first(db, &user)
+	return &user, err
+}
+
+// ByID looks up a user with the given ID (uid)
+// and returns that user
+//
+// 1 - user, nil 		- User found
+// 2 - nil, ErrNotFound	- User not found
+// 3 - nil, otherError  - Database error
+func (us *UserService) ByID(uid uint) (*User, error) {
+	var user User 
+	db := us.db.Where("ID = ?", uid)
 	err := first(db, &user)
 	return &user, err
 }

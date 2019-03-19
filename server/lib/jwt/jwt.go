@@ -3,12 +3,11 @@ package jwt
 import (
 	"github.com/dgrijalva/jwt-go"
 	"fmt"
-	"time"
 	"os"
 	"errors"
 )
 
-var sign = []byte(os.Getenv("JWT_SECRET_KEY"))
+var sign 	= []byte(os.Getenv("JWT_SECRET_KEY"))
 
 // GenerateJWT generates a new JWT token for use in API endpoint validation
 func GenerateJWT(uid uint) (string, error) {
@@ -16,7 +15,7 @@ func GenerateJWT(uid uint) (string, error) {
 	// create token with claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims {
 		Subject: string(uid),
-		ExpiresAt: time.Now().Add(time.Minute * 30).Unix(),
+		ExpiresAt: 0, 
 	})
 
 	tokenString, err := token.SignedString(sign)
