@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"../models"
 	"fmt"
+	"../lib/jwt"
 )
 
 // NewUserController is used to create a new User controller
@@ -85,10 +86,18 @@ func (u *UserController) Login(c *gin.Context) {
 		return
 	}
 
+	// generate valid JWT
+	validToken, err := jwt.GenerateJWT(user.ID)
+	if err != nil {
+		internalServerErrRes(c)
+		return
+	}
+
 	fmt.Printf("Successfully authenticated user %v...\n", user)
 	c.JSON(http.StatusFound, gin.H {
-		"status": http.StatusFound,
-		"message": "Login successfull!",
+		"status": 	http.StatusFound,
+		"message": 	"Login successfull!",
+		"token":	validToken,
 	})
 }
 

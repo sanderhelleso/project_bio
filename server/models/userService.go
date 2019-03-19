@@ -172,7 +172,7 @@ func ConnectToUserServiceDB() (*UserService) {
 	us, err := NewUserService(lib.ConnectionInfo())
 	lib.Must(err)
 
-	us.DestructiveReset()
+	//us.DestructiveReset()
 	us.AutoMigrate()
 
 	fmt.Println("Connected to database...")
