@@ -6,9 +6,9 @@ import (
 	"../lib/middelware"
 )
 
-// AuthRoutes controll the grouping of auth releated aspects of the app
-func AuthRoutes(router *gin.Engine, uc *controllers.UserController) {
-	v1 := router.Group("/api/v1/auth")
+// UsersRoutes controll the grouping of users releated aspects of the app
+func UsersRoutes(router *gin.Engine, uc *controllers.Users) {
+	v1 := router.Group("/api/v1/users")
 	{
 		v1.POST("/signup", uc.Create)
 		v1.POST("/login", uc.Login)
