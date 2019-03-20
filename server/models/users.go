@@ -5,7 +5,6 @@
 package models
 
 import (
-	"errors"
 	"os"
 	"strings"
 	"regexp"
@@ -16,42 +15,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-var (
-
-	// ErrNotFound is returned when a resource
-	// cannot be found in the database
-	ErrNotFound = errors.New("Resource not found")
-
-	// ErrIDInvalid is returned when an invalid ID is
-	// provided to a method like Delete
-	ErrIDInvalid = errors.New("ID provided was invalid")
-
-	// ErrPasswordIncorrect is returned when an invalid password
-	// is used when attempting to authenticate a user
-	ErrPasswordIncorrect = errors.New("Incorrect password provided")
-
-	// ErrEmailRequired is returned when an email address
-	// is not provided when creating a user
-	ErrEmailRequired = errors.New("Email address is required")
-
-	// ErrEmailInvalid is returned when an email address provided
-	// does not match any of our requirements
-	ErrEmailInvalid = errors.New("Email address is not valid")
-
-	// ErrEmailTaken is returned when an update or create
-	// is attempted with an email address that is already in use
-	ErrEmailTaken = errors.New("Email address is already taken")
-
-	// ErrPasswordTooShort is returned when an update or create is
-	// attempted with a user passord that is less than 8 characters
-	ErrPasswordTooShort = errors.New("Password must be atleast 8 characters long")
-
-	// ErrPasswordRequired is returned when a create is attempted
-	// wihtout a user password provided
-	ErrPasswordRequired = errors.New("Password is required")
-)
-
-// User represent a user in the project
+// User represent a user in the application
 type User struct {
 	gorm.Model          // `ID`, `CreatedAt`, `UpdatedAt`, `DeletedAt`
 	Email	    	string `gorm:"size:30;not null;unique_index"`
@@ -70,7 +34,7 @@ type User struct {
 // 3 - nil, otherError  - Database error
 type UserDB interface {
 
-	// Methods for quering for single users
+	// methods for quering for single users
 	ByID(id uint) (*User, error)
 	ByEmail(email string) (*User, error)
 
@@ -92,6 +56,14 @@ type UserService interface {
 	UserDB
 }
 
+// ensure interface is matching
+var _ UserService = &userService{}
+
+// implementation of interface
+type userService struct {
+	UserDB
+}
+
 // NewUserService connect the user db and validator
 func NewUserService(db *gorm.DB) UserService {
 	ug := &userGorm{db}
@@ -100,14 +72,6 @@ func NewUserService(db *gorm.DB) UserService {
 	return &userService{
 		UserDB: uv,
 	}
-}
-
-// ensure interface is matching
-var _ UserService = &userService{}
-
-// implementation of interface
-type userService struct {
-	UserDB
 }
 
 // Authenticate is used to authenticate a user with the provided email and password. 
@@ -146,10 +110,12 @@ func (us *userService) Authenticate(email, password string) (*User, error) {
 
 /******************* VALIDATORS **************************/
 
-// ensure interface is matching
-var _ UserDB = &userGorm{}
-
 type userValFunc func(*User) error
+
+type userValidator struct {
+	UserDB
+	emailRegex *regexp.Regexp
+}
 
 func runUsersValFuncs(user *User, fns ...userValFunc) error {
 	for _, fn := range fns {
@@ -169,11 +135,6 @@ func newUserValidator(udb UserDB) *userValidator {
 		// It is not perfect, but works well enough for now
 		emailRegex: regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,16}$`),
 	}
-}
-
-type userValidator struct {
-	UserDB
-	emailRegex *regexp.Regexp
 }
 
 // ByEmail will normalize the email address before
@@ -217,16 +178,16 @@ func (uv *userValidator) Create(user *User) error {
 
 // Delete will remove the provided user from the database,
 // removing all traces of the user and its data
-func (uv *userValidator) Delete(uid uint) error {
+func (uv *userValidator) Delete(id uint) error {
 	var user User
-	user.ID = uid
+	user.ID = id
 
 	err := runUsersValFuncs(&user, uv.idGreaterThan(0))
 	if err != nil {
 		return err
 	}
 
-	return uv.UserDB.Delete(uid)
+	return uv.UserDB.Delete(id)
 }
 
 // bcryptPassword will hash a users password with a
@@ -323,13 +284,12 @@ func (uv *userValidator) passwordRequired(user *User) error {
 
 func (uv *userValidator) passwordHashRequired(user *User) error {
 	if user.PasswordHash == "" {
-		return ErrEmailInvalid
+		return ErrPasswordRequired
 	}
 
 	return nil
 }
 
-/*****************************************************************/
 
 // ensure interface is matching
 var _ UserDB = &userGorm{}
@@ -379,18 +339,4 @@ func (ug *userGorm) Update(user *User) error {
 func (ug *userGorm) Delete(id uint) error {
 	user := User{Model: gorm.Model{ID: id}}
 	return ug.db.Delete(&user).Error
-}
-
-// first will query using the provided gorm.DB and it
-// will get the first item returned and place it into
-// dst. If nothing is found in the query, it will
-// return ErrNotFound
-func first(db *gorm.DB, dst interface{}) error {
-	err := db.First(dst).Error
-
-	if err == gorm.ErrRecordNotFound {
-		return ErrNotFound
-	}
-
-	return err
 }

@@ -7,6 +7,7 @@ import (
 	"os"
 )
 
+// NewServices create a connection to all services of the application
 func NewServices() (*Services, error) {
 	db, err := gorm.Open(os.Getenv("DB_TYPE"), lib.ConnectionInfo())
 	if err != nil {
@@ -20,6 +21,7 @@ func NewServices() (*Services, error) {
 	}, nil
 }
 
+// Services connects all of the application services
 type Services struct {
 	User    UserService
 	db      *gorm.DB
