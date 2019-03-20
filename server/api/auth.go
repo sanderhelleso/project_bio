@@ -7,7 +7,7 @@ import (
 )
 
 // AuthRoutes controll the grouping of auth releated aspects of the app
-func AuthRoutes(router *gin.Engine, uc *controllers.UserController) {
+func AuthRoutes(router *gin.Engine, uc *controllers.Users) {
 	v1 := router.Group("/api/v1/auth")
 	{
 		v1.POST("/signup", uc.Create)

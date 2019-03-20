@@ -7,7 +7,7 @@ import (
 
 // ConnectAndServe connects all endpoint groupings 
 // and serves the application on the port specified in.env 
-func ConnectAndServe(uc *controllers.UserController) {
+func ConnectAndServe(uc *controllers.Users) {
 
 	// connect router and API v1
 	router := gin.Default()

@@ -15,7 +15,13 @@ func main() {
 	err := godotenv.Load()
 	lib.Must(err)
 
-	us := models.ConnectToUserServiceDB()   // user service & db
-	uc := controllers.NewUserController(us) // user controller
-	api.ConnectAndServe(uc)					// connect api & serve
+	services, err := models.NewServices()
+	lib.Must(err)
+
+	defer services.Close()
+	services.DestructiveReset()
+	services.AutoMigrate()
+
+	uc := controllers.NewUsers(services.User)
+	api.ConnectAndServe(uc)
 }

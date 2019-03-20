@@ -10,10 +10,35 @@ import (
 	"strconv"
 )
 
-// NewUserController is used to create a new User controller
-func NewUserController(us *models.UserService) *UserController {
-	return &UserController {
-		us: us,
+// SignupForm represents the request body to the endpoint /signup. 
+type SignupForm struct {
+	Email 			string `form:"email" binding:"required"`
+	Password 		string `form:"password" binding:"required"`
+	FirstName 		string `form:"firstName" binding:"required"`
+	LastName 		string `form:"lastName" binding:"required"`
+	InstagramURL 	string `form:"instagramURL"`
+}
+
+// LoginForm represents the request body to the endpoint /login 
+type LoginForm struct {
+	Email 		string `form:"email" binding:"required"`
+	Password 	string `form:"password" binding:"required"`
+}
+
+// DeleteForm represents the request body to the endpoint /delete
+type DeleteForm struct {
+	ID 		string `form:"uid" binding:"required"`
+}
+
+// Users represents the controller for a user in the app
+type Users struct {
+	us models.UserService
+}
+
+// NewUsers is used to create a new User controller
+func NewUsers(us models.UserService) *Users {
+	return &Users {
+		us,
 	}
 }
 
@@ -25,7 +50,7 @@ func NewUserController(us *models.UserService) *UserController {
 // ROUTE:	/signup
 //
 // BODY:	SignupForm
-func (u *UserController) Create(c *gin.Context) {
+func (u *Users) Create(c *gin.Context) {
 
 	var form SignupForm
 	if c.Bind(&form) != nil {
@@ -45,7 +70,7 @@ func (u *UserController) Create(c *gin.Context) {
 	}
 
 	// attempt to create and store user in DB
-	err := u.us.Create(&user); if err != nil {
+	if err := u.us.Create(&user); err != nil {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
@@ -66,7 +91,7 @@ func (u *UserController) Create(c *gin.Context) {
 // ROUTE:	/delete
 //
 //BODY:		DeleteForm
-func (u *UserController) Delete(c *gin.Context) {
+func (u *Users) Delete(c *gin.Context) {
 
 	var form DeleteForm
 	if c.Bind(&form) != nil {
@@ -100,7 +125,7 @@ func (u *UserController) Delete(c *gin.Context) {
 // ROUTE:	/login
 //
 // BODY:	LoginForm
-func (u *UserController) Login(c *gin.Context) {
+func (u *Users) Login(c *gin.Context) {
 
 	var form LoginForm
 	if c.Bind(&form) != nil {
@@ -120,7 +145,7 @@ func (u *UserController) Login(c *gin.Context) {
 					c, 
 					http.StatusUnprocessableEntity,
 					"The email provided was invalid")
-			case models.ErrInvalidPassword:
+			case models.ErrPasswordIncorrect:
 				response.RespondWithError(
 					c, 
 					http.StatusUnprocessableEntity,
@@ -150,29 +175,4 @@ func (u *UserController) Login(c *gin.Context) {
 		"message": 	"Login successfull!",
 		"token":	validToken,
 	})
-}
-
-// SignupForm represents the request body to the endpoint /signup. 
-type SignupForm struct {
-	Email 			string `form:"email" binding:"required"`
-	Password 		string `form:"password" binding:"required"`
-	FirstName 		string `form:"firstName" binding:"required"`
-	LastName 		string `form:"lastName" binding:"required"`
-	InstagramURL 	string `form:"instagramURL"`
-}
-
-// LoginForm represents the request body to the endpoint /login 
-type LoginForm struct {
-	Email 		string `form:"email" binding:"required"`
-	Password 	string `form:"password" binding:"required"`
-}
-
-// DeleteForm represents the request body to the endpoint /delete
-type DeleteForm struct {
-	ID 		string `form:"uid" binding:"required"`
-}
-
-// UserController represents the controller for a user in the app
-type UserController struct {
-	us *models.UserService
 }
