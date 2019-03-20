@@ -7,11 +7,17 @@ import (
 	"../lib/response"
 )
 
-// FollowForm represents the request body to the endpoint /follow.
+// FollowingForm represents the request body to the endpoint /followers.
 // FollowForms structure is be used for both creation & delete
-type FollowForm struct {
+type FollowingForm struct {
 	UserID 			string `form:"userID" binding:"required"`
 	UserFollowingID string `form:"userFollowingID" binding:"required"`
+}
+
+// FollowerForm represents the request body to the endpoints
+// /followers/all - /followes/delete - /followers/following
+type FollowerForm struct {
+	UserID 			string `form:"userID" binding:"required"`
 }
 
 // Followers represents the controller for a follower releationship in the app
@@ -32,12 +38,12 @@ func NewFollowers(fs models.FollowerService) *Followers {
 // UserID -> Follows -> UserFollowingID -> Do not follow -> UserID
 //
 // METHOD: 	POST
-// ROUTE:	/follow/new
+// ROUTE:	/followers/create
 //
 // BODY:	FollowForm
 func (f *Followers) Create(c *gin.Context) {
 
-	var form FollowForm
+	var form FollowingForm
 	if c.Bind(&form) != nil {
 		response.RespondWithError(
 			c, 
@@ -76,12 +82,12 @@ func (f *Followers) Create(c *gin.Context) {
 // with the given following ids defining the releationship
 //
 // METHOD: 	DELETE
-// ROUTE:	/follow/unfollow
+// ROUTE:	/followers/delete
 //
 //BODY:		FollowForm
 func (f *Followers) Delete(c *gin.Context) {
 
-	var form FollowForm
+	var form FollowerForm
 	if c.Bind(&form) != nil {
 		response.RespondWithError(
 			c, 
@@ -106,4 +112,42 @@ func (f *Followers) Delete(c *gin.Context) {
 		c,
 		http.StatusOK,
 		"User succesfully unfollowed!")
+}
+
+// ByUserID is used to fetch all follower releationships
+// where the userID passed in is following a different user
+//
+// METHOD: 	GET
+// ROUTE:	/followers/all
+//
+// BODY:	FollowForm
+func (f *Followers) ByUserID(c *gin.Context) {
+
+	var form FollowerForm
+	if c.Bind(&form) != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			"Unable to process form data due to invalid format")
+		return
+	}
+
+	userID, err := ParseUserID(c.PostForm("userID"), c)
+	if err != nil { return }
+
+	// attempt to create and store user in DB
+	followers, err := f.fs.ByUserID(userID)
+	if err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusInternalServerError, 
+			"Something went wrong while attempting to fetch followers")
+		return
+	}
+
+	response.RespondWithSuccess(
+		c,
+		http.StatusCreated,
+		"Followers successfully fetched",
+		followers)
 }

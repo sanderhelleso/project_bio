@@ -18,7 +18,7 @@ type Follower struct {
 type FollowerDB interface {
 
 	// methods for quering follower(s)
-	ByID(id uint) (*Follower, error)
+	ByUserID(id uint) (*Follower, error)
 	ByFollowingID(id uint) (*Follower, error)
 
 	// methods for altering followers
@@ -71,7 +71,6 @@ func runFollowersValFunc(follower *Follower, fns ...followerValFunc) error {
 	return nil
 }
 
-
 func newFollowerValidator(fdb FollowerDB) *followerValidator {
 	return &followerValidator {
 		FollowerDB: fdb,
@@ -111,15 +110,15 @@ type followerGorm struct {
 	db *gorm.DB
 }
 
-// ByID will look up followrs by the id provided
-func (fg *followerGorm) ByID(id uint) (*Follower, error) {
+// ByID will look up followers by the id provided
+func (fg *followerGorm) ByUserID(id uint) (*Follower, error) {
 	var follower Follower
-	db := fg.db.Where("id = ?", id)
+	db := fg.db.Where("userID = ?", id)
 	err := first(db, &follower)
 	return &follower, err
 }
 
-// ByFollowingID will look up followres by the followingID provided
+// ByFollowingID will look up followers by the followingID provided
 func (fg *followerGorm) ByFollowingID(id uint) (*Follower, error) {
 	var follower Follower
 	db := fg.db.Where("userFollowingID = ?", id)

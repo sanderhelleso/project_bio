@@ -11,7 +11,7 @@ func ConnectAndServe(uc *controllers.Users, fc *controllers.Followers) {
 
 	// connect router and API v1
 	router := gin.Default()
-	AuthRoutes(router, uc)
-	FollowRoutes(router, fc)
+	UsersRoutes(router, uc)
+	FollowerRoutes(router, fc)
 	router.Run() // listen and serve on 0.0.0.0:5000
 }
