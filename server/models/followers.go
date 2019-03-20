@@ -18,7 +18,7 @@ type Follower struct {
 type FollowerDB interface {
 
 	// methods for quering follower(s)
-	ByUserID(id uint) (*[]User, error)
+	ByUserID(id uint) (*[]UserData, error)
 	ByFollowingID(id uint) (*Follower, error)
 
 	// methods for altering followers
@@ -110,11 +110,11 @@ type followerGorm struct {
 	db *gorm.DB
 }
 
-// ByID will look up followers by the id provided
-func (fg *followerGorm) ByUserID(id uint) (*[]User, error) {
-	var users []User
-	err := findFollowers(fg.db, &users, id)
-	return &users, err
+// ByUserID will look up followers by the id provided
+func (fg *followerGorm) ByUserID(id uint) (*[]UserData, error) {
+	var user User
+	followers, err := findFollowers(fg.db, user, id)
+	return followers, err
 }
 
 // ByFollowingID will look up followers by the followingID provided

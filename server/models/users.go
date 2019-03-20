@@ -29,6 +29,14 @@ type User struct {
 	Followers 		[]Follower `gorm:"foreignkey:UserFollowingID"`
 }
 
+// UserData represents the users data
+type UserData struct {
+	ID	  uint
+	Email string
+	FirstName string
+	LastName string
+}
+
 // UserDB is used to interact with the users database
 //
 // For all single user queries:

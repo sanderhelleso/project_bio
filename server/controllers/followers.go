@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"../models"
 	"../lib/response"
+	"../lib/parser"
 )
 
 // FollowingForm represents the request body to the endpoint /followers.
@@ -52,10 +53,10 @@ func (f *Followers) Create(c *gin.Context) {
 		return
 	}
 
-	userID, err := ParseUserID(c.PostForm("userID"), c)
+	userID, err := parser.ParseUserID(c.PostForm("userID"))
 	if err != nil { return }
 
-	userFollowingID, err := ParseUserID(c.PostForm("userFollowingID"), c)
+	userFollowingID, err := parser.ParseUserID(c.PostForm("userFollowingID"))
 	if err != nil { return }
 
 	follow := models.Follower {
@@ -97,7 +98,7 @@ func (f *Followers) Delete(c *gin.Context) {
 	}
 
 	// attempt to delete user with uid and its data from db
-	userID, err := ParseUserID(c.PostForm("userID"), c)
+	userID, err := parser.ParseUserID(c.PostForm("userID"))
 	if err != nil { return  }
 
 	err = f.fs.Delete(userID); if err != nil {
@@ -132,7 +133,7 @@ func (f *Followers) ByUserID(c *gin.Context) {
 		return
 	}
 
-	userID, err := ParseUserID(c.Param("userID"), c)
+	userID, err := parser.ParseUserID(c.Param("userID"))
 	if err != nil { return }
 
 	// attempt to create and store user in DB
@@ -145,7 +146,7 @@ func (f *Followers) ByUserID(c *gin.Context) {
 		return
 	}
 
-	response.RespondWithSuccess(
+	response.RespondWithSuccessAndSlice(
 		c,
 		http.StatusCreated,
 		"Followers successfully fetched",
