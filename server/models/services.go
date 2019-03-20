@@ -16,15 +16,17 @@ func NewServices() (*Services, error) {
 
 	db.LogMode(true)
 	return &Services{
-		User:    NewUserService(db),
-		db:      db,
+		User:     NewUserService(db),
+		Follower: NewFollowerService(db),
+		db:       db,
 	}, nil
 }
 
 // Services connects all of the application services
 type Services struct {
-	User    UserService
-	db      *gorm.DB
+	User     UserService
+	Follower FollowerService
+	db       *gorm.DB
 }
 
 // Close closes the  database connection
@@ -34,7 +36,7 @@ func (s *Services) Close() error {
 
 // DestructiveReset drops all tables and rebuilds it
 func (s *Services) DestructiveReset() error {
-	err := s.db.DropTableIfExists(&User{}).Error
+	err := s.db.DropTableIfExists(&User{}, &Follower{}).Error
 	if err != nil {
 		return err
 	}
@@ -44,6 +46,6 @@ func (s *Services) DestructiveReset() error {
 
 // AutoMigrate will attempt to automatically migrate all tables
 func (s *Services) AutoMigrate() error {
-	err := s.db.AutoMigrate(&User{}).Error
+	err := s.db.AutoMigrate(&User{}, &Follower{}).Error
 	return err
 }

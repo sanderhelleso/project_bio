@@ -335,7 +335,7 @@ func (ug *userGorm) Update(user *User) error {
 	return ug.db.Save(user).Error
 }
 
-//Delete  will delete the user with the provided ID
+//Delete will delete the user with the provided ID
 func (ug *userGorm) Delete(id uint) error {
 	user := User{Model: gorm.Model{ID: id}}
 	return ug.db.Delete(&user).Error
