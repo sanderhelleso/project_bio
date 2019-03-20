@@ -11,12 +11,13 @@ type Promo struct {
 	gorm.Model
 	UserID			uint 	`gorm:"not null"`
 	Title			string 	`gorm:"not null;size:100"`
-	Brand			string 	`gorm:not null;size:100"`
+	Brand			string 	`gorm:"not null;size:100"`
 	Description		string	
 	imageURL		string	
-	Price			float32 
+	Price			float32
+	Currency		string
 	PercantageOff	int	
-	ExpiredAt		time.Time
+	ExpiresAt		time.Time
 }
 
 // PromoDB is used to interact with the promos database
@@ -106,13 +107,6 @@ var _ PromoDB = &promoGorm{}
 
 type promoGorm struct {
 	db *gorm.DB
-}
-
-// ByUserID will look up users the user with the provided id is following
-func (pg *promoGorm) ByUserID(id uint) (*[]UserData, error) {
-	var user User
-	following, err := findFollowing(pg.db, user, id)
-	return following, err
 }
 
 // ByID will look up a promo with the provided id
