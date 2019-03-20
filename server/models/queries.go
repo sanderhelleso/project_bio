@@ -31,3 +31,16 @@ func all(db *gorm.DB, dst interface{}) error {
 
 	return err
 }
+
+// join will join thequery using the provided gorm.DB
+// and run sql joins on the provided tables
+func findFollowers(db *gorm.DB, dst interface{}, id uint) error {
+	join := db.Joins("JOIN followers ON followers.user_following_id = users.id")
+	err := join.Where("followers.user_id = ?", id).Find(dst).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return ErrNotFound
+	}
+
+	return err
+}

@@ -17,7 +17,7 @@ type FollowingForm struct {
 // FollowerForm represents the request body to the endpoints
 // /followers/all - /followes/delete - /followers/following
 type FollowerForm struct {
-	UserID 			string `form:"userID" binding:"required"`
+	UserID 			string `form:"userID"`
 }
 
 // Followers represents the controller for a follower releationship in the app
@@ -123,14 +123,14 @@ func (f *Followers) Delete(c *gin.Context) {
 // BODY:	FollowForm
 func (f *Followers) ByUserID(c *gin.Context) {
 
-	/*var form FollowerForm
+	var form FollowerForm
 	if c.Bind(&form) != nil {
 		response.RespondWithError(
 			c, 
 			http.StatusUnprocessableEntity, 
 			"Unable to process form data due to invalid format")
 		return
-	}*/
+	}
 
 	userID, err := ParseUserID(c.Param("userID"), c)
 	if err != nil { return }
