@@ -5,18 +5,13 @@ import (
 	"net/http"
 	"../models"
 	"../lib/response"
-	"strconv"
 )
-
-/*UserID			uint `gorm:"not null;index"`
-	UserFollowingID uint `gorm:"not null;index"`
-	CreatedAt  time.Time*/
 
 // FollowForm represents the request body to the endpoint /follow.
 // FollowForms structure is be used for both creation & delete
 type FollowForm struct {
-	UserID 			string `form:"userID" binding:"required, numeric"`
-	UserFollowingID string `form:"userFollowingID" binding:"required, numeric"`
+	UserID 			string `form:"userID" binding:"required"`
+	UserFollowingID string `form:"userFollowingID" binding:"required"`
 }
 
 // Followers represents the controller for a follower releationship in the app
@@ -37,7 +32,7 @@ func NewFollowers(fs models.FollowerService) *Followers {
 // UserID -> Follows -> UserFollowingID -> Do not follow -> UserID
 //
 // METHOD: 	POST
-// ROUTE:	/follow
+// ROUTE:	/follow/new
 //
 // BODY:	FollowForm
 func (f *Followers) Create(c *gin.Context) {
@@ -52,14 +47,10 @@ func (f *Followers) Create(c *gin.Context) {
 	}
 
 	userID, err := ParseUserID(c.PostForm("userID"), c)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 
 	userFollowingID, err := ParseUserID(c.PostForm("userFollowingID"), c)
-	if err != nil {
-		return
-	}
+	if err != nil { return }
 
 	follow := models.Follower {
 		UserID: 		 userID,
@@ -81,16 +72,16 @@ func (f *Followers) Create(c *gin.Context) {
 		"Follow successfull!")
 }
 
-// Delete is used to delete a user with a
-// given user id (uid) from the application
+// Delete is used to delete a follower releationship
+// with the given following ids defining the releationship
 //
 // METHOD: 	DELETE
-// ROUTE:	/delete
+// ROUTE:	/follow/unfollow
 //
-//BODY:		DeleteForm
-func (u *Users) Delete(c *gin.Context) {
+//BODY:		FollowForm
+func (f *Followers) Delete(c *gin.Context) {
 
-	var form DeleteForm
+	var form FollowForm
 	if c.Bind(&form) != nil {
 		response.RespondWithError(
 			c, 
@@ -100,17 +91,19 @@ func (u *Users) Delete(c *gin.Context) {
 	}
 
 	// attempt to delete user with uid and its data from db
-	uid, _ := strconv.Atoi(c.PostForm("uid"))
-	err := u.us.Delete(uint(uid)); if err != nil {
+	userID, err := ParseUserID(c.PostForm("userID"), c)
+	if err != nil { return  }
+
+	err = f.fs.Delete(userID); if err != nil {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
-			"Something went wrong when attempting to delete your account")
+			"Something went wrong when attempting to unfollow user")
 		return
 	}
 
 	response.RespondWithSuccess(
 		c,
 		http.StatusOK,
-		"Account successfully deleted")
+		"User succesfully unfollowed!")
 }
