@@ -29,6 +29,12 @@ type Services struct {
 	db       *gorm.DB
 }
 
+// CreateReleations create the table releationships
+// betweetn the tables in the applications database
+func (s *Services) CreateReleations() {
+	s.db.Model(&s.User).Related(&s.Follower)
+}
+
 // Close closes the  database connection
 func (s *Services) Close() error {
 	return s.db.Close()

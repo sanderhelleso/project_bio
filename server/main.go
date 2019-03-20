@@ -19,8 +19,9 @@ func main() {
 	lib.Must(err)
 
 	defer services.Close()
-	//services.DestructiveReset()
+	services.DestructiveReset()
 	services.AutoMigrate()
+	services.CreateReleations()
 
 	uc := controllers.NewUsers(services.User)
 	fc := controllers.NewFollowers(services.Follower)

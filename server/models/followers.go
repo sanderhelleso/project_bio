@@ -9,8 +9,8 @@ import (
 // Follower represents a follower of a user in the application
 type Follower struct {
 	ID        		uint `gorm:"primary_key"`
-	UserID			uint `gorm:"not null;index"`
-	UserFollowingID uint `gorm:"not null;index"`
+	UserID			uint `gorm:"not null;unique_index:idx_follow_code;"`
+	UserFollowingID uint `gorm:"not null;unique_index:idx_follow_code;"`
 	CreatedAt  time.Time
 }
 
