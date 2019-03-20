@@ -19,6 +19,7 @@ type FollowerDB interface {
 
 	// methods for quering follower(s)
 	ByID(id uint) (*Follower, error)
+	ByFollowingID(id uint) (*Follower, error)
 
 	// methods for altering followers
 	Create(follower *Follower) error
@@ -31,6 +32,10 @@ type FollowerService interface {
 	FollowerDB
 }
 
+// ensure interface is mathing
+var _ FollowerService = &followerService{}
+
+// implementation of interface
 type followerService struct {
 	FollowerDB
 }
@@ -73,16 +78,26 @@ func newFollowerValidator(fdb FollowerDB) *followerValidator {
 	}
 }
 
+// Create will validate and and backfill data
+func (fv *followerValidator) Create(follower *Follower) error {
+	err := runFollowersValFunc(follower,)
+	if err != nil {
+		return err
+	}
+
+	return fv.FollowerDB.Create(follower)
+}
+
 // Delete will remove the provided follower from the database,
 // removing all traces of the follower and its data
 func (fv *followerValidator) Delete(id uint) error {
 	var follower Follower
 	follower.ID = id
 
-	/*err := runFollowersValFuncs(&follower, )
+	err := runFollowersValFunc(&follower,)
 	if err != nil {
 		return err
-	}*/
+	}
 
 	return fv.FollowerDB.Delete(id)
 }
@@ -100,6 +115,14 @@ type followerGorm struct {
 func (fg *followerGorm) ByID(id uint) (*Follower, error) {
 	var follower Follower
 	db := fg.db.Where("id = ?", id)
+	err := first(db, &follower)
+	return &follower, err
+}
+
+// ByFollowingID will look up followres by the followingID provided
+func (fg *followerGorm) ByFollowingID(id uint) (*Follower, error) {
+	var follower Follower
+	db := fg.db.Where("userFollowingID = ?", id)
 	err := first(db, &follower)
 	return &follower, err
 }
