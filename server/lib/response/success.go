@@ -9,5 +9,6 @@ func RespondWithSuccess(c *gin.Context, code int, message interface{}, payload .
 	c.JSON(code, gin.H {
 		"message": 	message,
 		"status": 	code,
+		"payload":  payload,
 	})
 }

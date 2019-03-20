@@ -12,7 +12,7 @@ func FollowerRoutes(router *gin.Engine, fc *controllers.Followers) {
 	{
 		v1.Use(middelware.RequireToken)
 		v1.POST("/new", fc.Create)
-		v1.GET("/all", fc.ByUserID)
+		v1.GET("/:userID/all", fc.ByUserID)
 		v1.DELETE("/delete", fc.Delete)		
 	}
 }

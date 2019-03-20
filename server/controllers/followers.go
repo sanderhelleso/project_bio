@@ -123,16 +123,16 @@ func (f *Followers) Delete(c *gin.Context) {
 // BODY:	FollowForm
 func (f *Followers) ByUserID(c *gin.Context) {
 
-	var form FollowerForm
+	/*var form FollowerForm
 	if c.Bind(&form) != nil {
 		response.RespondWithError(
 			c, 
 			http.StatusUnprocessableEntity, 
 			"Unable to process form data due to invalid format")
 		return
-	}
+	}*/
 
-	userID, err := ParseUserID(c.PostForm("userID"), c)
+	userID, err := ParseUserID(c.Param("userID"), c)
 	if err != nil { return }
 
 	// attempt to create and store user in DB

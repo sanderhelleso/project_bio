@@ -17,3 +17,17 @@ func first(db *gorm.DB, dst interface{}) error {
 
 	return err
 }
+
+// all will query using the provided gorm.DB and it
+// will get all items returned and place it into
+// dst. If nothing is found in the query, it will
+// return ErrNotFound
+func all(db *gorm.DB, dst interface{}) error {
+	err := db.Find(dst).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return ErrNotFound
+	}
+
+	return err
+}

@@ -18,7 +18,7 @@ type Follower struct {
 type FollowerDB interface {
 
 	// methods for quering follower(s)
-	ByUserID(id uint) (*Follower, error)
+	ByUserID(id uint) (*[]Follower, error)
 	ByFollowingID(id uint) (*Follower, error)
 
 	// methods for altering followers
@@ -111,17 +111,17 @@ type followerGorm struct {
 }
 
 // ByID will look up followers by the id provided
-func (fg *followerGorm) ByUserID(id uint) (*Follower, error) {
-	var follower Follower
-	db := fg.db.Where("userID = ?", id)
-	err := first(db, &follower)
-	return &follower, err
+func (fg *followerGorm) ByUserID(id uint) (*[]Follower, error) {
+	var followers []Follower
+	db := fg.db.Where("user_id = ?", id)
+	err := all(db, &followers)
+	return &followers, err
 }
 
 // ByFollowingID will look up followers by the followingID provided
 func (fg *followerGorm) ByFollowingID(id uint) (*Follower, error) {
 	var follower Follower
-	db := fg.db.Where("userFollowingID = ?", id)
+	db := fg.db.Where("user_following_iD = ?", id)
 	err := first(db, &follower)
 	return &follower, err
 }
