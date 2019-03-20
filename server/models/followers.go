@@ -19,7 +19,7 @@ type FollowerDB interface {
 
 	// methods for quering follower(s)
 	ByUserID(id uint) (*[]UserData, error)
-	ByFollowingID(id uint) (*Follower, error)
+	ByUserFollowingID(id uint) (*[]UserData, error)
 
 	// methods for altering followers
 	Create(follower *Follower) error
@@ -110,19 +110,18 @@ type followerGorm struct {
 	db *gorm.DB
 }
 
-// ByUserID will look up followers by the id provided
+// ByUserID will look up users the user with the provided id is following
 func (fg *followerGorm) ByUserID(id uint) (*[]UserData, error) {
 	var user User
-	followers, err := findFollowers(fg.db, user, id)
-	return followers, err
+	following, err := findFollowing(fg.db, user, id)
+	return following, err
 }
 
-// ByFollowingID will look up followers by the followingID provided
-func (fg *followerGorm) ByFollowingID(id uint) (*Follower, error) {
-	var follower Follower
-	db := fg.db.Where("user_following_iD = ?", id)
-	err := first(db, &follower)
-	return &follower, err
+// ByUserFollowingID will look up users that is following the user with the provided id
+func (fg *followerGorm) ByUserFollowingID(id uint) (*[]UserData, error) {
+	var user User
+	following, err := findFollowers(fg.db, user, id)
+	return following, err
 }
 
 // Create will create the provided follower releationship

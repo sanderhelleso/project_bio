@@ -115,11 +115,11 @@ func (f *Followers) Delete(c *gin.Context) {
 		"User succesfully unfollowed!")
 }
 
-// ByUserID is used to fetch all follower releationships
-// where the userID passed in is following a different user
+// ByUserID is used to fetch all users that the provided
+// user with id is following
 //
 // METHOD: 	GET
-// ROUTE:	/followers/all
+// ROUTE:	/following/is
 //
 // BODY:	FollowForm
 func (f *Followers) ByUserID(c *gin.Context) {
@@ -148,7 +148,45 @@ func (f *Followers) ByUserID(c *gin.Context) {
 
 	response.RespondWithSuccessAndSlice(
 		c,
-		http.StatusCreated,
-		"Followers successfully fetched",
+		http.StatusOK,
+		"Users following successfully fetched",
 		followers)
+}
+
+// ByUserFollowingID is used to fetch all follower releationships
+// where the userID passed in is following a different user
+//
+// METHOD: 	GET
+// ROUTE:	/followers/have
+//
+// BODY:	FollowForm
+func (f *Followers) ByUserFollowingID(c *gin.Context) {
+
+	var form FollowerForm
+	if c.Bind(&form) != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			"Unable to process form data due to invalid format")
+		return
+	}
+
+	userID, err := parser.ParseUserID(c.Param("userID"))
+	if err != nil { return }
+
+	// attempt to create and store user in DB
+	following, err := f.fs.ByUserFollowingID(userID)
+	if err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusInternalServerError, 
+			"Something went wrong while attempting to fetch followers")
+		return
+	}
+
+	response.RespondWithSuccessAndSlice(
+		c,
+		http.StatusOK,
+		"Followers successfully fetched",
+		following)
 }
