@@ -42,10 +42,10 @@ type promoService struct {
 	PromoDB
 }
 
-// NewPromoDB connect the Promo db and validator
-func NewPromoDB(db *gorm.DB) PromoDB {
+// NewPromoService connect the Promo db and validator
+func NewPromoService(db *gorm.DB) PromoService {
 	pg := &promoGorm{db}
-	pv := newpromoValidator(pg)
+	pv := newPromoValidator(pg)
 
 	return &promoService {
 		PromoDB: pv,
@@ -70,7 +70,7 @@ func runPromosValFunc(Promo *Promo, fns ...promoValFunc) error {
 	return nil
 }
 
-func newpromoValidator(pdb PromoDB) *promoValidator {
+func newPromoValidator(pdb PromoDB) *promoValidator {
 	return &promoValidator {
 		PromoDB: pdb,
 	}

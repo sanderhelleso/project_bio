@@ -25,5 +25,7 @@ func main() {
 
 	uc := controllers.NewUsers(services.User)
 	fc := controllers.NewFollowers(services.Follower)
-	api.ConnectAndServe(uc, fc)
+	pc := controllers.NewPromos(services.Promo)
+
+	api.ConnectAndServe(uc, fc, pc)
 }
