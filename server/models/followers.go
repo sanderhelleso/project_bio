@@ -40,9 +40,6 @@ type followerService struct {
 	FollowerDB
 }
 
-// ensure interface is matching
-var _ FollowerService = &followerService{}
-
 // NewFollowerService connect the follower db and validator
 func NewFollowerService(db *gorm.DB) FollowerService {
 	fg := &followerGorm{db}

@@ -24,9 +24,6 @@ type User struct {
 	FirstName	    string `gorm:"size:35;not null"`
 	LastName	   	string `gorm:"size:35;not null"`
 	InstagramURL	string 
-
-	// releationship (many2many)
-	Followers 		[]Follower `gorm:"foreignkey:UserFollowingID"`
 }
 
 // UserData represents the users data
