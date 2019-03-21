@@ -13,7 +13,8 @@ type Promo struct {
 	Title			string 	`gorm:"not null;size:100"`
 	Brand			string 	`gorm:"not null;size:100"`
 	Description		string	
-	imageURL		string	
+	ImageURL		string	
+	ProductURL		string	 
 	Price			float32
 	Currency		string
 	PercantageOff	int	

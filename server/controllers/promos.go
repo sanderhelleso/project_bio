@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
@@ -12,13 +11,14 @@ import (
 // PromoForm represents the request body to the endpoint /promos.
 // PromoForms structure is be used for creation and update
 type PromoForm struct {
-	UserID 			string    `form:"userID" binding:"required"`
+	UserID 			uint      `form:"userID" binding:"required"`
 	Title			string 	  `form:"title" binding:"required"`
 	Brand			string 	  `form:"brand" binding:"required"`
 	Description		string	  `form:"description"`
-	imageURL		string	  `form:"imageURL"`
+	ImageURL		string	  `form:"imageURL"`
+	ProductURL		string	  `form:"productURL"`
 	Price			float32   `form:"price"`
-	Currency		float32   `form:"currency"`
+	Currency		string    `form:"currency"`
 	PercantageOff	int		  `form:"percentageOff"`
 	ExpiresAt		time.Time `form:"expiresAt"`
 }
@@ -61,30 +61,31 @@ func (p *Promos) Create(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(form)
-
-	/*promo := models.Promo {
-		UserID			uint 	`gorm:"not null"`
-		Title			string 	`gorm:"not null;size:100"`
-		Brand			string 	`gorm:"not null;size:100"`
-		Description		string	
-		imageURL		string	
-		Price			float32 
-		PercantageOff	int	
-		ExpiredAt		time.Time
+	// attempt to create and store promo in DB
+	promo := models.Promo {
+		UserID: 		form.UserID,
+		Title:			form.Title,
+		Brand:			form.Brand,
+		Description:	form.Description,
+		ImageURL:		form.ImageURL,
+		ProductURL:		form.ProductURL,
+		Price:			form.Price,
+		Currency:		form.Currency,
+		PercantageOff:	form.PercantageOff,
+		ExpiresAt:		form.ExpiresAt,
 	}
 
-	// attempt to create and store user in DB
-	if err := f.fs.Create(&follow); err != nil {
+	if err := p.ps.Create(&promo); err != nil {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
-			"Something went wrong when attempting to follow user")
+			"Something went wrong when attempting to create promo")
 		return
-	}*/
+	}
+
 
 	response.RespondWithSuccess(
 		c,
 		http.StatusCreated,
-		"Follow successfull!")
+		"Promo successfully created")
 }
