@@ -159,6 +159,20 @@ func (pv *promoValidator) validateCurrency() promoValFunc {
 	})
 }
 
+func (pv *promoValidator) validateExpiresAt() promoValFunc {
+	return promoValFunc(func(promo *Promo) error {
+		if !promo.ExpiresAt.IsZero() {
+			if promo.ExpiresAt.Before(time.Now()) {
+				return ErrPromoExpiresAtInvalid
+			}
+
+			return nil
+		}
+
+		return nil
+	})
+}
+
 // Create will validate and and backfill data
 func (pv *promoValidator) Create(promo *Promo) error {
 	err := runPromosValFunc(promo,
@@ -168,7 +182,8 @@ func (pv *promoValidator) Create(promo *Promo) error {
 	pv.normalizePrice,
 	pv.normalizeCurrency,
 	pv.validateCurrency(),
-	pv.pricePercentageBetween())
+	pv.pricePercentageBetween(),
+	pv.validateExpiresAt())
 
 	if err != nil {
 		return err
@@ -187,7 +202,8 @@ func (pv *promoValidator) Update(promo *Promo) error {
 	pv.normalizePrice,
 	pv.normalizeCurrency,
 	pv.validateCurrency(),
-	pv.pricePercentageBetween())
+	pv.pricePercentageBetween(),
+	pv.validateExpiresAt())
 
 	if err != nil {
 		return err

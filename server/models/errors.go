@@ -64,6 +64,10 @@ const (
 	// ErrPromoCurrencyInvalid is returned when a promo is atempted created
 	// with an invalid currency
 	ErrPromoCurrencyInvalid modelError = "Currency must be in the format 'XXX'. Currency for US Dollars would be 'USD'"
+
+	// ErrPromoExpiresAtInvalid is returned when a promo is atempted created
+	// with an invalid expirationAt date
+	ErrPromoExpiresAtInvalid modelError = "Expiration date cannot be a date that is in the present"
 )
 
 type modelError string
