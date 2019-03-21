@@ -4,7 +4,7 @@ import (
     "strconv"
     "os"
     "github.com/gin-gonic/gin"
-    "errors"
+    "net/http"
     "reflect"
     "fmt"
 )
@@ -23,14 +23,19 @@ func ParseUserID(value string) (uint, error) {
 }
 
 // GetIDFromCTX fetches the userID from current context
-// If unable to parse, return 0 and error message
-func GetIDFromCTX(c *gin.Context) (uint, error) {
-    id, found := c.Get(os.Getenv("CTX_USER_KEY"))
-	if !found { 
-        return 0, errors.New("Unable to identify user")
+func GetIDFromCTX(c *gin.Context) uint {
+    val := c.MustGet(os.Getenv("CTX_USER_KEY"))
+    id, err := ParseUserID(fmt.Sprint(val))
+    if err != nil {
+
+        // this is a VERY rare error, should add some logs here...
+        c.AbortWithStatusJSON(http.StatusForbidden, gin.H {
+            "code": http.StatusForbidden,
+            "message": "Unable to identify user",
+        })
     }
 
-	return ParseUserID(fmt.Sprint(id))
+	return id
 }
 
 // MakeSlice creates a slice from interface
@@ -60,7 +65,7 @@ func GetSliceLenFromType(arg interface{}) int {
     return slice.Len()
 }
 
-// takeArg is a helper function for MakeSlice that validates the args
+// takeArg is a helper function for MakeSlice that validates the args passed in
 func takeArg(arg interface{}, kind reflect.Kind) (val reflect.Value, ok bool) {
     val = reflect.ValueOf(arg)
     if val.Kind() == kind {

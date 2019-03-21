@@ -124,19 +124,9 @@ func (p *Promos) Update(c *gin.Context) {
 		return
 	}
 
-	// attempt to create and store promo in DB
-	userID, err := parser.GetIDFromCTX(c)
-	if err != nil || userID == 0 {
-		response.RespondWithError(
-			c, 
-			http.StatusInternalServerError, 
-			err)
-		return
-	}
-
 	promo := models.Promo {
 		ID:				form.ID,
-		UserID:			userID,
+		UserID:			parser.GetIDFromCTX(c),
 		Title:			form.Title,
 		Brand:			form.Brand,
 		Description:	form.Description,
