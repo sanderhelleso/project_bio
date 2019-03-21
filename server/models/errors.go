@@ -11,6 +11,10 @@ const (
 	// is used when attempting to authenticate a user
 	ErrPasswordIncorrect modelError = "Incorrect password provided"
 
+	// ErrPasswordInvalid is returned when a user attemps to
+	// signup with an invalid password.
+	ErrPasswordInvalid modelError = "Password is invalid"
+
 	// ErrEmailRequired is returned when an email address
 	// is not provided when creating a user
 	ErrEmailRequired modelError = "Email address is required"
@@ -23,20 +27,19 @@ const (
 	// is attempted with an email address that is already in use
 	ErrEmailTaken modelError = "Email address is already taken"
 
-	// ErrPasswordTooShort is returned when an update or create is
-	// attempted with a user passord that is less than 8 characters
-	ErrPasswordTooShort modelError = "Password must be atleast 8 characters long"
-
-	// ErrPasswordRequired is returned when a create is attempted
-	// wihtout a user password provided
-	ErrPasswordRequired modelError = "Password is required"
-
 	// ErrIDInvalid is returned when an invalid ID is
 	// provided to a method like Delete
 	ErrIDInvalid privateError = "ID provided was invalid"
 
+	// ErrIDMissmatch is returned when both passed in IDs  are equal
+	ErrIDMissmatch privateError = "IDs provided can not be the same"
+
 	// ErrUserIDRequired is returned when an user ID is required
 	ErrUserIDRequired  privateError = "models: user ID is required"
+
+	// ErrPasswordHashRequired is returned when a users
+	// password hash is required but not present
+	ErrPasswordHashRequired modelError = "Password hash is required"
 )
 
 type modelError string

@@ -74,9 +74,35 @@ func newFollowerValidator(fdb FollowerDB) *followerValidator {
 	}
 }
 
+
+func (fv *followerValidator) idGreaterThan(n uint) followerValFunc {
+	return followerValFunc(func(follower *Follower) error {
+		if follower.ID <= n {
+			return ErrIDInvalid
+		}
+
+		return nil
+	})
+}
+
+func (fv *followerValidator) notEqualOrZero(follower *Follower) error {
+	if follower.UserID == 0 || follower.UserFollowingID == 0 {
+		return ErrIDInvalid
+	}
+
+	if follower.UserID == follower.UserFollowingID {
+		return ErrIDMissmatch
+	}
+
+	return nil
+}
+
+
 // Create will validate and and backfill data
 func (fv *followerValidator) Create(follower *Follower) error {
-	err := runFollowersValFunc(follower,)
+	err := runFollowersValFunc(follower,
+	fv.notEqualOrZero)
+
 	if err != nil {
 		return err
 	}
@@ -90,7 +116,7 @@ func (fv *followerValidator) Delete(id uint) error {
 	var follower Follower
 	follower.ID = id
 
-	err := runFollowersValFunc(&follower,)
+	err := runFollowersValFunc(&follower, fv.idGreaterThan(0))
 	if err != nil {
 		return err
 	}

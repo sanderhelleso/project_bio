@@ -7,6 +7,7 @@ package models
 import (
 	"os"
 	"strings"
+	"unicode"
 	"regexp"
 	"golang.org/x/crypto/bcrypt"
 
@@ -138,9 +139,6 @@ func runUsersValFuncs(user *User, fns ...userValFunc) error {
 func newUserValidator(udb UserDB) *userValidator {
 	return &userValidator{
 		UserDB: udb,
-
-		// emailRegex is used to match email addresses.
-		// It is not perfect, but works well enough for now
 		emailRegex: regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,16}$`),
 	}
 }
@@ -168,8 +166,7 @@ func (uv *userValidator) ByEmail(email string) (*User, error) {
 // data with ID, CreatedAt and UpdatedAt fields
 func (uv *userValidator) Create(user *User) error {
 	err := runUsersValFuncs(user,
-		uv.passwordRequired,
-		uv.passwordMinLength,
+		uv.passwordFormat,
 		uv.bcryptPassword,
 		uv.passwordHashRequired,
 		uv.normalizeEmail,
@@ -215,6 +212,28 @@ func (uv *userValidator) bcryptPassword(user *User) error {
 	user.PasswordHash = string(hashedBytes) // convert byteslice to string
 	user.Password = ""
 	return nil
+}
+
+func (uv *userValidator) passwordFormat(user *User) error {
+	
+	gotUC, gotLC, gotN := false, false, false
+    for _, c := range user.Password {
+        switch {
+			case unicode.IsNumber(c):
+				gotN = true
+			case unicode.IsUpper(c):
+				gotUC = true
+			case unicode.IsLower(c):
+				gotLC = true
+			default:
+        }
+	}
+
+	if !(gotUC && gotLC && gotN && len(user.Password) >= 8) {
+		return ErrPasswordIncorrect
+	}
+	
+    return nil
 }
 
 func (uv *userValidator) idGreaterThan(n uint) userValFunc {
@@ -270,29 +289,9 @@ func (uv *userValidator) emailIsAvail(user *User) error {
 	return nil
 }
 
-func (uv *userValidator) passwordMinLength(user *User) error {
-	if user.Password == "" {
-		return nil
-	}
-
-	if len(user.Password) < 8 {
-		return ErrPasswordTooShort
-	}
-
-	return nil
-}
-
-func (uv *userValidator) passwordRequired(user *User) error {
-	if user.Password == "" {
-		return ErrPasswordRequired
-	}
-
-	return nil
-}
-
 func (uv *userValidator) passwordHashRequired(user *User) error {
 	if user.PasswordHash == "" {
-		return ErrPasswordRequired
+		return ErrPasswordHashRequired
 	}
 
 	return nil

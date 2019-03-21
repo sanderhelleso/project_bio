@@ -146,7 +146,6 @@ func (p *Promos) Update(c *gin.Context) {
 		return
 	}
 
-
 	response.RespondWithSuccess(
 		c,
 		http.StatusOK,
