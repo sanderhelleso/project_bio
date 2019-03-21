@@ -78,7 +78,7 @@ func (p *Promos) Create(c *gin.Context) {
 
 	// attempt to create and store promo in DB
 	promo := models.Promo {
-		UserID: 		form.UserID,
+		UserID: 		parser.GetIDFromCTX(c),
 		Title:			form.Title,
 		Brand:			form.Brand,
 		Description:	form.Description,

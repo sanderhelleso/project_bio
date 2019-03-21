@@ -2,17 +2,18 @@ package models
 
 import (
 	"time"
+	"strings"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 // Promo represents a product promote in the application
 type Promo struct {
-	ID        		uint `gorm:"primary_key"`
+	ID        		uint 	`gorm:"primary_key"`
 	UserID			uint 	`gorm:"not null;index"`
 	Title			string 	`gorm:"not null;size:100"`
 	Brand			string 	`gorm:"not null;size:100"`
-	Description		string	
+	Description		string	`gorm:"not null"`
 	ImageURL		string	
 	ProductURL		string	 
 	Price			float32
@@ -80,14 +81,46 @@ func newPromoValidator(pdb PromoDB) *promoValidator {
 	}
 }
 
+// takes 's' argument and validates 's' length after requirment
+func (pv *promoValidator) validateLength(promo *Promo, field string) promoValFunc {
+	return promoValFunc(func(promo *Promo) error {
+		var s string
+		var e error
+		min, max := 2, 100
+		switch field {
+			case "title":
+				s = promo.Title
+				e = ErrPromoTitleInvalid
+			case "brand":
+				s = promo.Brand
+				e = ErrPromoBrandInvalid
+			case "description":
+				s = promo.Description
+				e = ErrPromoDescriptionInvalid
+				max = 255
+			default:
+		}
+
+		sLen := len(strings.TrimSpace(s))
+		if sLen < min || sLen > max {
+			return e
+		}
+
+		return nil
+	})
+}
+
 // Create will validate and and backfill data
-func (pv *promoValidator) Create(Promo *Promo) error {
-	err := runPromosValFunc(Promo,)
+func (pv *promoValidator) Create(promo *Promo) error {
+	err := runPromosValFunc(promo,
+	pv.validateLength(promo, "title"),
+	pv.validateLength(promo, "brand"),
+	pv.validateLength(promo, "description"))
 	if err != nil {
 		return err
 	}
 
-	return pv.PromoDB.Create(Promo)
+	return pv.PromoDB.Create(promo)
 }
 
 // Delete will remove the provided Promo from the database,
@@ -123,7 +156,8 @@ func (pg *promoGorm) ByID(id uint) (*Promo, error) {
 
 // Create will create the provided promo
 func (pg *promoGorm) Create(Promo *Promo) error {
-	return pg.db.Create(Promo).Error
+	err := pg.db.Create(Promo).Error
+	return isDuplicateError(err, "promos")
 }
 
 // Update will update the releated promo with all of the data

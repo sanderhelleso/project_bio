@@ -31,22 +31,31 @@ const (
 	// ErrEmailExists is returned when both passed in IDs  are equal
 	ErrEmailExists modelError = "Email is already taken by another user"
 
-	// ErrFollowerExists is returned when a follower releationship already exists
-	ErrFollowerExists modelError = "You are already following this user"
-
 	// ErrIDInvalid is returned when an invalid ID is
 	// provided to a method like Delete
-	ErrIDInvalid privateError = "ID provided was invalid"
+	ErrIDInvalid modelError = "ID provided was invalid"
 
 	// ErrIDMissmatch is returned when both passed in IDs  are equal
-	ErrIDMissmatch privateError = "IDs provided can not be the same"
+	ErrIDMissmatch modelError = "IDs provided can not be the same"
 
 	// ErrUserIDRequired is returned when an user ID is required
-	ErrUserIDRequired  privateError = "models: user ID is required"
+	ErrUserIDRequired  modelError = "models: user ID is required"
 
 	// ErrPasswordHashRequired is returned when a users
 	// password hash is required but not present
 	ErrPasswordHashRequired modelError = "Password hash is required"
+
+	// ErrPromoTitleInvalid is returned when a promo is atempted created
+	// with a to short or long title
+	ErrPromoTitleInvalid modelError = "Title must be between 2 and 100 characters"
+
+	// ErrPromoBrandInvalid is returned when a promo is atempted created
+	// with a to short or long title
+	ErrPromoBrandInvalid modelError = "Brand name must be between 2 and 100 characters"
+
+	// ErrPromoDescriptionInvalid is returned when a promo is atempted created
+	// with a to short or long title
+	ErrPromoDescriptionInvalid modelError = "Description must be between 2 and 255 characters"
 )
 
 type modelError string
@@ -55,11 +64,6 @@ func (e modelError) Error() string {
 	return string(e)
 }
 
-type privateError string
-
-func (e privateError) Error() string {
-	return string(e)
-}
 
 /*********************** DB ERRORS ************************/
 
@@ -68,8 +72,6 @@ func isDuplicateError(err error, model string) error {
 		switch model {
 			case "users":
 				return ErrEmailExists
-			case "followers":
-				return ErrFollowerExists
 			default:
 		}
 	}
