@@ -18,6 +18,7 @@ func NewServices() (*Services, error) {
 	return &Services{
 		User:     NewUserService(db),
 		Follower: NewFollowerService(db),
+		Promo:	  NewPromoService(db),
 		db:       db,
 	}, nil
 }
@@ -26,6 +27,7 @@ func NewServices() (*Services, error) {
 type Services struct {
 	User     UserService
 	Follower FollowerService
+	Promo	 PromoService
 	db       *gorm.DB
 }
 
@@ -42,7 +44,7 @@ func (s *Services) Close() error {
 
 // DestructiveReset drops all tables and rebuilds it
 func (s *Services) DestructiveReset() error {
-	err := s.db.DropTableIfExists(&User{}, &Follower{}).Error
+	err := s.db.DropTableIfExists(&User{}, &Follower{}, &Promo{}).Error
 	if err != nil {
 		return err
 	}
@@ -52,6 +54,6 @@ func (s *Services) DestructiveReset() error {
 
 // AutoMigrate will attempt to automatically migrate all tables
 func (s *Services) AutoMigrate() error {
-	err := s.db.AutoMigrate(&User{}, &Follower{}).Error
+	err := s.db.AutoMigrate(&User{}, &Follower{}, &Promo{}).Error
 	return err
 }

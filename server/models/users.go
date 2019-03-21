@@ -24,9 +24,6 @@ type User struct {
 	FirstName	    string `gorm:"size:35;not null"`
 	LastName	   	string `gorm:"size:35;not null"`
 	InstagramURL	string 
-
-	// releationship (many2many)
-	Followers 		[]Follower `gorm:"foreignkey:UserFollowingID"`
 }
 
 // UserData represents the users data
@@ -164,7 +161,7 @@ func (uv *userValidator) ByEmail(email string) (*User, error) {
 		return nil, err
 	}
 
-	return uv.ByEmail(user.Email)
+	return uv.UserDB.ByEmail(user.Email)
 }
 
 // Create will create the provided user and backfill

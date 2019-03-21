@@ -7,7 +7,7 @@ import (
 )
 
 // FollowerRoutes controll the grouping of auth releated aspects of the app
-func FollowerRoutes(router *gin.Engine, fc *controllers.Followers) {
+func FollowersRoutes(router *gin.Engine, fc *controllers.Followers) {
 	v1 := router.Group("/api/v1/followers")
 	{
 		v1.Use(middelware.RequireToken)
