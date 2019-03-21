@@ -18,6 +18,13 @@ type Profile struct {
 
 type ProfileDB interface {
 
+
+	// Methods for quering a single profile
+	ByID(id uint) (*Profile, error)
+
+	// methods for altering profiles
+	Create(profile *Profile) error
+	Update(profile *Profile) error
 }
 
 
@@ -67,9 +74,42 @@ func newProfileValidator(pdb ProfileDB) *profileValidator {
 	}
 }
 
+func (pv *profileValidator) ByID(id uint) (*Profile, error) {
+	profile := Profile {
+		ID: id,
+	}
+
+	err := runProfilesValFuncs(&profile,
+	pv.idGreaterThan(0))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return pv.ProfileDB.ByID(profile.ID)
+}
+
+func (pv *profileValidator) idGreaterThan(n uint) profileValFunc {
+	return profileValFunc(func(profile *Profile) error {
+		if profile.ID <= n {
+			return ErrIDInvalid
+		}
+
+		return nil
+	})
+}
+
+
 // ensure interface is matching
 var _ ProfileDB = &profileGorm{}
 
 type profileGorm struct {
 	db *gorm.DB
+}
+
+func (pg *profileGorm) ByID(id uint) (*Profile, error) {
+	var profile Profile
+	db := pg.db.Where("profile_id = ?", id)
+	err := first(db, &profile)
+	return &profile, err
 }
