@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"../lib/jwt"
 	"../lib/response"
-	"strconv"
 )
 
 // AuthForm represents the request body to the endpoint /signup and /login. 
@@ -16,9 +15,9 @@ type AuthForm struct {
 	Password 		string `form:"password" binding:"required"`
 }
 
-// DeleteForm represents the request body to the endpoint /delete
-type DeleteForm struct {
-	ID 		string `form:"uid" binding:"required"`
+// DeleteUserForm represents the request body to the endpoint /delete
+type DeleteUserForm struct {
+	ID 	uint `form:"userID" binding:"required"`
 }
 
 // Users represents the controller for a user in the app
@@ -81,7 +80,7 @@ func (u *Users) Create(c *gin.Context) {
 //BODY:		DeleteForm
 func (u *Users) Delete(c *gin.Context) {
 
-	var form DeleteForm
+	var form DeleteUserForm
 	if c.Bind(&form) != nil {
 		response.RespondWithError(
 			c, 
@@ -91,8 +90,7 @@ func (u *Users) Delete(c *gin.Context) {
 	}
 
 	// attempt to delete user with uid and its data from db
-	uid, _ := strconv.Atoi(c.PostForm("uid"))
-	err := u.us.Delete(uint(uid)); if err != nil {
+	err := u.us.Delete(form.ID); if err != nil {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
@@ -136,7 +134,7 @@ func (u *Users) Login(c *gin.Context) {
 
 	// generate valid JWT
 	validToken, err := jwt.GenerateJWT(user.ID)
-	fmt.Println(validToken)
+	
 	if err != nil {
 		response.RespondWithError(
 			c, 

@@ -9,22 +9,23 @@ import (
 
 // Profile represents a users profile
 type Profile struct {
-	ID 				uint   `gorm:"primmary_key"`
-	FirstName	    string `gorm:"size:35;not null"`
-	LastName	   	string `gorm:"size:35;not null"`
+	ID 				uint   	`gorm:"primmary_key"`
+	UserID			uint   	
+	Handle			string  `gorm:"size:30;not null"`
+	FirstName	    string 	`gorm:"size:35;not null"`
+	LastName	   	string 	`gorm:"size:35;not null"`
 	InstagramURL	string 
 	UpdatedAt		time.Time
 }
 
 type ProfileDB interface {
 
-
 	// Methods for quering a single profile
 	ByID(id uint) (*Profile, error)
 
 	// methods for altering profiles
 	Create(profile *Profile) error
-	Update(profile *Profile) error
+	//Update(profile *Profile) error
 }
 
 
@@ -89,6 +90,16 @@ func (pv *profileValidator) ByID(id uint) (*Profile, error) {
 	return pv.ProfileDB.ByID(profile.ID)
 }
 
+func (pv *profileValidator) Create(profile *Profile) error {
+	err := runProfilesValFuncs(profile,)
+
+	if err != nil {
+		return err
+	}
+
+	return pv.ProfileDB.Create(profile)
+}
+
 func (pv *profileValidator) idGreaterThan(n uint) profileValFunc {
 	return profileValFunc(func(profile *Profile) error {
 		if profile.ID <= n {
@@ -112,4 +123,9 @@ func (pg *profileGorm) ByID(id uint) (*Profile, error) {
 	db := pg.db.Where("profile_id = ?", id)
 	err := first(db, &profile)
 	return &profile, err
+}
+
+func (pg *profileGorm) Create(profile *Profile) error {
+	err := pg.db.Create(profile).Error
+	return isDuplicateError(err, "profiles")
 }

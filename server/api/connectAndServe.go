@@ -7,14 +7,19 @@ import (
 
 // ConnectAndServe connects all endpoint groupings 
 // and serves the application on the port specified in.env 
-func ConnectAndServe(uc *controllers.Users, fc *controllers.Followers, pc *controllers.Promos) {
+func ConnectAndServe(
+	usersC 		*controllers.Users, 
+	followersC 	*controllers.Followers, 
+	promosC 	*controllers.Promos,
+	profilesC 	*controllers.Profiles) {
 
 	// connect router and API v1
 	router := gin.Default()
 
-	UsersRoutes(router, uc)
-	FollowersRoutes(router, fc)
-	PromosRoutes(router, pc)
+	UsersRoutes(router, usersC)
+	FollowersRoutes(router, followersC)
+	PromosRoutes(router, promosC)
+	ProfilesRoutes(router, profilesC)
 	
 	router.Run() // listen and serve on 0.0.0.0:5000
 }

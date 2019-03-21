@@ -18,12 +18,11 @@ import (
 
 // User represent a user in the application
 type User struct {
-	gorm.Model          // `ID`, `CreatedAt`, `UpdatedAt`, `DeletedAt`
-	Email	    	string `gorm:"size:30;not null;unique_index"`
-	Password		string `gorm:"-"` // ignore in DB
-	PasswordHash	string `gorm:"not null"`
-	Profile 		Profile
-	ProfileID		uint
+	gorm.Model          	// `ID`, `CreatedAt`, `UpdatedAt`, `DeletedAt`
+	Email	    	string 	`gorm:"size:30;not null;unique_index"`
+	Password		string 	`gorm:"-"` // ignore in DB
+	PasswordHash	string 	`gorm:"not null"`
+	Profile 		Profile `gorm:"foreignkey:UserID;"`
 }
 
 // UserData represents the users data
