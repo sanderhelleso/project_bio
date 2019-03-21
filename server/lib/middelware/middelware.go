@@ -6,7 +6,7 @@ import (
 	"../response"
 	"../jwt"
 	"strings"
-	"fmt"
+	"os"
 )
 
 // RequireToken checks the incoming request header
@@ -29,7 +29,8 @@ func RequireToken(c *gin.Context) {
 		return
 	}
 
-	fmt.Printf("\n\nUSER ID: %v \n\n", id)
-	
+	// update specifc request contex with id
+	c.Set(os.Getenv("CTX_USER_KEY"), id)
+
 	c.Next()
 }  
