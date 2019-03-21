@@ -57,9 +57,15 @@ func (u *Users) Create(c *gin.Context) {
 
 	// attempt to create and store user in DB
 	if err := u.us.Create(&user); err != nil {
+
+		code := http.StatusBadRequest
+		if err == models.ErrEmailExists {
+			code = http.StatusConflict
+		}
+
 		response.RespondWithError(
 			c, 
-			http.StatusConflict, 
+			code,  
 			err.Error())
 		return
 	}
@@ -93,7 +99,7 @@ func (u *Users) Delete(c *gin.Context) {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
-			"Something went wrong when attempting to delete your account")
+			"Something went wrong when attempting to delete your account. Please try again")
 		return
 	}
 

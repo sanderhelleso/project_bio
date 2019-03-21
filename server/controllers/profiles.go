@@ -62,8 +62,8 @@ func (p *Profiles) Create(c *gin.Context) {
 	if err := p.ps.Create(&profile); err != nil {
 		response.RespondWithError(
 			c, 
-			http.StatusConflict, 
-			err.Error())
+			http.StatusInternalServerError, 
+			"Something went wrong when creating profile. Please try again.")
 		return
 	}
 
