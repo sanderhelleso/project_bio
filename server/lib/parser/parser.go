@@ -1,8 +1,12 @@
 package parser
 
 import (
-	"strconv"
-	"reflect"
+    "strconv"
+    "os"
+    "github.com/gin-gonic/gin"
+    "errors"
+    "reflect"
+    "fmt"
 )
 
 // ParseUserID parses the given string representation of a user id
@@ -16,6 +20,17 @@ func ParseUserID(value string) (uint, error) {
 	}
 
 	return uint(n), err
+}
+
+// GetIDFromCTX fetches the userID from current context
+// If unable to parse, return 0 and error message
+func GetIDFromCTX(c *gin.Context) (uint, error) {
+    id, found := c.Get(os.Getenv("CTX_USER_KEY"))
+	if !found { 
+        return 0, errors.New("Unable to identify user")
+    }
+
+	return ParseUserID(fmt.Sprint(id))
 }
 
 // MakeSlice creates a slice from interface
