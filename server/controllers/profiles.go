@@ -11,8 +11,8 @@ import (
 // ProfileForm represents the request body to the endpoint /new and /update 
 type ProfileForm struct {
 	Handle			string  `form:"handle" binding:"required"`
-	FirstName	    string 	`form:"firstName" binding:"required"`
-	LastName	   	string 	`form:"lastName" binding:"required"`
+	Name	    	string 	`form:"name" binding:"required"`
+	Bio		    	string 	`form:"bio" binding:"required"`
 	InstagramURL	string  `form:"instagramURL" binding:"required"`
 }
 
@@ -54,8 +54,8 @@ func (p *Profiles) Create(c *gin.Context) {
 	profile := models.Profile {
 		UserID:			parser.GetIDFromCTX(c),	
 		Handle:			form.Handle,
-		FirstName:	    form.FirstName,
-		LastName:	   	form.LastName,
+		Name:	    	form.Name,
+		Bio:			form.Bio,
 		InstagramURL:	form.InstagramURL,
 	}
 

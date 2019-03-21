@@ -3,6 +3,9 @@ package models
 import (
 	"time"
 	"github.com/jinzhu/gorm"
+	"strings"
+	"net/url"
+	"net"
 
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
@@ -12,8 +15,8 @@ type Profile struct {
 	ID 				uint   	`gorm:"primmary_key"`
 	UserID			uint   	`gorm:"not null;unique"`
 	Handle			string  `gorm:"size:30;not null;unique_index"`
-	FirstName	    string 	`gorm:"size:35;not null"`
-	LastName	   	string 	`gorm:"size:35;not null"`
+	Name		    string 	`gorm:"size:70;not null"`
+	Bio				string  `gorm:"size:150"`
 	InstagramURL	string 
 	UpdatedAt		time.Time
 }
@@ -96,7 +99,8 @@ func (pv *profileValidator) ByHandle(handle string) (*Profile, error) {
 		Handle: handle,
 	}
 
-	err := runProfilesValFuncs(&profile,)
+	err := runProfilesValFuncs(&profile,
+	pv.normalizeHandle)
 
 	if err != nil {
 		return nil, err
@@ -106,7 +110,11 @@ func (pv *profileValidator) ByHandle(handle string) (*Profile, error) {
 }
 
 func (pv *profileValidator) Create(profile *Profile) error {
-	err := runProfilesValFuncs(profile,)
+	err := runProfilesValFuncs(profile,
+	pv.normalizeHandle,
+	pv.validateHandle,
+	pv.validateName,
+	pv.validateBio)
 
 	if err != nil {
 		return err
@@ -123,6 +131,64 @@ func (pv *profileValidator) idGreaterThan(n uint) profileValFunc {
 
 		return nil
 	})
+}
+
+func (pv *profileValidator) normalizeHandle(profile *Profile) error {
+	profile.Handle = strings.TrimSpace(strings.ToLower(profile.Handle))
+	return nil
+}
+
+func (pv *profileValidator) validateHandle(profile *Profile) error {
+	if len(profile.Handle) == 0 {
+		return ErrProfileHandleRequired
+	}
+
+	if len(profile.Handle) < 2 || len(profile.Handle) > 30 {
+		return ErrProfileHandleInvalid
+	}
+
+	return nil
+}
+
+func (pv *profileValidator) validateName(profile *Profile) error {
+	if len(strings.TrimSpace(profile.Name)) == 0 {
+		return ErrProfileNameRequired
+	}
+
+	if len(profile.Name) < 2 || len(profile.Name) > 70 {
+		return ErrProfileNameInvalid
+	}
+
+	return nil
+}
+
+func (pv *profileValidator) validateBio(profile *Profile) error {
+	if len(strings.TrimSpace(profile.Bio)) != 0 {
+
+		if len(profile.Bio) > 150 {
+			return ErrProfileBioInvalid
+		}
+	}
+
+	return nil
+}
+
+// ensure that provided url is valid and from instagram domain
+func (pv *profileValidator) validateInstagramURL(profile *Profile) error {
+	if len(strings.TrimSpace(profile.InstagramURL)) != 0 {
+
+		u, err := url.ParseRequestURI(profile.InstagramURL)
+		if err != nil {
+			return ErrProfileInstagramURLInvalid
+		}
+
+		host, _, _ := net.SplitHostPort(u.Host)
+		if host != "instagram.com" {
+			return ErrProfileInstagramURLInvalid
+		}
+	}
+	
+	return nil
 }
 
 

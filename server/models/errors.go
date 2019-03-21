@@ -68,6 +68,30 @@ const (
 	// ErrPromoExpiresAtInvalid is returned when a promo is atempted created
 	// with an invalid expirationAt date
 	ErrPromoExpiresAtInvalid modelError = "Expiration date cannot be a date that is in the present"
+
+	// ErrProfileHandleRequired is returned when a profile is atempted created
+	// with an empty handle
+	ErrProfileHandleRequired modelError = "Handle must be all lowercase and cannot contain space or special characters"
+
+	// ErrProfileHandleInvalid is returned when a profile is atempted created
+	// with an to long or short handle length
+	ErrProfileHandleInvalid modelError = "Handle must be between 2 and 30 characters"
+
+	// ErrProfileNameRequired is returned when a profile is atempted created
+	// with an empty name
+	ErrProfileNameRequired modelError = "Name is required"
+
+	// ErrProfileNameInvalid is returned when a profile is atempted created
+	// with an invalid name format
+	ErrProfileNameInvalid modelError = "Name must be between 2 and 70 characters"
+
+	// ErrProfileBioInvalid is returned when a profile is atempted created
+	// with an invalid bio length
+	ErrProfileBioInvalid modelError = "Bio cannot be longer than 150 characters"
+
+	// ErrProfileInstagramURLInvalid is returned when a profile is atempted created
+	// with an invalid bio instagram url
+	ErrProfileInstagramURLInvalid modelError = "Link provided is invalid. Must be accessible and from the offical Instagram"
 )
 
 type modelError string
