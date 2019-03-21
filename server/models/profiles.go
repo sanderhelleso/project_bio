@@ -5,7 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"strings"
 	"net/url"
-	"net"
+	"../lib/parser"
 
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
@@ -183,8 +183,7 @@ func (pv *profileValidator) validateInstagramURL(profile *Profile) error {
 			return ErrProfileInstagramURLInvalid
 		}
 
-		host, _, _ := net.SplitHostPort(u.Host)
-		if host != "instagram.com" {
+		if parser.GetDomainNameFromURL(u) != "instagram.com" {
 			return ErrProfileInstagramURLInvalid
 		}
 	}

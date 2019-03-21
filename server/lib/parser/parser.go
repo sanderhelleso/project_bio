@@ -8,6 +8,8 @@ import (
     "reflect"
     "fmt"
     "math"
+    "strings"
+    "net/url"
 )
 
 // ParseUserID parses the given string representation of a user id
@@ -26,6 +28,14 @@ func ParseUserID(value string) (uint, error) {
 // RoundFloat64 takes in any float64 value and rounds it to two decimals
 func RoundFloat64(value float64) float64 {
     return math.Round(value * 100) / 100
+}
+
+// GetDomainNameFromURL gets the domain name from passed in URL
+// Url must be valid in order for func to provide correct result
+func GetDomainNameFromURL(u *url.URL) string {
+    parts := strings.Split(u.Hostname(), ".")
+    domain := parts[len(parts) - 2] + "." + parts[len(parts)-1]
+    return domain
 }
 
 // GetIDFromCTX fetches the userID from current context
