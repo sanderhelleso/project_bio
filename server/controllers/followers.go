@@ -5,20 +5,19 @@ import (
 	"net/http"
 	"../models"
 	"../lib/response"
-	"../lib/parser"
 )
 
 // FollowingForm represents the request body to the endpoint /followers.
 // FollowForms structure is be used for both creation & delete
 type FollowingForm struct {
-	UserID 			string `form:"userID" binding:"required"`
-	UserFollowingID string `form:"userFollowingID" binding:"required"`
+	UserID 			uint `form:"userID" binding:"required"`
+	UserFollowingID uint `form:"userFollowingID" binding:"required"`
 }
 
 // FollowerForm represents the request body to the endpoints
 // /followers/all - /followes/delete - /followers/following
 type FollowerForm struct {
-	UserID 			string `form:"userID"`
+	UserID	uint `form:"userID"`
 }
 
 // Followers represents the controller for a follower releationship in the app
@@ -53,15 +52,9 @@ func (f *Followers) Create(c *gin.Context) {
 		return
 	}
 
-	userID, err := parser.ParseUserID(c.PostForm("userID"))
-	if err != nil { return }
-
-	userFollowingID, err := parser.ParseUserID(c.PostForm("userFollowingID"))
-	if err != nil { return }
-
 	follow := models.Follower {
-		UserID: 		 userID,
-		UserFollowingID: userFollowingID,
+		UserID: 		 form.UserFollowingID,
+		UserFollowingID: form.UserFollowingID,
 	}
 
 	// attempt to create and store follower in DB
@@ -97,11 +90,7 @@ func (f *Followers) Delete(c *gin.Context) {
 		return
 	}
 
-	// attempt to delete user with uid and its data from db
-	userID, err := parser.ParseUserID(c.PostForm("userID"))
-	if err != nil { return  }
-
-	err = f.fs.Delete(userID); if err != nil {
+	err := f.fs.Delete(form.UserID); if err != nil {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
@@ -133,11 +122,7 @@ func (f *Followers) ByUserID(c *gin.Context) {
 		return
 	}
 
-	userID, err := parser.ParseUserID(c.Param("userID"))
-	if err != nil { return }
-
-	// attempt to create and store user in DB
-	followers, err := f.fs.ByUserID(userID)
+	followers, err := f.fs.ByUserID(form.UserID)
 	if err != nil {
 		response.RespondWithError(
 			c, 
@@ -171,11 +156,8 @@ func (f *Followers) ByUserFollowingID(c *gin.Context) {
 		return
 	}
 
-	userID, err := parser.ParseUserID(c.Param("userID"))
-	if err != nil { return }
 
-	// attempt to create and store user in DB
-	following, err := f.fs.ByUserFollowingID(userID)
+	following, err := f.fs.ByUserFollowingID(form.UserID)
 	if err != nil {
 		response.RespondWithError(
 			c, 
