@@ -8,8 +8,8 @@ import (
 
 // Promo represents a product promote in the application
 type Promo struct {
-	gorm.Model
-	UserID			uint 	`gorm:"not null"`
+	ID        		uint `gorm:"primary_key"`
+	UserID			uint 	`gorm:"not null;index"`
 	Title			string 	`gorm:"not null;size:100"`
 	Brand			string 	`gorm:"not null;size:100"`
 	Description		string	
@@ -18,6 +18,8 @@ type Promo struct {
 	Price			float32
 	Currency		string
 	PercantageOff	int	
+	CreatedAt 		time.Time
+	UpdatedAt 		time.Time
 	ExpiresAt		time.Time
 }
 
@@ -26,6 +28,7 @@ type PromoDB interface {
 
 	// methods for altering promos
 	Create(promo *Promo) error
+	Update(promo *Promo) error
 	Delete(id uint) error
 }
 
@@ -123,8 +126,15 @@ func (pg *promoGorm) Create(Promo *Promo) error {
 	return pg.db.Create(Promo).Error
 }
 
+// Update will update the releated promo with all of the data
+// in the provided promo object.
+func (pg *promoGorm) Update(promo *Promo) error {	
+	return pg.db.Save(promo).Error
+}
+
+
 // Delete will delete the promo with the provided ID
 func (pg *promoGorm) Delete(id uint) error {
-	Promo := Promo{Model: gorm.Model{ID: id}}
+	Promo := Promo{ID: id}
 	return pg.db.Delete(&Promo).Error
 }
