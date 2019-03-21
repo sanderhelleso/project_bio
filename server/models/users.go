@@ -22,9 +22,8 @@ type User struct {
 	Email	    	string `gorm:"size:30;not null;unique_index"`
 	Password		string `gorm:"-"` // ignore in DB
 	PasswordHash	string `gorm:"not null"`
-	FirstName	    string `gorm:"size:35;not null"`
-	LastName	   	string `gorm:"size:35;not null"`
-	InstagramURL	string 
+	Profile 		Profile
+	ProfileID		uint
 }
 
 // UserData represents the users data

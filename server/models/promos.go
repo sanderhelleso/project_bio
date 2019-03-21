@@ -19,7 +19,7 @@ type Promo struct {
 	ProductURL		string	 
 	Price			float64
 	PercantageOff	uint	
-	Currency		string
+	Currency		string	`gorm:"size:3"`
 	CreatedAt 		time.Time
 	UpdatedAt 		time.Time
 	ExpiresAt		time.Time

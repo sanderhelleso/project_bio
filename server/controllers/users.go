@@ -10,19 +10,10 @@ import (
 	"strconv"
 )
 
-// SignupForm represents the request body to the endpoint /signup. 
-type SignupForm struct {
+// AuthForm represents the request body to the endpoint /signup and /login. 
+type AuthForm struct {
 	Email 			string `form:"email" binding:"required"`
 	Password 		string `form:"password" binding:"required"`
-	FirstName 		string `form:"firstName" binding:"required"`
-	LastName 		string `form:"lastName" binding:"required"`
-	InstagramURL 	string `form:"instagramURL"`
-}
-
-// LoginForm represents the request body to the endpoint /login 
-type LoginForm struct {
-	Email 		string `form:"email" binding:"required"`
-	Password 	string `form:"password" binding:"required"`
 }
 
 // DeleteForm represents the request body to the endpoint /delete
@@ -52,7 +43,7 @@ func NewUsers(us models.UserService) *Users {
 // BODY:	SignupForm
 func (u *Users) Create(c *gin.Context) {
 
-	var form SignupForm
+	var form AuthForm
 	if c.Bind(&form) != nil {
 		response.RespondWithError(
 			c, 
@@ -64,9 +55,6 @@ func (u *Users) Create(c *gin.Context) {
 	user := models.User {
 		Email: 			form.Email,
 		Password:		form.Password,
-		FirstName: 		form.FirstName,
-		LastName:		form.LastName,
-		InstagramURL:	form.InstagramURL,
 	}
 
 	// attempt to create and store user in DB
@@ -127,7 +115,7 @@ func (u *Users) Delete(c *gin.Context) {
 // BODY:	LoginForm
 func (u *Users) Login(c *gin.Context) {
 
-	var form LoginForm
+	var form AuthForm
 	if c.Bind(&form) != nil {
 		response.RespondWithError(
 			c, 
