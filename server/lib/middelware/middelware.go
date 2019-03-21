@@ -6,6 +6,7 @@ import (
 	"../response"
 	"../jwt"
 	"strings"
+	"fmt"
 )
 
 // RequireToken checks the incoming request header
@@ -22,10 +23,13 @@ func RequireToken(c *gin.Context) {
 
 	// get the token from the bearer header
 	token := strings.Split(bearer, "Bearer ")[1]
-	if !jwt.CompareJWT(token) {
+	valid, id := jwt.CompareJWT(token)
+	if !valid {
 		response.RespondWithError(c, http.StatusForbidden, "Invalid authentication token")
 		return
 	}
+
+	fmt.Printf("\n\nUSER ID: %v \n\n", id)
 	
 	c.Next()
 }  

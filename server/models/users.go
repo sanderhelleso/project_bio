@@ -161,7 +161,7 @@ func (uv *userValidator) ByEmail(email string) (*User, error) {
 		return nil, err
 	}
 
-	return uv.ByEmail(user.Email)
+	return uv.UserDB.ByEmail(user.Email)
 }
 
 // Create will create the provided user and backfill

@@ -161,6 +161,7 @@ func (u *Users) Login(c *gin.Context) {
 
 	// generate valid JWT
 	validToken, err := jwt.GenerateJWT(user.ID)
+	fmt.Println(validToken)
 	if err != nil {
 		response.RespondWithError(
 			c, 
