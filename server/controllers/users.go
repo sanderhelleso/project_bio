@@ -73,8 +73,8 @@ func (u *Users) Create(c *gin.Context) {
 	if err := u.us.Create(&user); err != nil {
 		response.RespondWithError(
 			c, 
-			http.StatusInternalServerError, 
-			"Something went wrong when attempting to signup")
+			http.StatusConflict, 
+			err.Error())
 		return
 	}
 

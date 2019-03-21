@@ -64,12 +64,12 @@ func (f *Followers) Create(c *gin.Context) {
 		UserFollowingID: userFollowingID,
 	}
 
-	// attempt to create and store user in DB
+	// attempt to create and store follower in DB
 	if err := f.fs.Create(&follow); err != nil {
 		response.RespondWithError(
 			c, 
-			http.StatusInternalServerError, 
-			"Something went wrong when attempting to follow user")
+			http.StatusBadRequest, 
+			err.Error())
 		return
 	}
 

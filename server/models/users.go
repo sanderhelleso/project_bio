@@ -332,8 +332,11 @@ func (ug *userGorm) ByEmail(email string) (*User, error) {
 
 // Create will create the provided user and backfill data
 // like the ID, CreatedAt and UpdatedAt fields
+//
+// If duplicate error, send custom message, else standard
 func (ug *userGorm) Create(user *User) error {
-	return ug.db.Create(user).Error
+	err := ug.db.Create(user).Error
+	return isDuplicateError(err, "users")
 }
 
 // Update will update the provided user with all of the

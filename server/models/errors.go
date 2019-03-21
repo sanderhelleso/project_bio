@@ -1,5 +1,6 @@
 package models
 
+import "strings"
 
 const (
 
@@ -27,6 +28,12 @@ const (
 	// is attempted with an email address that is already in use
 	ErrEmailTaken modelError = "Email address is already taken"
 
+	// ErrEmailExists is returned when both passed in IDs  are equal
+	ErrEmailExists modelError = "Email is already taken by another user"
+
+	// ErrFollowerExists is returned when a follower releationship already exists
+	ErrFollowerExists modelError = "You are already following this user"
+
 	// ErrIDInvalid is returned when an invalid ID is
 	// provided to a method like Delete
 	ErrIDInvalid privateError = "ID provided was invalid"
@@ -52,4 +59,20 @@ type privateError string
 
 func (e privateError) Error() string {
 	return string(e)
+}
+
+/*********************** DB ERRORS ************************/
+
+func isDuplicateError(err error, model string) error {
+	if strings.Contains(err.Error(), "duplicate key value violates unique constraint") {
+		switch model {
+			case "users":
+				return ErrEmailExists
+			case "followers":
+				return ErrFollowerExists
+			default:
+		}
+	}
+
+	return err
 }

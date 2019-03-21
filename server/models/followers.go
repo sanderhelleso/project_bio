@@ -149,7 +149,8 @@ func (fg *followerGorm) ByUserFollowingID(id uint) (*[]UserData, error) {
 
 // Create will create the provided follower releationship
 func (fg *followerGorm) Create(follower *Follower) error {
-	return fg.db.Create(follower).Error
+	err := fg.db.Create(&follower).Error
+	return isDuplicateError(err, "followers")
 }
 
 //Delete will delete the follower with the provided ID
