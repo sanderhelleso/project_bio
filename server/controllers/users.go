@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"../models"
-	"fmt"
 	"../lib/jwt"
 	"../lib/response"
 )
@@ -134,7 +133,7 @@ func (u *Users) Login(c *gin.Context) {
 
 	// generate valid JWT
 	validToken, err := jwt.GenerateJWT(user.ID)
-	
+
 	if err != nil {
 		response.RespondWithError(
 			c, 

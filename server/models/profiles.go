@@ -10,8 +10,8 @@ import (
 // Profile represents a users profile
 type Profile struct {
 	ID 				uint   	`gorm:"primmary_key"`
-	UserID			uint   	
-	Handle			string  `gorm:"size:30;not null"`
+	UserID			uint   	`gorm:"not null;unique"`
+	Handle			string  `gorm:"size:30;not null;unique_index"`
 	FirstName	    string 	`gorm:"size:35;not null"`
 	LastName	   	string 	`gorm:"size:35;not null"`
 	InstagramURL	string 
@@ -22,6 +22,7 @@ type ProfileDB interface {
 
 	// Methods for quering a single profile
 	ByID(id uint) (*Profile, error)
+	ByHandle(handle string) (*Profile, error)
 
 	// methods for altering profiles
 	Create(profile *Profile) error
@@ -90,6 +91,20 @@ func (pv *profileValidator) ByID(id uint) (*Profile, error) {
 	return pv.ProfileDB.ByID(profile.ID)
 }
 
+func (pv *profileValidator) ByHandle(handle string) (*Profile, error) {
+	profile := Profile {
+		Handle: handle,
+	}
+
+	err := runProfilesValFuncs(&profile,)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return pv.ProfileDB.ByHandle(profile.Handle)
+}
+
 func (pv *profileValidator) Create(profile *Profile) error {
 	err := runProfilesValFuncs(profile,)
 
@@ -121,6 +136,13 @@ type profileGorm struct {
 func (pg *profileGorm) ByID(id uint) (*Profile, error) {
 	var profile Profile
 	db := pg.db.Where("profile_id = ?", id)
+	err := first(db, &profile)
+	return &profile, err
+}
+
+func (pg *profileGorm) ByHandle(handle string) (*Profile, error) {
+	var profile Profile
+	db := pg.db.Where("handle = ?", handle)
 	err := first(db, &profile)
 	return &profile, err
 }

@@ -99,7 +99,9 @@ func (us *userService) Authenticate(email, password string) (*User, error) {
 	}
 
 	// compare found users passwordHash, with decrypted provided password
-	err = bcrypt.CompareHashAndPassword([]byte(foundUser.PasswordHash), []byte(password + os.Getenv("USER_PWD_PEPPER")))
+	err = bcrypt.CompareHashAndPassword(
+	[]byte(foundUser.PasswordHash), 
+	[]byte(password + os.Getenv("USER_PWD_PEPPER")))
 
 	// handle errors after case occured
 	if err != nil {

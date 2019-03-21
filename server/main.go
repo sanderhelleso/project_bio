@@ -23,9 +23,10 @@ func main() {
 	services.AutoMigrate()
 	services.CreateReleations()
 
-	uc := controllers.NewUsers(services.User)
-	fc := controllers.NewFollowers(services.Follower)
-	pc := controllers.NewPromos(services.Promo)
+	usersC 		:= controllers.NewUsers(services.User)
+	followersC 	:= controllers.NewFollowers(services.Follower)
+	promosC	 	:= controllers.NewPromos(services.Promo)
+	profilesC 	:= controllers.NewProfiles(services.Profile)
 
-	api.ConnectAndServe(uc, fc, pc)
+	api.ConnectAndServe(usersC, followersC, promosC, profilesC)
 }
