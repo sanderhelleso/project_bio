@@ -62,19 +62,19 @@ func (u *Users) Create(c *gin.Context) {
 	}
 
 	user := models.User {
-		Email: 			c.PostForm("email"),
-		Password:		c.PostForm("password"),
-		FirstName: 		c.PostForm("firstName"),
-		LastName:		c.PostForm("lastName"),
-		InstagramURL:	c.PostForm("instagramURL"),
+		Email: 			form.Email,
+		Password:		form.Password,
+		FirstName: 		form.FirstName,
+		LastName:		form.LastName,
+		InstagramURL:	form.InstagramURL,
 	}
 
 	// attempt to create and store user in DB
 	if err := u.us.Create(&user); err != nil {
 		response.RespondWithError(
 			c, 
-			http.StatusInternalServerError, 
-			"Something went wrong when attempting to signup")
+			http.StatusConflict, 
+			err.Error())
 		return
 	}
 
@@ -137,25 +137,12 @@ func (u *Users) Login(c *gin.Context) {
 	}
 
 	// attempt to authenticate user
-	user, err := u.us.Authenticate(c.PostForm("email"), c.PostForm("password"))
+	user, err := u.us.Authenticate(form.Email, form.Password)
 	if err != nil {
-		switch err {
-			case models.ErrNotFound:
-				response.RespondWithError(
-					c, 
-					http.StatusUnprocessableEntity,
-					"The email provided was invalid")
-			case models.ErrPasswordIncorrect:
-				response.RespondWithError(
-					c, 
-					http.StatusUnprocessableEntity,
-					"The password provided was invalid")
-			default:
-				response.RespondWithError(
-					c, 
-					http.StatusUnprocessableEntity,
-					"Something went wrong when performing action")
-		}
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity,
+			err.Error())
 		return
 	}
 
@@ -170,7 +157,6 @@ func (u *Users) Login(c *gin.Context) {
 		return
 	}
 
-	fmt.Printf("Successfully authenticated user %v...\n", user)
 	c.JSON(http.StatusFound, gin.H {
 		"status": 	http.StatusFound,
 		"message": 	"Login successfull!",

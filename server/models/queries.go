@@ -32,6 +32,7 @@ func all(db *gorm.DB, dst interface{}) error {
 	return err
 }
 
+
 // findFollowing will find all users that the user with provided id is following
 func findFollowing(db *gorm.DB, dst User, id uint) (*[]UserData, error) {
 	results := make([]UserData, 0)

@@ -18,9 +18,9 @@ type PromoForm struct {
 	Description		string	  `form:"description"`
 	ImageURL		string	  `form:"imageURL"`
 	ProductURL		string	  `form:"productURL"`
-	Price			float32   `form:"price"`
+	Price			float64   `form:"price"`
+	PercantageOff	uint	  `form:"percentageOff"`
 	Currency		string    `form:"currency"`
-	PercantageOff	int		  `form:"percentageOff"`
 	ExpiresAt		time.Time `form:"expiresAt"`
 }
 
@@ -33,9 +33,9 @@ type UpdatePromoForm struct {
 	Description		string	  `form:"description"`
 	ImageURL		string	  `form:"imageURL"`
 	ProductURL		string	  `form:"productURL"`
-	Price			float32   `form:"price"`
+	Price			float64   `form:"price"`
+	PercantageOff	uint	  `form:"percentageOff"`
 	Currency		string    `form:"currency"`
-	PercantageOff	int		  `form:"percentageOff"`
 	ExpiresAt		time.Time `form:"expiresAt"`
 }
 
@@ -78,7 +78,7 @@ func (p *Promos) Create(c *gin.Context) {
 
 	// attempt to create and store promo in DB
 	promo := models.Promo {
-		UserID: 		form.UserID,
+		UserID: 		parser.GetIDFromCTX(c),
 		Title:			form.Title,
 		Brand:			form.Brand,
 		Description:	form.Description,
@@ -145,7 +145,6 @@ func (p *Promos) Update(c *gin.Context) {
 			"Something went wrong when attempting to update promo")
 		return
 	}
-
 
 	response.RespondWithSuccess(
 		c,

@@ -7,6 +7,7 @@ import (
     "net/http"
     "reflect"
     "fmt"
+    "math"
 )
 
 // ParseUserID parses the given string representation of a user id
@@ -20,6 +21,11 @@ func ParseUserID(value string) (uint, error) {
 	}
 
 	return uint(n), err
+}
+
+// RoundFloat64 takes in any float64 value and rounds it to two decimals
+func RoundFloat64(value float64) float64 {
+    return math.Round(value * 100) / 100
 }
 
 // GetIDFromCTX fetches the userID from current context
