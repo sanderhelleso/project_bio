@@ -4,6 +4,7 @@ import (
 	"time"
 	"strings"
 	"github.com/jinzhu/gorm"
+	"../lib/parser"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
@@ -16,9 +17,9 @@ type Promo struct {
 	Description		string	`gorm:"not null"`
 	ImageURL		string	
 	ProductURL		string	 
-	Price			float32
+	Price			float64
+	PercantageOff	uint	
 	Currency		string
-	PercantageOff	int	
 	CreatedAt 		time.Time
 	UpdatedAt 		time.Time
 	ExpiresAt		time.Time
@@ -82,7 +83,7 @@ func newPromoValidator(pdb PromoDB) *promoValidator {
 }
 
 // takes 's' argument and validates 's' length after requirment
-func (pv *promoValidator) validateLength(promo *Promo, field string) promoValFunc {
+func (pv *promoValidator) validateLength(field string) promoValFunc {
 	return promoValFunc(func(promo *Promo) error {
 		var s string
 		var e error
@@ -110,12 +111,65 @@ func (pv *promoValidator) validateLength(promo *Promo, field string) promoValFun
 	})
 }
 
+func (pv *promoValidator) idGreaterThan(n uint) promoValFunc {
+	return promoValFunc(func(promo *Promo) error {
+		if promo.ID <= n {
+			return ErrIDInvalid
+		}
+
+		return nil
+	})
+}
+
+func (pv *promoValidator) normalizePrice(promo *Promo) error {
+	promo.Price = parser.RoundFloat64(promo.Price)
+	return nil
+}
+
+func (pv *promoValidator) pricePercentageBetween() promoValFunc {
+	return promoValFunc(func(promo *Promo) error {
+		if promo.Price != 0 {
+			if promo.PercantageOff < 0 || promo.PercantageOff > 100 {
+				return ErrPromoPercentageOffInvalid
+			}
+
+			return nil
+		}
+
+		return nil
+	})
+}
+
+func (pv *promoValidator) normalizeCurrency(promo *Promo) error {
+	promo.Currency = strings.ToUpper(promo.Currency)
+	return nil
+}
+
+func (pv *promoValidator) validateCurrency() promoValFunc {
+	return promoValFunc(func(promo *Promo) error {
+		if promo.Price != 0 {
+			if len(strings.TrimSpace(promo.Currency)) != 3 {
+				return ErrPromoCurrencyInvalid
+			}
+
+			return nil
+		}
+
+		return nil
+	})
+}
+
 // Create will validate and and backfill data
 func (pv *promoValidator) Create(promo *Promo) error {
 	err := runPromosValFunc(promo,
-	pv.validateLength(promo, "title"),
-	pv.validateLength(promo, "brand"),
-	pv.validateLength(promo, "description"))
+	pv.validateLength("title"),
+	pv.validateLength("brand"),
+	pv.validateLength("description"),
+	pv.normalizePrice,
+	pv.normalizeCurrency,
+	pv.validateCurrency(),
+	pv.pricePercentageBetween())
+
 	if err != nil {
 		return err
 	}
@@ -123,13 +177,33 @@ func (pv *promoValidator) Create(promo *Promo) error {
 	return pv.PromoDB.Create(promo)
 }
 
+// Update will validate update promo
+func (pv *promoValidator) Update(promo *Promo) error {
+	err := runPromosValFunc(promo,
+	pv.idGreaterThan(0),
+	pv.validateLength("title"),
+	pv.validateLength("brand"),
+	pv.validateLength("description"),
+	pv.normalizePrice,
+	pv.normalizeCurrency,
+	pv.validateCurrency(),
+	pv.pricePercentageBetween())
+
+	if err != nil {
+		return err
+	}
+
+	return pv.PromoDB.Update(promo)
+}
+
 // Delete will remove the provided Promo from the database,
 // removing all traces of the Promo and its data
 func (pv *promoValidator) Delete(id uint) error {
-	var Promo Promo
-	Promo.ID = id
+	var promo Promo
+	promo.ID = id
 
-	err := runPromosValFunc(&Promo,)
+	err := runPromosValFunc(&promo, pv.idGreaterThan(0))
+
 	if err != nil {
 		return err
 	}

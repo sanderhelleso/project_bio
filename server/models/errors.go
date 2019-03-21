@@ -56,6 +56,14 @@ const (
 	// ErrPromoDescriptionInvalid is returned when a promo is atempted created
 	// with a to short or long title
 	ErrPromoDescriptionInvalid modelError = "Description must be between 2 and 255 characters"
+
+	// ErrPromoPercentageOffInvalid is returned when a promo is atempted created
+	// with an invalid percentage of value
+	ErrPromoPercentageOffInvalid modelError = "Percentage off must be between 1 and 100"
+
+	// ErrPromoCurrencyInvalid is returned when a promo is atempted created
+	// with an invalid currency
+	ErrPromoCurrencyInvalid modelError = "Currency must be in the format 'XXX'. Currency for US Dollars would be 'USD'"
 )
 
 type modelError string

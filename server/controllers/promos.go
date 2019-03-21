@@ -18,9 +18,9 @@ type PromoForm struct {
 	Description		string	  `form:"description"`
 	ImageURL		string	  `form:"imageURL"`
 	ProductURL		string	  `form:"productURL"`
-	Price			float32   `form:"price"`
+	Price			float64   `form:"price"`
+	PercantageOff	uint	  `form:"percentageOff"`
 	Currency		string    `form:"currency"`
-	PercantageOff	int		  `form:"percentageOff"`
 	ExpiresAt		time.Time `form:"expiresAt"`
 }
 
@@ -33,9 +33,9 @@ type UpdatePromoForm struct {
 	Description		string	  `form:"description"`
 	ImageURL		string	  `form:"imageURL"`
 	ProductURL		string	  `form:"productURL"`
-	Price			float32   `form:"price"`
+	Price			float64   `form:"price"`
+	PercantageOff	uint	  `form:"percentageOff"`
 	Currency		string    `form:"currency"`
-	PercantageOff	int		  `form:"percentageOff"`
 	ExpiresAt		time.Time `form:"expiresAt"`
 }
 
