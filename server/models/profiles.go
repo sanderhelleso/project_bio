@@ -17,7 +17,7 @@ type Profile struct {
 	Handle			string  `gorm:"size:30;not null;unique_index"`
 	Name		    string 	`gorm:"size:70;not null"`
 	Bio				string  `gorm:"size:150"`
-	InstagramURL	string 
+	InstagramURL	string  
 	UpdatedAt		time.Time
 }
 
@@ -114,7 +114,8 @@ func (pv *profileValidator) Create(profile *Profile) error {
 	pv.normalizeHandle,
 	pv.validateHandle,
 	pv.validateName,
-	pv.validateBio)
+	pv.validateBio,
+	pv.validateInstagramURL)
 
 	if err != nil {
 		return err

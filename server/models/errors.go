@@ -104,11 +104,13 @@ func (e modelError) Error() string {
 /*********************** DB ERRORS ************************/
 
 func isDuplicateError(err error, model string) error {
-	if strings.Contains(err.Error(), "duplicate key value violates unique constraint") {
-		switch model {
-			case "users":
-				return ErrEmailExists
-			default:
+	if err != nil {
+		if strings.Contains(err.Error(), "duplicate key value violates unique constraint") {
+			switch model {
+				case "users":
+					return ErrEmailExists
+				default:
+			}
 		}
 	}
 
