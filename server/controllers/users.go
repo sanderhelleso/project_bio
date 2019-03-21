@@ -4,30 +4,19 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"../models"
-	"fmt"
 	"../lib/jwt"
 	"../lib/response"
-	"strconv"
 )
 
-// SignupForm represents the request body to the endpoint /signup. 
-type SignupForm struct {
+// AuthForm represents the request body to the endpoint /signup and /login. 
+type AuthForm struct {
 	Email 			string `form:"email" binding:"required"`
 	Password 		string `form:"password" binding:"required"`
-	FirstName 		string `form:"firstName" binding:"required"`
-	LastName 		string `form:"lastName" binding:"required"`
-	InstagramURL 	string `form:"instagramURL"`
 }
 
-// LoginForm represents the request body to the endpoint /login 
-type LoginForm struct {
-	Email 		string `form:"email" binding:"required"`
-	Password 	string `form:"password" binding:"required"`
-}
-
-// DeleteForm represents the request body to the endpoint /delete
-type DeleteForm struct {
-	ID 		string `form:"uid" binding:"required"`
+// DeleteUserForm represents the request body to the endpoint /delete
+type DeleteUserForm struct {
+	ID 	uint `form:"userID" binding:"required"`
 }
 
 // Users represents the controller for a user in the app
@@ -52,7 +41,7 @@ func NewUsers(us models.UserService) *Users {
 // BODY:	SignupForm
 func (u *Users) Create(c *gin.Context) {
 
-	var form SignupForm
+	var form AuthForm
 	if c.Bind(&form) != nil {
 		response.RespondWithError(
 			c, 
@@ -64,9 +53,6 @@ func (u *Users) Create(c *gin.Context) {
 	user := models.User {
 		Email: 			form.Email,
 		Password:		form.Password,
-		FirstName: 		form.FirstName,
-		LastName:		form.LastName,
-		InstagramURL:	form.InstagramURL,
 	}
 
 	// attempt to create and store user in DB
@@ -93,7 +79,7 @@ func (u *Users) Create(c *gin.Context) {
 //BODY:		DeleteForm
 func (u *Users) Delete(c *gin.Context) {
 
-	var form DeleteForm
+	var form DeleteUserForm
 	if c.Bind(&form) != nil {
 		response.RespondWithError(
 			c, 
@@ -103,8 +89,7 @@ func (u *Users) Delete(c *gin.Context) {
 	}
 
 	// attempt to delete user with uid and its data from db
-	uid, _ := strconv.Atoi(c.PostForm("uid"))
-	err := u.us.Delete(uint(uid)); if err != nil {
+	err := u.us.Delete(form.ID); if err != nil {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
@@ -127,7 +112,7 @@ func (u *Users) Delete(c *gin.Context) {
 // BODY:	LoginForm
 func (u *Users) Login(c *gin.Context) {
 
-	var form LoginForm
+	var form AuthForm
 	if c.Bind(&form) != nil {
 		response.RespondWithError(
 			c, 
@@ -148,7 +133,7 @@ func (u *Users) Login(c *gin.Context) {
 
 	// generate valid JWT
 	validToken, err := jwt.GenerateJWT(user.ID)
-	fmt.Println(validToken)
+
 	if err != nil {
 		response.RespondWithError(
 			c, 
