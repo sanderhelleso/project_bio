@@ -94,7 +94,7 @@ func (f *Followers) Delete(c *gin.Context) {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
-			"Something went wrong when attempting to unfollow user")
+			"Something went wrong when attempting to unfollow user. Please try again.")
 		return
 	}
 

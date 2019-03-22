@@ -94,7 +94,7 @@ func (p *Promos) Create(c *gin.Context) {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
-			"Something went wrong when attempting to create promo")
+			"Something went wrong when attempting to create promo. Please try again")
 		return
 	}
 
@@ -142,7 +142,7 @@ func (p *Promos) Update(c *gin.Context) {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
-			"Something went wrong when attempting to update promo")
+			"Something went wrong when attempting to update promo. Please try again")
 		return
 	}
 
@@ -174,7 +174,7 @@ func (p *Promos) Delete (c *gin.Context) {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
-			"Something went wrong when attempting to delete promo")
+			"Something went wrong when attempting to delete promo Please try again")
 		return
 	}
 

@@ -12,8 +12,8 @@ import (
 type ProfileForm struct {
 	Handle			string  `form:"handle" binding:"required"`
 	Name	    	string 	`form:"name" binding:"required"`
-	Bio		    	string 	`form:"bio" binding:"required"`
-	InstagramURL	string  `form:"instagramURL" binding:"required"`
+	Bio		    	string 	`form:"bio"`
+	InstagramURL	string  `form:"instagramURL"`
 }
 
 // DeleteProfileForm represents the request body to the endpoint /delete
@@ -62,8 +62,8 @@ func (p *Profiles) Create(c *gin.Context) {
 	if err := p.ps.Create(&profile); err != nil {
 		response.RespondWithError(
 			c, 
-			http.StatusConflict, 
-			err.Error())
+			http.StatusInternalServerError, 
+			"Something went wrong when creating profile. Please try again.")
 		return
 	}
 

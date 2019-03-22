@@ -6,18 +6,18 @@ import (
 	"os"
 	"errors"
 	"strconv"
+	"../../models"
 )
 
-var sign 	= []byte(os.Getenv("JWT_SECRET_KEY"))
+var sign = []byte(os.Getenv("JWT_SECRET_KEY"))
 
 // GenerateJWT generates a new JWT token for use in API endpoint validation
-func GenerateJWT(id uint) (string, error) {
+func GenerateJWT(user *models.User) (string, error) {
+	token := jwt.New(jwt.SigningMethodHS256)
 
-	// create token with claims
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims {
-		Subject: fmt.Sprint(id),
-		ExpiresAt: 0, 
-	})
+	claims := token.Claims.(jwt.MapClaims)
+	claims["userID"] = fmt.Sprint(user.ID)
+	claims["verified"] = user.Verified
 
 	tokenString, err := token.SignedString(sign)
 
@@ -30,7 +30,7 @@ func GenerateJWT(id uint) (string, error) {
 }
 
 // CompareJWT compares a passed in header token and validates 
-func CompareJWT(headerToken string) (bool, uint)  {
+func CompareJWT(headerToken string) (bool, uint, bool)  {
 	token, err := jwt.Parse(headerToken, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("Unexpected signing method")
@@ -41,12 +41,19 @@ func CompareJWT(headerToken string) (bool, uint)  {
 
 	// handle invalid signing methods
 	if err != nil {
-		return false, 0
+		return false, 0, false
 	}
 
-	// retrieve claims and parse subject id
-	claims := token.Claims.(jwt.MapClaims)
-	id, _ := strconv.Atoi(claims["sub"].(string))
+	id, verified := formatClaims(token.Claims.(jwt.MapClaims))
+	return token.Valid, id, verified
+}
 
-	return token.Valid, uint(id)
+func formatClaims(claims jwt.MapClaims) (uint, bool) {
+
+	// retrieve & format claims
+	id, _ 	 := strconv.Atoi(claims["userID"].(string))
+	verified := claims["verified"].(bool)
+
+	// return values retrieved from claims
+	return uint(id), verified
 }

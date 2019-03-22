@@ -17,15 +17,30 @@ func RequireToken(c *gin.Context) {
 	// get bearer token
 	bearer := c.GetHeader("Authorization")
 	if bearer == "" {
-		response.RespondWithError(c, http.StatusForbidden, "Authentication token required")
+		response.RespondWithError(
+			c,
+			http.StatusForbidden,
+			"Authentication token required")
 		return
 	}
 
 	// get the token from the bearer header
 	token := strings.Split(bearer, "Bearer ")[1]
-	valid, id := jwt.CompareJWT(token)
+	valid, id, verified := jwt.CompareJWT(token)
+
 	if !valid {
-		response.RespondWithError(c, http.StatusForbidden, "Invalid authentication token")
+		response.RespondWithError(
+			c,
+			http.StatusForbidden, 
+			"Invalid authentication token")
+		return
+	}
+
+	if !verified {
+		response.RespondWithError(
+			c, 
+			http.StatusUnauthorized, 
+			"Your account must be verified to perform this action")
 		return
 	}
 
