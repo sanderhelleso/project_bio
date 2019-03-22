@@ -92,6 +92,10 @@ const (
 	// ErrProfileInstagramURLInvalid is returned when a profile is atempted created
 	// with an invalid bio instagram url
 	ErrProfileInstagramURLInvalid modelError = "Link provided is invalid. Must be accessible and from the offical Instagram"
+
+	// ErrPwResetTokenInvalid is returned when a user is attempting to 
+	// reset a password witn an invalid password reset token
+	ErrPwResetTokenInvalid modelError = "Token provided is not valid"	 
 )
 
 type modelError string

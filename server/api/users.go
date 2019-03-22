@@ -12,6 +12,8 @@ func UsersRoutes(router *gin.Engine, uc *controllers.Users) {
 	{
 		v1.POST("/signup", uc.Create)
 		v1.POST("/login", uc.Login)
+		v1.POST("/forgot", uc.IntitiateReset)
+		v1.POST("/reset", uc.CompleteReset)
 		
 		v1.Use(middelware.RequireToken)
 		v1.DELETE("/delete", uc.Delete)

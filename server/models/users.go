@@ -9,12 +9,17 @@ import (
 	"strings"
 	"unicode"
 	"regexp"
+	"../lib/hash"
+	"time"
 	"golang.org/x/crypto/bcrypt"
 
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
+
+// Password reset token max allowed hours
+const pwrtDur = 12
 
 // User represent a user in the application
 type User struct {
@@ -59,8 +64,18 @@ type UserService interface {
 	// Authenticate will verify the provided email and
 	// password are correct, if correct, the user corresponding
 	// to that email will be returned, if not the releated error
-	// for the reason the method failed
+	// for the reason the method failed.
 	Authenticate(email, password string) (*User, error)
+
+	// InitiateReset will start the reset password proccess
+	// by creating a reset token for the user found with
+	// the provided email address.
+	InitiateReset(email string) (string, error)
+
+	// CompleteReset will conplete the initiated reset password
+	// proccess by updating the old users password with the new
+	// and clearing the reset password token to no longer work
+	CompleteReset(token, newPw string) (*User, error)
 	UserDB
 }
 
@@ -70,15 +85,18 @@ var _ UserService = &userService{}
 // implementation of interface
 type userService struct {
 	UserDB
+	pwResetDB pwResetDB
 }
 
 // NewUserService connect the user db and validator
 func NewUserService(db *gorm.DB) UserService {
-	ug := &userGorm{db}
-	uv := newUserValidator(ug)
+	ug 	 := &userGorm{db}
+	hmac := hash.NewHMAC(os.Getenv("HMAC_SECRET_KEY"))
+	uv 	 := newUserValidator(ug)
 
 	return &userService{
 		UserDB: uv,
+		pwResetDB: newPwResetValidator(&pwResetGorm{db}, hmac),
 	}
 }
 
@@ -115,6 +133,56 @@ func (us *userService) Authenticate(email, password string) (*User, error) {
 	}
 
 	return foundUser, nil
+}
+
+func (us *userService) InitiateReset(email string) (string, error) {
+	user, err := us.ByEmail(email)
+	if err != nil {
+		return "", err
+	}
+
+	pwr := pwReset {
+		UserID: user.ID,
+	}
+
+	if err := us.pwResetDB.Create(&pwr); err != nil {
+		return "", err
+	}
+
+	return pwr.Token, nil
+}
+
+func (us *userService) CompleteReset(token, newPw string) (*User, error) {
+	pwr, err := us.pwResetDB.ByToken(token)
+	if err != nil {
+		if err == ErrNotFound {
+			return nil, ErrPwResetTokenInvalid
+		}
+
+		return nil, err
+	}
+
+	// token is invalid if more than 12 hours old
+	if time.Now().Sub(pwr.CreatedAt) > (time.Hour * pwrtDur) {
+		return nil, ErrPwResetTokenInvalid
+	}
+
+	// lookup user by pw reset token
+	user, err := us.ByID(pwr.UserID)
+	if err != nil {
+		return nil, err
+	}
+
+	// update password for user
+	user.Password = newPw
+	err = us.Update(user)
+	if err != nil {
+		return nil, err
+	}
+
+	// clear reset token
+	us.pwResetDB.Delete(pwr.ID)
+	return user, nil
 }
 
 
