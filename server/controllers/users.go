@@ -21,6 +21,14 @@ type DeleteUserForm struct {
 	ID 	uint `form:"userID" binding:"required"`
 }
 
+// ResetPwForm is used to proccess the forgot password
+// form and the reset password form
+type ResetPwForm struct {
+	Email 		string `form:"email" binding:"required"`
+	Password 	string `form:"password" binding:"required"`
+	Token 		string `form:"token"`
+}
+
 // Users represents the controller for a user in the app
 type Users struct {
 	us 		models.UserService
@@ -159,5 +167,63 @@ func (u *Users) Login(c *gin.Context) {
 		"status": 	http.StatusFound,
 		"message": 	"Login successfull!",
 		"token":	token,
+	})
+}
+
+// POST /forgot
+func (u *Users) IntitiateReset(c *gin.Context) {
+	var form ResetPwForm
+	if err := c.Bind(&form); err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			err.Error())
+		return
+	}
+
+	token, err := u.us.InitiateReset(form.Email)
+	if err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			err.Error())
+		return
+	}
+
+	// TODO: Send the user and email with token and instruction
+	_ = token
+
+	response.RespondWithSuccess(
+		c,
+		http.StatusOK,
+		"An email containing instructions has been sent to the provided email address")
+}
+
+// POST /reset
+// CompleteReset processes the reset password for
+func (u *Users) CompleteReset(c *gin.Context) {
+	var form ResetPwForm
+	if err := c.Bind(&form); err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			err.Error())
+		return
+	}
+
+	user, err := u.us.CompleteReset(form.Token, form.Password)
+	if err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			err.Error())
+		return
+	}
+
+	// TODO: login user by sendig back user data
+	c.JSON(http.StatusFound, gin.H {
+		"status": 	http.StatusOK,
+		"message": 	"Password has been succesfully updated!",
+		"payload": user, // <--- update this to include profile
 	})
 }

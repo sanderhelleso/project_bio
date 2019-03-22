@@ -71,6 +71,10 @@ type UserService interface {
 	// by creating a reset token for the user found with
 	// the provided email address.
 	InitiateReset(email string) (string, error)
+
+	// CompleteReset will conplete the initiated reset password
+	// proccess by updating the old users password with the new
+	// and clearing the reset password token to no longer work
 	CompleteReset(token, newPw string) (*User, error)
 	UserDB
 }
