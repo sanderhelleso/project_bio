@@ -46,7 +46,7 @@ type ClientConfig func(*Client)
 
 func NewClient(opts ...ClientConfig) *Client {
 	client := Client {
-		from: os.Getenv("MAIL_DEFAULT_FROM"),
+		from: os.Getenv("MAIL_DEFAULT_EMAIL"),
 	}
 
 	for _, opt := range opts {
@@ -63,9 +63,10 @@ type Client struct {
 
 func (c *Client) Welcome(toName, toEmail string) error {
 
+	fmt.Println("SENDING EMAIL....")
+
 	// build
-	message := mailgun.NewMessage(
-	c.from, 
+	message := mailgun.NewMessage(c.from, 
 	welcomeSubject, 
 	welcomeText,
 	buildEmail(toName, toEmail))

@@ -6,6 +6,8 @@ import (
 	"../models"
 	"../lib/jwt"
 	"../lib/response"
+	"../email"
+	"fmt"
 )
 
 // AuthForm represents the request body to the endpoint /signup and /login. 
@@ -21,13 +23,15 @@ type DeleteUserForm struct {
 
 // Users represents the controller for a user in the app
 type Users struct {
-	us models.UserService
+	us 		models.UserService
+	emailer *email.Client
 }
 
 // NewUsers is used to create a new User controller
-func NewUsers(us models.UserService) *Users {
+func NewUsers(us models.UserService, emailer *email.Client) *Users {
 	return &Users {
 		us,
+		emailer,
 	}
 }
 
@@ -71,6 +75,8 @@ func (u *Users) Create(c *gin.Context) {
 		return
 	}
 
+	err := u.emailer.Welcome("Testuser", user.Email)
+	fmt.Println(err)
 	response.RespondWithSuccess(
 		c,
 		http.StatusCreated,
