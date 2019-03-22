@@ -2,17 +2,19 @@ package email
 
 import (
 	"github.com/arxdsilva/hermes" // uses branch that fixes go module problem
+	"fmt"
+	"time"
 )
 
 const (
 	welcomeSubject = "Welcome to Project Bio!"
 	resetSubject   = "Instructions for resseting your password."
 	resetBaseURL   = "http://localhost:5000/users/reset"
+	verifyBaseURL  = "http://localhost:5000/users/verify"
 )
 
 // GenerateEmail generates a hermes styled email
 func GenerateEmail(email hermes.Email) (string, string) {
-
 	h := hermes.Hermes{
 		Product: hermes.Product{
 	
@@ -22,6 +24,7 @@ func GenerateEmail(email hermes.Email) (string, string) {
 				
 			// Optional product logo
 			Logo: "http://www.duchess-france.org/wp-content/uploads/2016/01/gopher.png",
+			Copyright: fmt.Sprintf("Copyright © %d Project Bio. All rights reserved.", time.Now().Year()),
 		},
 	}
 
@@ -44,7 +47,7 @@ func Welcome(link string) hermes.Email {
 			},
 			Actions: []hermes.Action{
 				{
-					Instructions: "To get started we need you please confirm your account.",
+					Instructions: "To get started, please click here:",
 					Button: hermes.Button{
 						Color: "#22BC66", 
 						TextColor: "#FFFFFF",

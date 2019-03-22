@@ -11,7 +11,6 @@ import (
 	"regexp"
 	"../lib/hash"
 	"time"
-	"fmt"
 	"golang.org/x/crypto/bcrypt"
 
 
@@ -68,15 +67,26 @@ type UserService interface {
 	// for the reason the method failed.
 	Authenticate(email, password string) (*User, error)
 
+	// InitiateVerification will start the verify account
+	// proccess by creating a verify token for the newly
+	// signed up user
+	InitiateVerification(email string) (string, error)
+
+	// CompleteVerification will complete the initiated verify account
+	// proccess by updating the users verify status from true to false
+	// and clearing the verify account token to no longer work
+	CompleteVerification(token string) (*User, error)
+
 	// InitiateReset will start the reset password proccess
 	// by creating a reset token for the user found with
 	// the provided email address.
 	InitiateReset(email string) (string, error)
 
-	// CompleteReset will conplete the initiated reset password
+	// CompleteReset will complete the initiated reset password
 	// proccess by updating the old users password with the new
 	// and clearing the reset password token to no longer work
 	CompleteReset(token, newPw string) (*User, error)
+
 	UserDB
 }
 
@@ -86,7 +96,8 @@ var _ UserService = &userService{}
 // implementation of interface
 type userService struct {
 	UserDB
-	pwResetDB pwResetDB
+	accVerifyDB accVerifyDB
+	pwResetDB 	pwResetDB
 }
 
 // NewUserService connect the user db and validator
@@ -96,8 +107,9 @@ func NewUserService(db *gorm.DB) UserService {
 	uv 	 := newUserValidator(ug)
 
 	return &userService{
-		UserDB: uv,
-		pwResetDB: newPwResetValidator(&pwResetGorm{db}, hmac),
+		UserDB: 	 uv,
+		accVerifyDB: newAccVerifyValidator(&accVerifyGorm{db}, hmac),
+		pwResetDB: 	 newPwResetValidator(&pwResetGorm{db}, hmac),
 	}
 }
 
@@ -136,6 +148,48 @@ func (us *userService) Authenticate(email, password string) (*User, error) {
 	return foundUser, nil
 }
 
+func (us *userService) InitiateVerification(email string) (string, error) {
+	user, err := us.ByEmail(email)
+	if err != nil {
+		return "", err
+	}
+
+	accv := accVerify {
+		UserID: user.ID,
+	}
+
+	if err := us.accVerifyDB.Create(&accv); err != nil {
+		return "", err
+	}
+
+	return accv.Token, nil
+}
+
+func (us *userService) CompleteVerification(token string) (*User, error) {
+	accv, err := us.accVerifyDB.ByToken(token)
+	if err != nil {
+		if err == ErrNotFound {
+			return nil, ErrPwResetTokenInvalid
+		}
+
+		return nil, err
+	}
+
+	// lookup user by acc verify token
+	user, err := us.ByID(accv.UserID)
+	if err != nil {
+		return nil, err
+	}
+
+	// updates users verified status
+	user.Verified = true
+	us.Update(user)
+
+	// clear verify token
+	us.accVerifyDB.Delete(accv.ID)
+	return user, nil
+}
+
 func (us *userService) InitiateReset(email string) (string, error) {
 	user, err := us.ByEmail(email)
 	if err != nil {
@@ -155,7 +209,6 @@ func (us *userService) InitiateReset(email string) (string, error) {
 
 func (us *userService) CompleteReset(token, newPw string) (*User, error) {
 	pwr, err := us.pwResetDB.ByToken(token)
-	fmt.Println(err)
 	if err != nil {
 		if err == ErrNotFound {
 			return nil, ErrPwResetTokenInvalid
