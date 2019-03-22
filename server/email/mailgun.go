@@ -40,12 +40,18 @@ type Client struct {
 }
 
 func (c *Client) Welcome(toEmail string) error {
+
+	verifyURL := "https://google.com"
+
+	template := Welcome(verifyURL)
+	text, html := GenerateEmail(template)
+
 	message := mailgun.NewMessage(c.from, 
 	welcomeSubject, 
-	welcomeText,
+	text,
 	buildEmail("", toEmail))
 
-	message.SetHtml(welcomeHTML)
+	message.SetHtml(html)
 
 	_, _, err := c.mg.Send(message)
 	return err

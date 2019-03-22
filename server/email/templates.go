@@ -4,11 +4,15 @@ import (
 	"github.com/arxdsilva/hermes" // uses branch that fixes go module problem
 )
 
-type welcome struct {
-	link string
-}
+const (
+	welcomeSubject = "Welcome to projectbio!"
+	resetSubject   = "Instructions for resseting your password."
+	resetBaseURL   = "http://localhost:5000/reset"
+)
 
-func (w *welcome) Email() hermes.Email {
+// Welcome creates a new welcome email with a verification
+// link that allows user to verify their account
+func Welcome(link string) hermes.Email {
 	return hermes.Email{
 		Body: hermes.Body{
 			Name: "Hi There!",
@@ -21,7 +25,7 @@ func (w *welcome) Email() hermes.Email {
 					Button: hermes.Button{
 						Color: "#22BC66", // Optional action button color
 						Text:  "Confirm your account",
-						Link:  w.link,
+						Link:  link,
 					},
 				},
 			},
@@ -33,9 +37,6 @@ func (w *welcome) Email() hermes.Email {
 }
 
 const (
-	resetSubject   = "Instructions for resseting your password."
-	resetBaseURL   = "http://localhost:5000/reset"
-
 	resetTextTmpl = `Hi there!
 
 	It appears that you have requested a password reset. If this was you, 

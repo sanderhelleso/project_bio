@@ -87,7 +87,7 @@ func (u *Users) Create(c *gin.Context) {
 		return
 	}
 
-	go u.emailer.WelcomeWithVerify(user.Email)
+	go u.emailer.Welcome(user.Email)
 	response.RespondWithSuccess(
 		c,
 		http.StatusCreated,
