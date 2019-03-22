@@ -33,6 +33,12 @@ type ResetPwForm struct {
 	Token 		string `form:"token" binding:"required"`
 }
 
+// VerifyAccForm is used to proccess the verify account
+// form and complete the account verification proccess
+type VerifyAccForm struct {
+	Token 		string `form:"token" binding:"required"`
+}
+
 // Users represents the controller for a user in the app
 type Users struct {
 	us 		models.UserService
@@ -87,7 +93,11 @@ func (u *Users) Create(c *gin.Context) {
 		return
 	}
 
-	go u.emailer.Welcome(user.Email)
+	// generate verification token
+	token, _ := u.us.InitiateVerification(user.Email)
+
+	// send welcome email with verification token
+	go u.emailer.Welcome(user.Email, token)
 	response.RespondWithSuccess(
 		c,
 		http.StatusCreated,
@@ -173,6 +183,7 @@ func (u *Users) Login(c *gin.Context) {
 	})
 }
 
+// InitiateReset initiates the reset password functionality
 // POST /forgot
 func (u *Users) IntitiateReset(c *gin.Context) {
 	var form ForgotPwForm
@@ -200,8 +211,8 @@ func (u *Users) IntitiateReset(c *gin.Context) {
 		"An email containing instructions has been sent to the provided email address")
 }
 
+// CompleteReset processes the reset password form
 // POST /reset
-// CompleteReset processes the reset password for
 func (u *Users) CompleteReset(c *gin.Context) {
 	var form ResetPwForm
 	if err := c.Bind(&form); err != nil {
@@ -225,6 +236,35 @@ func (u *Users) CompleteReset(c *gin.Context) {
 	c.JSON(http.StatusFound, gin.H {
 		"status": 	http.StatusOK,
 		"message": 	"Password has been succesfully updated!",
+		"payload": user, // <--- update this to include profile
+	})
+}
+
+// CompleteVerification processes the verify account form
+// POST /verify
+func (u *Users) CompleteVerification(c *gin.Context) {
+	var form VerifyAccForm
+	if err := c.Bind(&form); err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			err.Error())
+		return
+	}
+
+	user, err := u.us.CompleteVerification(form.Token)
+	if err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			err.Error())
+		return
+	}
+
+	// TODO: login user by sendig back user data
+	c.JSON(http.StatusFound, gin.H {
+		"status": 	http.StatusOK,
+		"message": 	"Account has been succesfully verified!",
 		"payload": user, // <--- update this to include profile
 	})
 }

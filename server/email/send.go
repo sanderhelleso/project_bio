@@ -8,10 +8,11 @@ import (
 // Welcome sends a welcome email to a newly signed up user,
 // includes a generated verification link that
 // the user must confirm in order to verify the account
-func (c *Client) Welcome(toEmail string) error {
+func (c *Client) Welcome(toEmail, token string) error {
 
-	// TODO: Generate verification link
-	verifyURL := "https://google.com"
+	v := url.Values{}
+	v.Set("token", token)
+	verifyURL := verifyBaseURL + "?" + v.Encode()
 
 	template := Welcome(verifyURL)
 	text, html := GenerateEmail(template)
@@ -34,7 +35,6 @@ func (c *Client) Welcome(toEmail string) error {
 // user must use in order to be able to reset their password
 func (c *Client) ResetPw(toEmail, token string) error {
 
-	// TODO: Build the reset url
 	v := url.Values{}
 	v.Set("token", token)
 	resetURL := resetBaseURL + "?" + v.Encode()

@@ -8,6 +8,7 @@ const (
 	welcomeSubject = "Welcome to Project Bio!"
 	resetSubject   = "Instructions for resseting your password."
 	resetBaseURL   = "http://localhost:5000/users/reset"
+	verifyBaseURL  = "http://localhost:5000/users/verify"
 )
 
 // GenerateEmail generates a hermes styled email
