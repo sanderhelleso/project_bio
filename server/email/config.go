@@ -5,6 +5,12 @@ import (
 	"os"
 )
 
+// Client represents an email client in the application
+type Client struct {
+	from 	string
+	mg 		mailgun.Mailgun
+}
+
 // WithMailgun implements the mailgun api that allows us to
 // use the mailgun service to send emails to verified emails
 func WithMailgun(domain, apiKey, pubKey string) ClientConfig {
@@ -35,10 +41,4 @@ func NewClient(opts ...ClientConfig) *Client {
 	}
 
 	return &client
-}
-
-// Client represents an email client in the application
-type Client struct {
-	from 	string
-	mg 		mailgun.Mailgun
 }
