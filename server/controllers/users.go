@@ -51,8 +51,9 @@ func (u *Users) Create(c *gin.Context) {
 	}
 
 	user := models.User {
-		Email: 			form.Email,
-		Password:		form.Password,
+		Email: 		form.Email,
+		Password:	form.Password,
+		Verified:	false,
 	}
 
 	// attempt to create and store user in DB
@@ -138,7 +139,7 @@ func (u *Users) Login(c *gin.Context) {
 	}
 
 	// generate valid JWT
-	validToken, err := jwt.GenerateJWT(user.ID)
+	token, err := jwt.GenerateJWT(user)
 
 	if err != nil {
 		response.RespondWithError(
@@ -151,6 +152,6 @@ func (u *Users) Login(c *gin.Context) {
 	c.JSON(http.StatusFound, gin.H {
 		"status": 	http.StatusFound,
 		"message": 	"Login successfull!",
-		"token":	validToken,
+		"token":	token,
 	})
 }
