@@ -3,11 +3,14 @@ package email
 import (
 	mailgun "gopkg.in/mailgun/mailgun-go.v1"
 	"fmt"
+	"url"
 	"os"
 )
 
 const (
 	welcomeSubject = "Welcome to projectbio!"
+	resetSubject   = "Instructions for resseting your password."
+	resetBaseURL   = "http://localhost:5000/reset"
 
 	welcomeText = `Hi there!
 
@@ -25,6 +28,42 @@ const (
 	<br>
 	Best,
 	<br>
+	Team Bio
+	`
+
+	resetTextTmpl = `Hi there!
+
+	It appears that you have requested a password reset. If this was you, 
+	please follow the link below to update your password:
+
+	%s
+
+	If you are asked for a token, please use the following value:
+
+	%s
+
+	If you did't request a password reset you ca safely ignore this email
+	and your account will not be changed
+
+	Best,
+	Team Bio
+	`
+
+	resetHTMLTmpl = `Hi there!
+	<br><br>
+	<p>It appears that you have requested a password reset. If this was you, 
+	please follow the link below to update your password:</P>
+	<br><br>
+	<a href="%s">%s</a>
+	<br><br>
+	<p>If you are asked for a token, please use the following value:</p>
+	<br><br>
+	<strong>%s</strong>
+	<br><br>
+	<p>If you did't request a password reset you ca safely ignore this email
+	and your account will not be changed</p>
+	<br><br>
+	Best,
 	Team Bio
 	`
 )
@@ -62,19 +101,33 @@ type Client struct {
 }
 
 func (c *Client) Welcome(toName, toEmail string) error {
-
-	fmt.Println("SENDING EMAIL....")
-
-	// build
 	message := mailgun.NewMessage(c.from, 
 	welcomeSubject, 
 	welcomeText,
 	buildEmail(toName, toEmail))
-	
-	// set html
+
 	message.SetHtml(welcomeHTML)
 
-	// send
+	_, _, err := c.mg.Send(message)
+	return err
+}
+
+func (c *Client) ResetPw(toEmail, token string) error {
+
+	// TODO: Build the reset url
+	v := url.Values{}
+	v.Set("token", token)
+	resetURL := resetBaseURL + "?" + v.Encode()
+	resetText := fmt.Sprintf(resetTextTmpl, resetURL, token)
+
+	message := mailgun.NewMessage(c.from, 
+	resetSubject, 
+	resetText,
+	toEmail)
+
+	resetHTML := fmt.Sprintf(resetHTMLTmpl, resetURL, resetURL, token)
+	message.SetHtml(resetHTML)
+
 	_, _, err := c.mg.Send(message)
 	return err
 }
