@@ -47,7 +47,7 @@ func (s *Services) Close() error {
 
 // DestructiveReset drops all tables and rebuilds it
 func (s *Services) DestructiveReset() error {
-	err := s.db.DropTableIfExists(&User{}, &Follower{}, &Promo{}, &Profile{}).Error
+	err := s.db.DropTableIfExists(&User{}, &Follower{}, &Promo{}, &Profile{}, &pwReset{}).Error
 	if err != nil {
 		return err
 	}
@@ -57,6 +57,6 @@ func (s *Services) DestructiveReset() error {
 
 // AutoMigrate will attempt to automatically migrate all tables
 func (s *Services) AutoMigrate() error {
-	err := s.db.AutoMigrate(&User{}, &Follower{}, &Promo{}, &Profile{}).Error
+	err := s.db.AutoMigrate(&User{}, &Follower{}, &Promo{}, &Profile{}, &pwReset{}).Error
 	return err
 }

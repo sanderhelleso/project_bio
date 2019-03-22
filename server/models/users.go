@@ -9,6 +9,7 @@ import (
 	"strings"
 	"unicode"
 	"regexp"
+	"../lib/hash"
 	"golang.org/x/crypto/bcrypt"
 
 
@@ -61,6 +62,8 @@ type UserService interface {
 	// to that email will be returned, if not the releated error
 	// for the reason the method failed
 	Authenticate(email, password string) (*User, error)
+	//InitiateReset(...) (...)
+	//CompleteReset(...) (...)
 	UserDB
 }
 
@@ -70,15 +73,18 @@ var _ UserService = &userService{}
 // implementation of interface
 type userService struct {
 	UserDB
+	pwResetDB pwResetDB
 }
 
 // NewUserService connect the user db and validator
 func NewUserService(db *gorm.DB) UserService {
-	ug := &userGorm{db}
-	uv := newUserValidator(ug)
+	ug 	 := &userGorm{db}
+	hmac := hash.NewHMAC(os.Getenv("HMAC_SECRET_KEY"))
+	uv 	 := newUserValidator(ug)
 
 	return &userService{
 		UserDB: uv,
+		pwResetDB: newPwResetValidator(&pwResetGorm{db}, hmac),
 	}
 }
 
