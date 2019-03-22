@@ -16,6 +16,7 @@ func main() {
 	err := godotenv.Load()
 	lib.Must(err)
 
+	// mail client setup
 	emailer := email.NewClient(
 	email.WithSender(
 		os.Getenv("MAIL_DEFAULT_NAME"),
