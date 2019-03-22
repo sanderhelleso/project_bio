@@ -21,12 +21,17 @@ type DeleteUserForm struct {
 	ID 	uint `form:"userID" binding:"required"`
 }
 
+// ForgotPwForm is used to proccess the forgot password
+// form and init the reset proccess
+type ForgotPwForm struct {
+	Email 		string `form:"email" binding:"required"`
+}
+
 // ResetPwForm is used to proccess the forgot password
 // form and the reset password form
 type ResetPwForm struct {
-	Email 		string `form:"email" binding:"required"`
 	Password 	string `form:"password" binding:"required"`
-	Token 		string `form:"token"`
+	Token 		string `form:"token" binding:"required"`
 }
 
 // Users represents the controller for a user in the app
@@ -172,7 +177,7 @@ func (u *Users) Login(c *gin.Context) {
 
 // POST /forgot
 func (u *Users) IntitiateReset(c *gin.Context) {
-	var form ResetPwForm
+	var form ForgotPwForm
 	if err := c.Bind(&form); err != nil {
 		response.RespondWithError(
 			c, 
