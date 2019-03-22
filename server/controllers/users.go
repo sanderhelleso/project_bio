@@ -7,7 +7,6 @@ import (
 	"../lib/jwt"
 	"../lib/response"
 	"../email"
-	"fmt"
 )
 
 // AuthForm represents the request body to the endpoint /signup and /login. 
@@ -88,8 +87,7 @@ func (u *Users) Create(c *gin.Context) {
 		return
 	}
 
-	err := u.emailer.Welcome("Testuser", user.Email)
-	fmt.Println(err)
+	go u.emailer.WelcomeWithVerify(user.Email)
 	response.RespondWithSuccess(
 		c,
 		http.StatusCreated,
@@ -195,15 +193,7 @@ func (u *Users) IntitiateReset(c *gin.Context) {
 		return
 	}
 
-	err = u.emailer.ResetPw(form.Email, token)
-	if err != nil {
-		response.RespondWithError(
-			c, 
-			http.StatusUnprocessableEntity, 
-			err.Error())
-		return
-	}
-
+	go u.emailer.ResetPw(form.Email, token)
 	response.RespondWithSuccess(
 		c,
 		http.StatusOK,

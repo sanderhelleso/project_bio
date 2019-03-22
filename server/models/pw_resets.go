@@ -2,15 +2,17 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
+	"time"
 	"../lib/hash"
 	"../lib/rand"
 )
 
 type pwReset struct {
-	gorm.Model
+	ID        	uint	`gorm:"primary_key"`
 	UserID 		uint  	`gorm:"not null"`
 	Token 		string 	`gorm:"-"`
 	TokenHash 	string	`gorm:"not null;unique_index"`
+	CreatedAt  	time.Time
 }
 
 type pwResetDB interface {
@@ -87,7 +89,7 @@ func (pwrg *pwResetGorm) Create(pwr *pwReset) error {
 }
 
 func (pwrg *pwResetGorm) Delete(id uint) error {
-	pwr := pwReset{Model: gorm.Model{ID: id}}
+	pwr := pwReset{ID: id}
 	return pwrg.db.Delete(&pwr).Error
 }
 

@@ -7,67 +7,6 @@ import (
 	"net/url"
 )
 
-const (
-	welcomeSubject = "Welcome to projectbio!"
-	resetSubject   = "Instructions for resseting your password."
-	resetBaseURL   = "http://localhost:5000/reset"
-
-	welcomeText = `Hi there!
-
-	Welcome to projectbio! We really home you enjoy using
-	our application!
-
-	Best,
-	Team Bio
-	`
-	welcomeHTML = `<h4>Hi there!</h4>
-	<br><br>
-	<p>Welcome to <a href="https://www.google.com">Projectbio.com</a>!</p>
-	<br><br>
-	<p>We really hope you enjoy using our application!</p>
-	<br>
-	Best,
-	<br>
-	Team Bio
-	`
-
-	resetTextTmpl = `Hi there!
-
-	It appears that you have requested a password reset. If this was you, 
-	please follow the link below to update your password:
-
-	%s
-
-	If you are asked for a token, please use the following value:
-
-	%s
-
-	If you did't request a password reset you ca safely ignore this email
-	and your account will not be changed
-
-	Best,
-	Team Bio
-	`
-
-	resetHTMLTmpl = `Hi there!
-	<br><br>
-	<p>It appears that you have requested a password reset. If this was you, 
-	please follow the link below to update your password:</P>
-	<br><br>
-	<a href="%s">%s</a>
-	<br><br>
-	<p>If you are asked for a token, please use the following value:</p>
-	<br><br>
-	<strong>%s</strong>
-	<br><br>
-	<p>If you did't request a password reset you ca safely ignore this email
-	and your account will not be changed</p>
-	<br><br>
-	Best,
-	Team Bio
-	`
-)
-
 func WithMailgun(domain, apiKey, pubKey string) ClientConfig {
 	return func(c *Client) {
 		mg := mailgun.NewMailgun(domain, apiKey, pubKey)
@@ -100,11 +39,11 @@ type Client struct {
 	mg 		mailgun.Mailgun
 }
 
-func (c *Client) Welcome(toName, toEmail string) error {
+func (c *Client) Welcome(toEmail string) error {
 	message := mailgun.NewMessage(c.from, 
 	welcomeSubject, 
 	welcomeText,
-	buildEmail(toName, toEmail))
+	buildEmail("", toEmail))
 
 	message.SetHtml(welcomeHTML)
 
