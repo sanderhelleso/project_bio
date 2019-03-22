@@ -10,12 +10,16 @@ import (
 	"unicode"
 	"regexp"
 	"../lib/hash"
+	"time"
 	"golang.org/x/crypto/bcrypt"
 
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
+
+// Password reset token max allowed hours
+const pwrtDur = 12
 
 // User represent a user in the application
 type User struct {
@@ -67,7 +71,7 @@ type UserService interface {
 	// by creating a reset token for the user found with
 	// the provided email address.
 	InitiateReset(email string) (string, error)
-	//CompleteReset(...) (...)
+	CompleteReset(token, newPw string) (*User, error)
 	UserDB
 }
 
@@ -142,6 +146,39 @@ func (us *userService) InitiateReset(email string) (string, error) {
 	}
 
 	return pwr.Token, nil
+}
+
+func (us *userService) CompleteReset(token, newPw string) (*User, error) {
+	pwr, err := us.pwResetDB.ByToken(token)
+	if err != nil {
+		if err == ErrNotFound {
+			return nil, ErrPwResetTokenInvalid
+		}
+
+		return nil, err
+	}
+
+	// token is invalid if more than 12 hours old
+	if time.Now().Sub(pwr.CreatedAt) > (time.Hour * pwrtDur) {
+		return nil, ErrPwResetTokenInvalid
+	}
+
+	// lookup user by pw reset token
+	user, err := us.ByID(pwr.UserID)
+	if err != nil {
+		return nil, err
+	}
+
+	// update password for user
+	user.Password = newPw
+	err = us.Update(user)
+	if err != nil {
+		return nil, err
+	}
+
+	// clear reset token
+	us.pwResetDB.Delete(pwr.ID)
+	return user, nil
 }
 
 
