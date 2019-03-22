@@ -11,6 +11,7 @@ import (
 	"regexp"
 	"../lib/hash"
 	"time"
+	"fmt"
 	"golang.org/x/crypto/bcrypt"
 
 
@@ -154,6 +155,7 @@ func (us *userService) InitiateReset(email string) (string, error) {
 
 func (us *userService) CompleteReset(token, newPw string) (*User, error) {
 	pwr, err := us.pwResetDB.ByToken(token)
+	fmt.Println(err)
 	if err != nil {
 		if err == ErrNotFound {
 			return nil, ErrPwResetTokenInvalid

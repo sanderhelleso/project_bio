@@ -7,7 +7,6 @@ import (
 	"../lib/jwt"
 	"../lib/response"
 	"../email"
-	"fmt"
 )
 
 // AuthForm represents the request body to the endpoint /signup and /login. 
@@ -21,12 +20,17 @@ type DeleteUserForm struct {
 	ID 	uint `form:"userID" binding:"required"`
 }
 
+// ForgotPwForm is used to proccess the forgot password
+// form and init the reset proccess
+type ForgotPwForm struct {
+	Email 		string `form:"email" binding:"required"`
+}
+
 // ResetPwForm is used to proccess the forgot password
 // form and the reset password form
 type ResetPwForm struct {
-	Email 		string `form:"email" binding:"required"`
 	Password 	string `form:"password" binding:"required"`
-	Token 		string `form:"token"`
+	Token 		string `form:"token" binding:"required"`
 }
 
 // Users represents the controller for a user in the app
@@ -83,8 +87,7 @@ func (u *Users) Create(c *gin.Context) {
 		return
 	}
 
-	err := u.emailer.Welcome("Testuser", user.Email)
-	fmt.Println(err)
+	go u.emailer.Welcome(user.Email)
 	response.RespondWithSuccess(
 		c,
 		http.StatusCreated,
@@ -172,7 +175,7 @@ func (u *Users) Login(c *gin.Context) {
 
 // POST /forgot
 func (u *Users) IntitiateReset(c *gin.Context) {
-	var form ResetPwForm
+	var form ForgotPwForm
 	if err := c.Bind(&form); err != nil {
 		response.RespondWithError(
 			c, 
@@ -190,15 +193,7 @@ func (u *Users) IntitiateReset(c *gin.Context) {
 		return
 	}
 
-	err = u.emailer.ResetPw(form.Email, token)
-	if err != nil {
-		response.RespondWithError(
-			c, 
-			http.StatusUnprocessableEntity, 
-			err.Error())
-		return
-	}
-
+	go u.emailer.ResetPw(form.Email, token)
 	response.RespondWithSuccess(
 		c,
 		http.StatusOK,
