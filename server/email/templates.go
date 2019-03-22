@@ -7,7 +7,7 @@ import (
 const (
 	welcomeSubject = "Welcome to Project Bio!"
 	resetSubject   = "Instructions for resseting your password."
-	resetBaseURL   = "http://localhost:5000/reset"
+	resetBaseURL   = "http://localhost:5000/users/reset"
 )
 
 // GenerateEmail generates a hermes styled email
@@ -39,15 +39,15 @@ func GenerateEmail(email hermes.Email) (string, string) {
 func Welcome(link string) hermes.Email {
 	return hermes.Email{
 		Body: hermes.Body{
-			Name: "there",
 			Intros: []string{
 				"Welcome to Project Bio! We're very excited to have you on board.",
 			},
 			Actions: []hermes.Action{
 				{
-					Instructions: "To get started we need you to verify your account, please click here:",
+					Instructions: "To get started we need you please confirm your account.",
 					Button: hermes.Button{
 						Color: "#22BC66", 
+						TextColor: "#FFFFFF",
 						Text:  "Confirm your account",
 						Link:  link,
 					},
@@ -56,7 +56,7 @@ func Welcome(link string) hermes.Email {
 			Outros: []string{
 				"Need help, or have questions? Just reply to this email, we'd love to help.",
 			},
-			Signature: "Thanks from the folks at Project Bio",
+			Signature: "Thanks",
 		},
 	}
 }
@@ -66,7 +66,6 @@ func Welcome(link string) hermes.Email {
 func Reset(link string) hermes.Email {
 	return hermes.Email{
 		Body: hermes.Body{
-			Name: "there",
 			Intros: []string{
 				"You have received this email because a password reset request for Project Bio account was received.",
 			},
@@ -75,6 +74,7 @@ func Reset(link string) hermes.Email {
 					Instructions: "Click the button below to reset your password:",
 					Button: hermes.Button{
 						Color: "#DC4D2F",
+						TextColor: "#FFFFFF",
 						Text:  "Reset your password",
 						Link:  link,
 					},
@@ -83,7 +83,7 @@ func Reset(link string) hermes.Email {
 			Outros: []string{
 				"If you did't request a password reset you can safely ignore this email and your account will not be changed",
 			},
-			Signature: "Thanks from the folks at Project Bio",
+			Signature: "Thanks",
 		},
 	}
 }
