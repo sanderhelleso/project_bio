@@ -190,8 +190,14 @@ func (u *Users) IntitiateReset(c *gin.Context) {
 		return
 	}
 
-	// TODO: Send the user and email with token and instruction
-	_ = token
+	err = u.emailer.ResetPw(form.Email, token)
+	if err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			err.Error())
+		return
+	}
 
 	response.RespondWithSuccess(
 		c,

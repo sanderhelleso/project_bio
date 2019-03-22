@@ -3,8 +3,8 @@ package email
 import (
 	mailgun "gopkg.in/mailgun/mailgun-go.v1"
 	"fmt"
-	"url"
 	"os"
+	"net/url"
 )
 
 const (
