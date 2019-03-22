@@ -41,6 +41,7 @@ type Client struct {
 
 func (c *Client) Welcome(toEmail string) error {
 
+	// TODO: Generate verification link
 	verifyURL := "https://google.com"
 
 	template := Welcome(verifyURL)
@@ -63,15 +64,16 @@ func (c *Client) ResetPw(toEmail, token string) error {
 	v := url.Values{}
 	v.Set("token", token)
 	resetURL := resetBaseURL + "?" + v.Encode()
-	resetText := fmt.Sprintf(resetTextTmpl, resetURL, token)
+
+	template := Reset(resetURL)
+	text, html := GenerateEmail(template)
 
 	message := mailgun.NewMessage(c.from, 
 	resetSubject, 
-	resetText,
+	text,
 	toEmail)
 
-	resetHTML := fmt.Sprintf(resetHTMLTmpl, resetURL, resetURL, token)
-	message.SetHtml(resetHTML)
+	message.SetHtml(html)
 
 	_, _, err := c.mg.Send(message)
 	return err
