@@ -60,9 +60,13 @@ type UserService interface {
 	// Authenticate will verify the provided email and
 	// password are correct, if correct, the user corresponding
 	// to that email will be returned, if not the releated error
-	// for the reason the method failed
+	// for the reason the method failed.
 	Authenticate(email, password string) (*User, error)
-	//InitiateReset(...) (...)
+
+	// InitiateReset will start the reset password proccess
+	// by creating a reset token for the user found with
+	// the provided email address.
+	InitiateReset(email string) (string, error)
 	//CompleteReset(...) (...)
 	UserDB
 }
@@ -121,6 +125,23 @@ func (us *userService) Authenticate(email, password string) (*User, error) {
 	}
 
 	return foundUser, nil
+}
+
+func (us *userService) InitiateReset(email string) (string, error) {
+	user, err := us.ByEmail(email)
+	if err != nil {
+		return "", err
+	}
+
+	pwr := pwReset {
+		UserID: user.ID,
+	}
+
+	if err := us.pwResetDB.Create(&pwr); err != nil {
+		return "", err
+	}
+
+	return pwr.Token, nil
 }
 
 
