@@ -7,6 +7,7 @@ import (
 	"../jwt"
 	"strings"
 	"os"
+	"fmt"
 )
 
 // RequireToken checks the incoming request header
@@ -27,6 +28,7 @@ func RequireToken(c *gin.Context) {
 	// get the token from the bearer header
 	token := strings.Split(bearer, "Bearer ")[1]
 	valid, id, verified := jwt.CompareJWT(token)
+	fmt.Printf("\n\n valid: %v \n verified: %v \n\n", id, verified)
 
 	if !valid {
 		response.RespondWithError(

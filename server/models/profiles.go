@@ -85,8 +85,7 @@ func (pv *profileValidator) ByUserID(id uint) (*Profile, error) {
 		UserID: id,
 	}
 
-	err := runProfilesValFuncs(&profile,
-	pv.idGreaterThan(0))
+	err := runProfilesValFuncs(&profile, pv.idGreaterThan(0))
 
 	if err != nil {
 		return nil, err
@@ -143,7 +142,7 @@ func (pv *profileValidator) Update(profile *Profile) error {
 
 func (pv *profileValidator) idGreaterThan(n uint) profileValFunc {
 	return profileValFunc(func(profile *Profile) error {
-		if profile.ID <= n {
+		if profile.UserID <= n {
 			return ErrIDInvalid
 		}
 
