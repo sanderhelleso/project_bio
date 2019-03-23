@@ -2,18 +2,15 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/nfnt/resize"
 	"net/http"
-	"image"
 	"image/jpeg"
 	_ "image/png"
 	"../models"
-	"mime/multipart"
+	"../lib"
 	"../lib/response"
 	"../lib/parser"
 	"fmt"
 	"os"
-	//"io"
 	"path/filepath"
 	"strings"
 )
@@ -87,17 +84,24 @@ func (p *Profiles) Create(c *gin.Context) {
 
 // AvatarUpload handle uploading of a users avatar
 func (p *Profiles) AvatarUpload(c *gin.Context) {
-
-	// get uploaded file
-	fHeader, _ := c.FormFile("avatar")
-	ext := strings.ToLower((filepath.Ext(fHeader.Filename)))
-
-	// check ext
-	if !(ext == ".jpg" || ext == ".png") {
+	profile, err := p.ps.ByUserID(parser.GetIDFromCTX(c))
+	if err != nil {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
-			"Only files of type JPG or PNG are allowed.",
+			"Unable to find the profiles releated user. Please try to re-login and try again",
+		)
+		return
+	}
+
+	// get uploaded file
+	fHeader, _ := c.FormFile("avatar")
+	err := lib.ValidateExtension(fHeader.Filename)
+	if err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			err.Error(),
 		)
 		return
 	}
@@ -110,7 +114,7 @@ func (p *Profiles) AvatarUpload(c *gin.Context) {
 	defer file.Close()
 
 	// create dir path for avatar
-	avatarPath := fmt.Sprintf("images/avatars/%v/", parser.GetIDFromCTX(c))
+	avatarPath := fmt.Sprintf("images/avatars/%v/", profile.UserID)
 	err = os.MkdirAll(avatarPath, 0755)
 	if err != nil {
 		uploadAvatarErr(c)
@@ -126,17 +130,31 @@ func (p *Profiles) AvatarUpload(c *gin.Context) {
 	defer dst.Close()
 
 
-	// rezise and store avatar in users path
-	err = jpeg.Encode(dst, resizeImg(150, 150, file), nil)
+	// rezise file
+	new, err := lib.ResizeImg(150, 150, file)
+	if err != nil {
+		uploadAvatarErr(c)
+		return
+	}
+	
+	// store avatar in users path
+	err = jpeg.Encode(dst, new, nil)
 	if err != nil {
 		uploadAvatarErr(c)
 		return
 	}
 
+	// update profile
+	profile.Avatar = avatarPath + "avatar.jpg"
+	p.ps.Update(profile)
+
 	response.RespondWithSuccess(
 		c,
 		http.StatusCreated,
-		"Avatar successfully uploaded!")
+		"Avatar successfully uploaded!",
+	)
+
+
 }
 
 // helper func to send error message releated to avatar upload
@@ -146,19 +164,4 @@ func uploadAvatarErr(c *gin.Context) {
 		http.StatusInternalServerError, 
 		"Something went wrong when uploading image. Please try again.",
 	)
-}
-
-// resize image file to passed inn demensions
-// using Lanczos resampling and preserve aspect ratio
-func resizeImg(width uint, height uint, file multipart.File) image.Image {
-	img, _, err := image.Decode(file)
-	defer file.Close()
-
-	if err != nil {
-		fmt.Println(err)
-		panic(err)
-	}
-
-	new := resize.Resize(height, width, img, resize.Lanczos3)
-	return new
 }
