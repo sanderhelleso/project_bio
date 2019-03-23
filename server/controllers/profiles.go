@@ -6,6 +6,9 @@ import (
 	"../models"
 	"../lib/response"
 	"../lib/parser"
+	"fmt"
+	"os"
+	"io"
 )
 
 // ProfileForm represents the request body to the endpoint /new and /update 
@@ -14,6 +17,7 @@ type ProfileForm struct {
 	Name	    	string 	`form:"name" binding:"required"`
 	Bio		    	string 	`form:"bio"`
 	InstagramURL	string  `form:"instagramURL"`
+	Avatar			string	`form:"avatar"`
 }
 
 // DeleteProfileForm represents the request body to the endpoint /delete
@@ -57,6 +61,7 @@ func (p *Profiles) Create(c *gin.Context) {
 		Name:	    	form.Name,
 		Bio:			form.Bio,
 		InstagramURL:	form.InstagramURL,
+		Avatar:			form.Avatar,
 	}
 
 	if err := p.ps.Create(&profile); err != nil {
@@ -71,4 +76,57 @@ func (p *Profiles) Create(c *gin.Context) {
 		c,
 		http.StatusCreated,
 		"Profile successfully created!")
+}
+
+// AvatarUpload handle uploading of a users avatar
+func (p *Profiles) AvatarUpload(c *gin.Context) {
+
+	// get uploaded file
+	blob, _ := c.FormFile("avatar")
+	file, err := blob.Open()
+	if err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusInternalServerError, 
+			"OPEN FILE: Something went wrong when uploading image. Please try again.")
+		return
+	}
+	defer file.Close()
+
+	// create dir path for avatar
+	avatarPath := fmt.Sprintf("images/avatars/%v/", 1)
+	err = os.MkdirAll(avatarPath, 0755)
+	if err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusInternalServerError, 
+			"MAKE DIR: Something went wrong when uploading image. Please try again.")
+		return
+	}
+
+	// create destination file
+	dst, err := os.Create(avatarPath + blob.Filename)
+	if err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusInternalServerError, 
+			"CREATE DEST FILE: Something went wrong when uploading image. Please try again.")
+		return
+	}
+	defer dst.Close()
+
+	// copy uplaoded file data to destination file
+	_, err = io.Copy(dst, file)
+	if err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusInternalServerError, 
+			"COPY DATA: Something went wrong when uploading image. Please try again.")
+		return
+	}
+
+	response.RespondWithSuccess(
+		c,
+		http.StatusCreated,
+		"Avatar successfully uploaded!")
 }

@@ -5,6 +5,8 @@ import (
 	"../controllers"
 )
 
+const maxMultiPartMem = 1 << 20 // 1mb
+
 // ConnectAndServe connects all endpoint groupings 
 // and serves the application on the port specified in.env 
 func ConnectAndServe(
@@ -15,6 +17,7 @@ func ConnectAndServe(
 
 	// connect router and API v1
 	router := gin.Default()
+	router.MaxMultipartMemory = maxMultiPartMem
 
 	UsersRoutes(router, usersC)
 	FollowersRoutes(router, followersC)
