@@ -3,16 +3,9 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"image/jpeg"
-	_ "image/png"
 	"../models"
-	"../lib"
 	"../lib/response"
 	"../lib/parser"
-	"fmt"
-	"os"
-	"path/filepath"
-	"strings"
 )
 
 // ProfileForm represents the request body to the endpoint /new and /update 
@@ -32,12 +25,14 @@ type DeleteProfileForm struct {
 // Profiles represents the controller for a profile in the app
 type Profiles struct {
 	ps models.ProfileService
+	is models.ImageService
 }
 
 // NewProfiles is used to create a new Profile controller
-func NewProfiles(ps models.ProfileService) *Profiles {
+func NewProfiles(ps models.ProfileService, is models.ImageService) *Profiles {
 	return &Profiles {
 		ps,
+		is,
 	}
 }
 
@@ -86,82 +81,34 @@ func (p *Profiles) Create(c *gin.Context) {
 func (p *Profiles) AvatarUpload(c *gin.Context) {
 	profile, err := p.ps.ByUserID(parser.GetIDFromCTX(c))
 	if err != nil {
-		response.RespondWithError(
-			c, 
-			http.StatusInternalServerError, 
-			"Unable to find the profiles releated user. Please try to re-login and try again",
-		)
+		uploadAvatarErr(c, err.Error())
 		return
 	}
 
-	// get uploaded file
-	fHeader, _ := c.FormFile("avatar")
-	err := lib.ValidateExtension(fHeader.Filename)
-	if err != nil {
-		response.RespondWithError(
-			c, 
-			http.StatusUnprocessableEntity, 
-			err.Error(),
-		)
-		return
-	}
+	// get file from form
+	f, _ := c.FormFile("avatar")
 
-	file, err := fHeader.Open()
+	// create avatar
+	err = p.is.CreateAvatar(profile, f)
 	if err != nil {
-		uploadAvatarErr(c)
-		return
-	}
-	defer file.Close()
-
-	// create dir path for avatar
-	avatarPath := fmt.Sprintf("images/avatars/%v/", profile.UserID)
-	err = os.MkdirAll(avatarPath, 0755)
-	if err != nil {
-		uploadAvatarErr(c)
-		return
-	}
-
-	// create destination file
-	dst, err := os.Create(avatarPath + "avatar.jpg")
-	if err != nil {
-		uploadAvatarErr(c)
-		return
-	}
-	defer dst.Close()
-
-
-	// rezise file
-	new, err := lib.ResizeImg(150, 150, file)
-	if err != nil {
-		uploadAvatarErr(c)
-		return
-	}
-	
-	// store avatar in users path
-	err = jpeg.Encode(dst, new, nil)
-	if err != nil {
-		uploadAvatarErr(c)
+		uploadAvatarErr(c, err.Error())
 		return
 	}
 
 	// update profile
-	profile.Avatar = avatarPath + "avatar.jpg"
 	p.ps.Update(profile)
-
 	response.RespondWithSuccess(
 		c,
 		http.StatusCreated,
 		"Avatar successfully uploaded!",
 	)
-
-
 }
 
 // helper func to send error message releated to avatar upload
-func uploadAvatarErr(c *gin.Context) {
+func uploadAvatarErr(c *gin.Context, errMsg string) {
 	response.RespondWithError(
 		c, 
 		http.StatusInternalServerError, 
-		"Something went wrong when uploading image. Please try again.",
+		errMsg,
 	)
 }

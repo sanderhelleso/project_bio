@@ -15,7 +15,7 @@ type Promo struct {
 	Title			string 	`gorm:"not null;size:100"`
 	Brand			string 	`gorm:"not null;size:100"`
 	Description		string	`gorm:"not null"`
-	ImageURL		string	
+	Image			string	
 	ProductURL		string	 
 	Price			float64
 	PercantageOff	uint	
@@ -27,6 +27,9 @@ type Promo struct {
 
 // PromoDB is used to interact with the promos database
 type PromoDB interface {
+
+	// methods for quering promos
+	ByID(id uint) (*Promo, error)
 
 	// methods for altering promos
 	Create(promo *Promo) error
