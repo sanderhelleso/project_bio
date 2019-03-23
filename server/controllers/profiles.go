@@ -2,14 +2,19 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/nfnt/resize"
 	"net/http"
+	"image"
+	"image/jpeg"
 	"../models"
+	"mime/multipart"
 	"../lib/response"
 	"../lib/parser"
 	"fmt"
 	"os"
-	"io"
+	//"io"
 	"path/filepath"
+	"strings"
 )
 
 // ProfileForm represents the request body to the endpoint /new and /update 
@@ -84,7 +89,7 @@ func (p *Profiles) AvatarUpload(c *gin.Context) {
 
 	// get uploaded file
 	fHeader, _ := c.FormFile("avatar")
-	ext := filepath.Ext(fHeader.Filename)
+	ext := strings.ToLower((filepath.Ext(fHeader.Filename)))
 
 	// check ext
 	if !(ext == ".jpg" || ext == ".png") {
@@ -112,15 +117,16 @@ func (p *Profiles) AvatarUpload(c *gin.Context) {
 	}
 
 	// create destination file
-	dst, err := os.Create(avatarPath + fHeader.Filename)
+	dst, err := os.Create(avatarPath + "avatar.jpg")
 	if err != nil {
 		uploadAvatarErr(c)
 		return
 	}
 	defer dst.Close()
 
-	// copy uplaoded file data to destination file
-	_, err = io.Copy(dst, file)
+
+	// rezise and store avatar in users path
+	err = jpeg.Encode(dst, resizeImg(150, 150, file), nil)
 	if err != nil {
 		uploadAvatarErr(c)
 		return
@@ -139,4 +145,19 @@ func uploadAvatarErr(c *gin.Context) {
 		http.StatusInternalServerError, 
 		"Something went wrong when uploading image. Please try again.",
 	)
+}
+
+// resize image file to passed inn demensions
+// using Lanczos resampling and preserve aspect ratio
+func resizeImg(width uint, height uint, file multipart.File) image.Image {
+	img, _, err := image.Decode(file)
+	defer file.Close()
+
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+
+	new := resize.Resize(height, width, img, resize.Lanczos3)
+	return new
 }
