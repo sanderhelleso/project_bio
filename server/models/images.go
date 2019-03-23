@@ -15,6 +15,7 @@ import (
 
 type ImageService interface {
 	CreateAvatar(profile *Profile, f *multipart.FileHeader) error
+	CreatePromo(promo *Promo, f *multipart.FileHeader) error
 }
 
 func NewImageService() ImageService {
@@ -31,19 +32,68 @@ func (is *imageService) CreateAvatar(profile *Profile, f *multipart.FileHeader) 
 		return err
 	}
 
-	path, err := mkAvatarPath(profile.UserID)
+	path, err := mkImagePath("avatars", profile.UserID)
 	if err != nil {
 		return err
 	}
 
-	path += "avatar.jpg"
 	file, err := f.Open()
 	if err != nil {
 		return err
 	}
-	defer file.Close()
 
-	// create destination file
+	// save image at path
+	path += "avatar.jpg"	
+	err = saveImage(path, file, 150, 150)
+	if err != nil {
+		return err
+	}
+
+	profile.Avatar = path
+	return nil
+}
+
+// CreatePromo takes in a pointer to a promo and fileheader and will
+// attempt to create a new promo with the provided file from the promo
+func (is *imageService) CreatePromo(promo *Promo, f *multipart.FileHeader) error {
+	err := validateExt(f.Filename)
+	if err != nil {
+		return err
+	}
+
+	path, err := mkImagePath("promos", promo.ID)
+	if err != nil {
+		return err
+	}
+
+	file, err := f.Open()
+	if err != nil {
+		return err
+	}
+
+	// save image at path
+	err = saveImage(path, file, 300, 300)
+	if err != nil {
+		return err
+	}
+
+	promo.ImageURL = path
+	return nil
+}
+
+func mkImagePath(service string, id uint) (string, error) {
+	path := fmt.Sprintf("images/%v/%v/", service, id)
+	err := os.MkdirAll(path, 0755)
+	if err != nil {
+		return "", err
+	}
+
+	return path, nil
+}
+
+// saveImage takes in a path and file and saves the data of the file
+// to the destination path that is passed in
+func saveImage(path string, file multipart.File, width, height uint) error {
 	dst, err := os.Create(path)
 	if err != nil {
 		return err
@@ -51,7 +101,7 @@ func (is *imageService) CreateAvatar(profile *Profile, f *multipart.FileHeader) 
 	defer dst.Close()
 
 	// rezise file
-	new, err := resizeImg(150, 150, file)
+	new, err := resizeImg(width, height, file)
 	if err != nil {
 		return err
 	}
@@ -62,19 +112,7 @@ func (is *imageService) CreateAvatar(profile *Profile, f *multipart.FileHeader) 
 		return err
 	}
 
-	// set avatar for profile
-	profile.Avatar = path
 	return nil
-}
-
-func mkAvatarPath(userID uint) (string, error) {
-	avatarPath := fmt.Sprintf("images/avatars/%v/", userID)
-	err := os.MkdirAll(avatarPath, 0755)
-	if err != nil {
-		return "", err
-	}
-
-	return avatarPath, nil
 }
 
 // resizeImg will resize a image file to the passed inn demensions
