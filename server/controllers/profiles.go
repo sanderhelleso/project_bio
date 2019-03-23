@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"image"
 	"image/jpeg"
+	_ "image/png"
 	"../models"
 	"mime/multipart"
 	"../lib/response"
