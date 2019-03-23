@@ -13,7 +13,8 @@ func ConnectAndServe(
 	usersC 		*controllers.Users, 
 	followersC 	*controllers.Followers, 
 	promosC 	*controllers.Promos,
-	profilesC 	*controllers.Profiles) {
+	profilesC 	*controllers.Profiles,
+) {
 
 	// connect router and API v1
 	router := gin.Default()

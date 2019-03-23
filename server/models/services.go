@@ -20,6 +20,7 @@ func NewServices() (*Services, error) {
 		Profile:  NewProfileService(db),	
 		Follower: NewFollowerService(db),
 		Promo:	  NewPromoService(db),
+		Image:	  NewImageService(),	
 		db:       db,
 	}, nil
 }
@@ -30,6 +31,7 @@ type Services struct {
 	Profile  ProfileService
 	Follower FollowerService
 	Promo	 PromoService
+	Image	 ImageService
 	db       *gorm.DB
 }
 
