@@ -72,12 +72,14 @@ func (is *imageService) CreatePromo(promo *Promo, f *multipart.FileHeader) error
 	}
 
 	// save image at path
+	path += "promo.jpg"
 	err = saveImage(path, file, 300, 300)
 	if err != nil {
 		return err
 	}
 
-	promo.ImageURL = path
+	promo.Image = path
+	fmt.Println(promo)
 	return nil
 }
 

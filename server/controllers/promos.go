@@ -12,11 +12,9 @@ import (
 // PromoForm represents the request body to the endpoint /promos.
 // PromoForms structure is used for create
 type PromoForm struct {
-	UserID 			uint      `form:"userID" binding:"required"`
 	Title			string 	  `form:"title" binding:"required"`
 	Brand			string 	  `form:"brand" binding:"required"`
 	Description		string	  `form:"description"`
-	ImageURL		string	  `form:"imageURL"`
 	ProductURL		string	  `form:"productURL"`
 	Price			float64   `form:"price"`
 	PercantageOff	uint	  `form:"percentageOff"`
@@ -28,10 +26,9 @@ type PromoForm struct {
 // UpdatePromoForms structure is used for update
 type UpdatePromoForm struct {
 	ID				uint      `form:"id" binding:"required"`
-	Title			string 	  `form:"title"`
-	Brand			string 	  `form:"brand"`
+	Title			string 	  `form:"title" binding:"required"`
+	Brand			string 	  `form:"brand" binding:"required"`
 	Description		string	  `form:"description"`
-	ImageURL		string	  `form:"imageURL"`
 	ProductURL		string	  `form:"productURL"`
 	Price			float64   `form:"price"`
 	PercantageOff	uint	  `form:"percentageOff"`
@@ -39,21 +36,23 @@ type UpdatePromoForm struct {
 	ExpiresAt		time.Time `form:"expiresAt"`
 }
 
-// DeletePromoForm represents the request body to the endpoints
-// /promos/delete
-type DeletePromoForm struct {
+// PromoFormWithID represents the request body to the endpoints
+// /promos/delete and /promos/image
+type PromoFormWithID struct {
 	ID 	uint `form:"id" binding:"required"`
 }
 
 // Promos represents the controller for a promoer releationship in the app
 type Promos struct {
 	ps models.PromoService
+	is models.ImageService
 }
 
 // NewPromos is used to create a new promoer controller
-func NewPromos(ps models.PromoService) *Promos {
+func NewPromos(ps models.PromoService, is models.ImageService) *Promos {
 	return &Promos {
 		ps,
+		is,
 	}
 }
 
@@ -82,7 +81,6 @@ func (p *Promos) Create(c *gin.Context) {
 		Title:			form.Title,
 		Brand:			form.Brand,
 		Description:	form.Description,
-		ImageURL:		form.ImageURL,
 		ProductURL:		form.ProductURL,
 		Price:			form.Price,
 		Currency:		form.Currency,
@@ -94,10 +92,9 @@ func (p *Promos) Create(c *gin.Context) {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
-			"Something went wrong when attempting to create promo. Please try again")
+			err.Error())
 		return
 	}
-
 
 	response.RespondWithSuccess(
 		c,
@@ -130,7 +127,6 @@ func (p *Promos) Update(c *gin.Context) {
 		Title:			form.Title,
 		Brand:			form.Brand,
 		Description:	form.Description,
-		ImageURL:		form.ImageURL,
 		ProductURL:		form.ProductURL,
 		Price:			form.Price,
 		Currency:		form.Currency,
@@ -146,10 +142,11 @@ func (p *Promos) Update(c *gin.Context) {
 		return
 	}
 
-	response.RespondWithSuccess(
-		c,
-		http.StatusOK,
-		"Promo successfully updated")
+	c.JSON(http.StatusInternalServerError, gin.H {
+		"message": 	"Promo successfully updated",
+		"status": 	http.StatusInternalServerError,
+		"payload": 	promo,
+	})
 }
 
 // Delete is used to delete a promo identified
@@ -161,7 +158,7 @@ func (p *Promos) Update(c *gin.Context) {
 // BODY:	PromoID
 func (p *Promos) Delete (c *gin.Context) {
 
-	var form DeletePromoForm
+	var form PromoFormWithID
 	if c.Bind(&form) != nil {
 		response.RespondWithError(
 			c, 
@@ -182,4 +179,51 @@ func (p *Promos) Delete (c *gin.Context) {
 		c,
 		http.StatusOK,
 		"Promo succesfully removed!")
+}
+
+// PromoUpload handle uploading of a promos image
+func (p *Promos) PromoUpload(c *gin.Context) {
+
+	// get file from form
+	f, _ := c.FormFile("image")
+
+	var form PromoFormWithID
+	if c.Bind(&form) != nil || f == nil {
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			"Unable to process form data due to invalid format")
+		return
+	}
+
+	// find promo releated to id
+	promo, err := p.ps.ByID(form.ID)
+	if err != nil {
+		uploadPromoErr(c, err.Error())
+		return
+	}
+
+	// create promo
+	err = p.is.CreatePromo(promo, f)
+	if err != nil {
+		uploadPromoErr(c, err.Error())
+		return
+	}
+
+	// update promo
+	p.ps.Update(promo)
+	response.RespondWithSuccess(
+		c,
+		http.StatusCreated,
+		"Promo image successfully uploaded!",
+	)
+}
+
+// helper func to send error message releated to promo upload
+func uploadPromoErr(c *gin.Context, errMsg string) {
+	response.RespondWithError(
+		c, 
+		http.StatusInternalServerError, 
+		errMsg,
+	)
 }
