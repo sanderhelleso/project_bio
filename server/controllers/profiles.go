@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"io"
+	"path/filepath"
 )
 
 // ProfileForm represents the request body to the endpoint /new and /update 
@@ -82,35 +83,38 @@ func (p *Profiles) Create(c *gin.Context) {
 func (p *Profiles) AvatarUpload(c *gin.Context) {
 
 	// get uploaded file
-	blob, _ := c.FormFile("avatar")
-	file, err := blob.Open()
-	if err != nil {
+	fHeader, _ := c.FormFile("avatar")
+	ext := filepath.Ext(fHeader.Filename)
+
+	// check ext
+	if !(ext == ".jpg" || ext == ".png") {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
-			"OPEN FILE: Something went wrong when uploading image. Please try again.")
+			"Only files of type JPG or PNG are allowed.",
+		)
+		return
+	}
+
+	file, err := fHeader.Open()
+	if err != nil {
+		uploadAvatarErr(c)
 		return
 	}
 	defer file.Close()
 
 	// create dir path for avatar
-	avatarPath := fmt.Sprintf("images/avatars/%v/", 1)
+	avatarPath := fmt.Sprintf("images/avatars/%v/", parser.GetIDFromCTX(c))
 	err = os.MkdirAll(avatarPath, 0755)
 	if err != nil {
-		response.RespondWithError(
-			c, 
-			http.StatusInternalServerError, 
-			"MAKE DIR: Something went wrong when uploading image. Please try again.")
+		uploadAvatarErr(c)
 		return
 	}
 
 	// create destination file
-	dst, err := os.Create(avatarPath + blob.Filename)
+	dst, err := os.Create(avatarPath + fHeader.Filename)
 	if err != nil {
-		response.RespondWithError(
-			c, 
-			http.StatusInternalServerError, 
-			"CREATE DEST FILE: Something went wrong when uploading image. Please try again.")
+		uploadAvatarErr(c)
 		return
 	}
 	defer dst.Close()
@@ -118,10 +122,7 @@ func (p *Profiles) AvatarUpload(c *gin.Context) {
 	// copy uplaoded file data to destination file
 	_, err = io.Copy(dst, file)
 	if err != nil {
-		response.RespondWithError(
-			c, 
-			http.StatusInternalServerError, 
-			"COPY DATA: Something went wrong when uploading image. Please try again.")
+		uploadAvatarErr(c)
 		return
 	}
 
@@ -129,4 +130,13 @@ func (p *Profiles) AvatarUpload(c *gin.Context) {
 		c,
 		http.StatusCreated,
 		"Avatar successfully uploaded!")
+}
+
+// helper func to send error message releated to avatar upload
+func uploadAvatarErr(c *gin.Context) {
+	response.RespondWithError(
+		c, 
+		http.StatusInternalServerError, 
+		"Something went wrong when uploading image. Please try again.",
+	)
 }
