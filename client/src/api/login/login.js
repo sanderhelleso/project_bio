@@ -1,8 +1,7 @@
-import axios from 'axios'
 import ENDPOINTS from '../endpoints';
 import API from '../api';
 
-export default async function login(email, password) {
+export async function login(email, password) {
 
     const data = { email, password }
 

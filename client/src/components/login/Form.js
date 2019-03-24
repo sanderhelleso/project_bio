@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
+import { login } from '../../api/login/login';
 
 class Form extends Component {
     state = {
-        email: '',
-        password: '',
+        email: 'johndoe@gmail.com',
+        password: 'Randompass123',
         loading: false
     }
 
+    async componentDidMount() {
+        //const response = await login(this.state.email, this.state.password);
+        //console.log(response);
+    }
+
+
     render() {
-        <h5>Im a form</h5>
+        return <h5>Im a form</h5>
     }
 }
+
+export default Form;
