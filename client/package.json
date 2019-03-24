@@ -1,0 +1,19 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "next": "^8.0.3",
+    "react": "^16.8.5",
+    "react-dom": "^16.8.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "author": "Sander Hellesø",
+  "license": "ISC"
+}
