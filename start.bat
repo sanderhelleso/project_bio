@@ -8,4 +8,4 @@ cd ..\
 
 :: RUN CLIENT
 cd .\client
-start cmd /k call npm start
+start cmd /k call npm start 
