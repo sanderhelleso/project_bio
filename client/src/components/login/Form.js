@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { login } from '../../api/login/login';
+import { Button, Buttons, Instagram, } from '../styles/Button';
+import { Inputs, Input } from '../styles/Input';
+import FeatherIcon from 'feather-icons-react';
 
 class Form extends Component {
     state = {
@@ -15,7 +18,23 @@ class Form extends Component {
 
 
     render() {
-        return <h5>Im a form</h5>
+        return (
+            <form>
+                <Inputs stack={true} stretch={true}>
+                    <Input placeholder="E-Mail address" type="email" />
+                    <Input placeholder="Password" type="password" />
+                </Inputs>
+               <Buttons stretch={true}>
+                    <Button>Submit</Button>
+                    <Instagram>
+                        <span>
+                            <FeatherIcon icon="instagram" />
+                        </span>
+                        Instagram
+                    </Instagram>
+                </Buttons>
+            </form>
+        )
     }
 }
 

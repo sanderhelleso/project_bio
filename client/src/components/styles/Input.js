@@ -14,10 +14,17 @@ const inputStyles = `
     margin: 1rem;
 `;
 
-export default styled.input`
+export const Inputs = styled.div`
+    
+    input {
+        display: ${props => props.stack ? 'block' : 'inline-block'};
+        min-width: ${props => props.stretch ? '100%' : 'none'};
+    }
+`
+
+export const Input = styled.input`
     ${inputStyles}
     border: 1.5px solid ${props => props.theme.disabledBg};
-    background-color: transparent;
 
     &::placeholder {
         opacity: 0.7;

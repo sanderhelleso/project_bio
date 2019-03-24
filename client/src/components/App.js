@@ -21,6 +21,14 @@ export default App;
 
 
 const GlobalStyle = createGlobalStyle`
+    html {
+        box-sizing: border-box;
+    }
+    
+    *, *:before, *:after {
+        box-sizing: inherit;
+    }
+
     body {
         @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,700');
         font-family: 'Poppins', sans-serif;
