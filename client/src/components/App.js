@@ -21,7 +21,9 @@ export default App;
 
 
 const GlobalStyle = createGlobalStyle`
-  body {
-    background-color: ${props => props.bg};
-  }
+    body {
+        @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,700');
+        font-family: 'Poppins', sans-serif;
+        background-color: ${props => props.bg};
+    } 
 `
