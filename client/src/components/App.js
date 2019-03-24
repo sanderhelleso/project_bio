@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
+import Routes from './routes/Routes';
 
 class App extends Component {
-    state = {
-        greeting: 'Hello World'
-    }
-
     render() {
-        return <h1>{this.state.greeting}</h1>
+        return <Routes />
     }
 }
 
