@@ -24,9 +24,13 @@ const GlobalStyle = createGlobalStyle`
     html {
         box-sizing: border-box;
     }
-    
+
     *, *:before, *:after {
         box-sizing: inherit;
+    }
+
+    p {
+        line-height: 1.8;
     }
 
     body {
