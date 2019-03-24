@@ -176,8 +176,8 @@ func (u *Users) Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusFound, gin.H {
-		"status": 	http.StatusFound,
+	c.JSON(http.StatusOK, gin.H {
+		"status": 	http.StatusOK,
 		"message": 	"Login successfull!",
 		"token":	token,
 	})
@@ -185,7 +185,7 @@ func (u *Users) Login(c *gin.Context) {
 
 // InitiateReset initiates the reset password functionality
 // POST /forgot
-func (u *Users) IntitiateReset(c *gin.Context) {
+func (u *Users) InitiateReset(c *gin.Context) {
 	var form ForgotPwForm
 	if err := c.Bind(&form); err != nil {
 		response.RespondWithError(
