@@ -1,6 +1,7 @@
 package api
 
 import (
+	cors "github.com/rs/cors/wrapper/gin"
 	"github.com/gin-gonic/gin"
 	"../controllers"
 )
@@ -18,6 +19,7 @@ func ConnectAndServe(
 
 	// connect router and API v1
 	router := gin.Default()
+	router.Use(cors.Default())
 	router.MaxMultipartMemory = maxMultiPartMem
 
 	UsersRoutes(router, usersC)
