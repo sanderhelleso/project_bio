@@ -8,7 +8,11 @@ const Login = () => (
     <main>
         <Container>
             <StyledCont>
-                <StyledHeading>Log In</StyledHeading>
+                <h1>Get Started</h1>
+                <p>
+                    Your fans are waiting, it only takes a couple of seconds!<br/>
+                    Dont have an account? Dont worry, we create one for you.
+                </p>
                 <Form />
             </StyledCont>
         </Container>
@@ -18,19 +22,27 @@ const Login = () => (
 
 export default Login;
 
-const StyledHeading = styled.h1`
-    font-size: 4.5rem;
-    color: #e0e0e0;
-`;
-
 const StyledCont = styled.div`
     position: relative;
     max-width: 500px;
-    margin: 15vh auto;
+    margin: 12.5vh auto;
     display: block;
 
-    button {
-        margin-top: 2rem;
+    button, input {
+        margin: 1rem 0;
+    }
+
+    h1 {
+        font-size: 4rem;
+        color: ${props => props.theme.primaryText};
+        margin-left: -2.5rem;
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+
+    p {
+        margin-bottom: 3rem;
+        color: ${props => props.theme.secondaryText};
     }
 `;
 

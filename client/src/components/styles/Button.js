@@ -10,7 +10,6 @@ const buttonStyles = `
     border-radius: 4px;
     font-weight: 400;
     transition: 0.3s ease-in-out;
-    margin: 1rem;
     font-family: 'Poppins', sans-serif;
     transform: scale(1.001);
 `

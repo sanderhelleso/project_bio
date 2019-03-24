@@ -11,7 +11,6 @@ const inputStyles = `
     font-family: 'Poppins', sans-serif;
     border-radius: 4px;
     transition: 0.3s ease-in-out;
-    margin: 1rem;
 `;
 
 export const Inputs = styled.div`
