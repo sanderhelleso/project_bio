@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { withToastManager } from 'react-toast-notifications';
+import { withRouter } from 'react-router-dom'
 
 import { login } from '../../api/login/login';
 import { Button, Buttons, Instagram, } from '../styles/Button';
@@ -10,6 +11,8 @@ import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import loginAction from '../../actions/userActions/loginAction';
+
+import { redirLoadProfile } from '../../lib/redirects';
 
 class Form extends Component {
     state = {
@@ -25,6 +28,9 @@ class Form extends Component {
         // login user if successfull
         if (response.status < 400) {
             this.props.loginAction(response.token)
+
+            // redir and fetch profile
+            this.props.history.push('/load_profile');
         }
 
         // display notification status
@@ -83,7 +89,7 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators({ loginAction }, dispatch)
 }
 
-export default connect(null, mapDispatchToProps)(Form = withToastManager(Form));
+export default connect(null, mapDispatchToProps)(Form = withToastManager(withRouter(Form)));
 
 const StyledOr = styled.span`
     text-align: center;

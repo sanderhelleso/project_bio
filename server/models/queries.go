@@ -32,14 +32,13 @@ func all(db *gorm.DB, dst interface{}) error {
 	return err
 }
 
-
 // findFollowing will find all users that the user with provided id is following
 func findFollowing(db *gorm.DB, dst User, id uint) (*[]UserData, error) {
 	results := make([]UserData, 0)
-	s 	:= db.Table("users").Select("users.id, users.email, users.first_name, users.last_name")
-	j 	:= s.Joins("JOIN followers ON followers.user_following_id = users.id")
-	w 	:= j.Where("followers.user_id = ?", id).Scan(&results)
-	o   := w.Order("followers.created_at desc")
+	s := db.Table("users").Select("users.id, users.email, users.first_name, users.last_name")
+	j := s.Joins("JOIN followers ON followers.user_following_id = users.id")
+	w := j.Where("followers.user_id = ?", id).Scan(&results)
+	o := w.Order("followers.created_at desc")
 	err := o.Find(dst).Error
 
 	if err == gorm.ErrRecordNotFound {
@@ -52,10 +51,10 @@ func findFollowing(db *gorm.DB, dst User, id uint) (*[]UserData, error) {
 // findFollowers will find all users that is following the user with the provided user id
 func findFollowers(db *gorm.DB, dst User, id uint) (*[]UserData, error) {
 	results := make([]UserData, 0)
-	s 	:= db.Table("users").Select("users.id, users.email, users.first_name, users.last_name")
-	j 	:= s.Joins("JOIN followers ON followers.user_id = users.id")
-	w 	:= j.Where("followers.user_following_id = ?", id).Scan(&results)
-	o   := w.Order("followers.created_at desc")
+	s := db.Table("users").Select("users.id, users.email, users.first_name, users.last_name")
+	j := s.Joins("JOIN followers ON followers.user_id = users.id")
+	w := j.Where("followers.user_following_id = ?", id).Scan(&results)
+	o := w.Order("followers.created_at desc")
 	err := o.Find(dst).Error
 
 	if err == gorm.ErrRecordNotFound {

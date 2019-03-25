@@ -1,13 +1,14 @@
 package middelware
 
 import (
-	"net/http"
-	"github.com/gin-gonic/gin"
-	"../response"
-	"../jwt"
-	"strings"
-	"os"
 	"fmt"
+	"net/http"
+	"os"
+	"strings"
+
+	"../jwt"
+	"../response"
+	"github.com/gin-gonic/gin"
 )
 
 // RequireToken checks the incoming request header
@@ -33,21 +34,14 @@ func RequireToken(c *gin.Context) {
 	if !valid {
 		response.RespondWithError(
 			c,
-			http.StatusForbidden, 
+			http.StatusForbidden,
 			"Invalid authentication token")
-		return
-	}
-
-	if !verified {
-		response.RespondWithError(
-			c, 
-			http.StatusUnauthorized, 
-			"Your account must be verified to perform this action")
 		return
 	}
 
 	// update specifc request contex with id
 	c.Set(os.Getenv("CTX_USER_KEY"), id)
+	c.Set("verified", verified)
 
 	c.Next()
-}  
+}

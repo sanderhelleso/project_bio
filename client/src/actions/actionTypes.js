@@ -8,6 +8,7 @@ export const FOLLOW_USER     = 'FOLLOW_USER';
 export const UNFOLLOW_USER   = 'UNFOLLOW_USER';
 
 // PROFILE REDUCER
+export const SET_PROFILE     = 'SET_PROFILE';
 export const CREATE_PROFILE  = 'CREATE_PROFILE';
 export const UPDATE_PROFILE  = 'UPDATE_PROFILE';
 export const CREATE_AVATAR   = 'CREATE_AVATAR';
