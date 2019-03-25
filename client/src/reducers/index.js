@@ -5,10 +5,10 @@ import promoReducer from './promoReducer';
 import followerReducer from './followerReducer';
 
 const appReducer = combineReducers({ 
-    userReducer,
-    profileReducer,
-    promoReducer,
-    followerReducer
+    user: userReducer,
+    profile: profileReducer,
+    promos: promoReducer,
+    followers: followerReducer
 });
 
 export default (state, action) => {

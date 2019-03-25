@@ -1,6 +1,7 @@
 import { CREATE_PROFILE, UPDATE_PROFILE, CREATE_AVATAR, DELETE_AVATAR } from '../actions/actionTypes';
 
 const initialState = {
+    created: false,
     handle: '',
     avatar: '',
     name: '',
@@ -29,5 +30,8 @@ export default (state = initialState, action) => {
             return {
                 state
             }
+
+        default:
+            return state;
     }
 }
