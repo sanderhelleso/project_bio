@@ -3,9 +3,9 @@ import {
     UNLIKE_PROMO, COMMENT_PROMO, UNCOMMENT_PROMO 
 } from '../actions/actionTypes';
 
-const defaultState = { promos: 0 }
+const initialState = { promos: 0 }
 
-export default (state = defaultState, action) => {
+export default (state = initialState, action) => {
     switch(action.type) {
         case CREATE_PROMO:
             return {
