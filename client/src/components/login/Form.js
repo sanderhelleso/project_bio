@@ -20,7 +20,7 @@ class Form extends Component {
 
         // display notification status
         const { toastManager } = this.props;
-        toastManager.add(response.status < 400 ? response.message : response.error, {
+        toastManager.add(response.message, {
             appearance: response.status < 400 ? 'success' : 'error',
             autoDismiss: !response.newUser
         })

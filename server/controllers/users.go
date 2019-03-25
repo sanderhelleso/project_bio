@@ -75,6 +75,7 @@ func (u *Users) Login(c *gin.Context) {
 	}
 
 	newUser := false
+	message := response.SuccessLoginExtUser
 
 	// attempt to authenticate user
 	user, err := u.us.Authenticate(form.Email, form.Password)
@@ -111,6 +112,7 @@ func (u *Users) Login(c *gin.Context) {
 			// send welcome email with verification token
 			go u.emailer.Welcome(user.Email, token)
 			newUser = true
+			message = response.SuccessLoginNewUser
 
 		} else {
 			response.RespondWithError(
@@ -134,7 +136,7 @@ func (u *Users) Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
-		"message": "Login successfull!",
+		"message": message,
 		"token":   token,
 		"newUser": newUser,
 	})

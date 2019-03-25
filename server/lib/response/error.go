@@ -6,8 +6,8 @@ import (
 
 // RespondWithError responds with an error to a http request with provided data
 func RespondWithError(c *gin.Context, code int, message interface{}) {
-	c.AbortWithStatusJSON(code, gin.H {
-		"error": 	message,
-		"status": 	code,
+	c.AbortWithStatusJSON(code, gin.H{
+		"message": message,
+		"status":  code,
 	})
 }
