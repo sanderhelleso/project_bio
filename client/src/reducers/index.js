@@ -1,14 +1,19 @@
 import { combineReducers } from 'redux';
 import userReducer from './userReducer';
+import profileReducer from './profileReducer';
+import promoReducer from './promoReducer';
+import followerReducer from './followerReducer';
 
 const appReducer = combineReducers({ 
-    // future reducers go here
-    userReducer
+    userReducer,
+    profileReducer,
+    promoReducer,
+    followerReducer
 });
 
 export default (state, action) => {
 
-    // logout
+    // on logout, reset state
     if (action.type === 'LOGOUT') {
         navigator.credentials.preventSilentAccess();
         state = undefined;
