@@ -1,7 +1,7 @@
 
 // return authorization header token recieved
 // from localstorage, sat on valid login
-export const bearerToken = () => {
+export default () => {
     try {
 
         const serializedState = localStorage.getItem('state');

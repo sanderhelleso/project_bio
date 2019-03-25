@@ -1,8 +1,8 @@
 import { FOLLOW_USER, UNFOLLOW_USER } from '../actions/actionTypes';
 
-const defaultState = { following: 0, followers: 0 };
+const initialState = { following: 0, followers: 0 };
 
-export default (state = defaultState, action) => {
+export default (state = initialState, action) => {
     switch(action.typpe) {
         case FOLLOW_USER:
             return {
