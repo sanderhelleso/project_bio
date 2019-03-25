@@ -6,13 +6,13 @@ package models
 
 import (
 	"os"
-	"strings"
-	"unicode"
 	"regexp"
-	"../lib/hash"
+	"strings"
 	"time"
-	"golang.org/x/crypto/bcrypt"
+	"unicode"
 
+	"../lib/hash"
+	"golang.org/x/crypto/bcrypt"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -23,20 +23,20 @@ const pwrtDur = 12
 
 // User represent a user in the application
 type User struct {
-	gorm.Model          	// `ID`, `CreatedAt`, `UpdatedAt`, `DeletedAt`
-	Email	    	string 	`gorm:"size:30;not null;unique_index"`
-	Password		string 	`gorm:"-"` // ignore in DB
-	PasswordHash	string 	`gorm:"not null"`
-	Verified		bool	`gorm:"not null"`
-	Profile 		Profile `gorm:"foreignkey:UserID;"`
+	gorm.Model           // `ID`, `CreatedAt`, `UpdatedAt`, `DeletedAt`
+	Email        string  `gorm:"size:30;not null;unique_index"`
+	Password     string  `gorm:"-"` // ignore in DB
+	PasswordHash string  `gorm:"not null"`
+	Verified     bool    `gorm:"not null"`
+	Profile      Profile `gorm:"foreignkey:UserID;"`
 }
 
 // UserData represents the users data
 type UserData struct {
-	ID	  uint
-	Email string
+	ID        uint
+	Email     string
 	FirstName string
-	LastName string
+	LastName  string
 }
 
 // UserDB is used to interact with the users database
@@ -97,23 +97,23 @@ var _ UserService = &userService{}
 type userService struct {
 	UserDB
 	accVerifyDB accVerifyDB
-	pwResetDB 	pwResetDB
+	pwResetDB   pwResetDB
 }
 
 // NewUserService connect the user db and validator
 func NewUserService(db *gorm.DB) UserService {
-	ug 	 := &userGorm{db}
+	ug := &userGorm{db}
 	hmac := hash.NewHMAC(os.Getenv("HMAC_SECRET_KEY"))
-	uv 	 := newUserValidator(ug)
+	uv := newUserValidator(ug)
 
 	return &userService{
-		UserDB: 	 uv,
+		UserDB:      uv,
 		accVerifyDB: newAccVerifyValidator(&accVerifyGorm{db}, hmac),
-		pwResetDB: 	 newPwResetValidator(&pwResetGorm{db}, hmac),
+		pwResetDB:   newPwResetValidator(&pwResetGorm{db}, hmac),
 	}
 }
 
-// Authenticate is used to authenticate a user with the provided email and password. 
+// Authenticate is used to authenticate a user with the provided email and password.
 //
 // - If the email address provided is invald, this will return nil, ErrNotFound
 //
@@ -132,16 +132,16 @@ func (us *userService) Authenticate(email, password string) (*User, error) {
 
 	// compare found users passwordHash, with decrypted provided password
 	err = bcrypt.CompareHashAndPassword(
-	[]byte(foundUser.PasswordHash), 
-	[]byte(password + os.Getenv("USER_PWD_PEPPER")))
+		[]byte(foundUser.PasswordHash),
+		[]byte(password+os.Getenv("USER_PWD_PEPPER")))
 
 	// handle errors after case occured
 	if err != nil {
 		switch err {
-			case bcrypt.ErrMismatchedHashAndPassword:
-				return nil, ErrPasswordIncorrect
-			default:
-				return nil, err
+		case bcrypt.ErrMismatchedHashAndPassword:
+			return nil, ErrPasswordIncorrect
+		default:
+			return nil, err
 		}
 	}
 
@@ -154,7 +154,7 @@ func (us *userService) InitiateVerification(email string) (string, error) {
 		return "", err
 	}
 
-	accv := accVerify {
+	accv := accVerify{
 		UserID: user.ID,
 	}
 
@@ -196,7 +196,7 @@ func (us *userService) InitiateReset(email string) (string, error) {
 		return "", err
 	}
 
-	pwr := pwReset {
+	pwr := pwReset{
 		UserID: user.ID,
 	}
 
@@ -240,7 +240,6 @@ func (us *userService) CompleteReset(token, newPw string) (*User, error) {
 	return user, nil
 }
 
-
 /******************* VALIDATORS **************************/
 
 type userValFunc func(*User) error
@@ -262,7 +261,7 @@ func runUsersValFuncs(user *User, fns ...userValFunc) error {
 
 func newUserValidator(udb UserDB) *userValidator {
 	return &userValidator{
-		UserDB: udb,
+		UserDB:     udb,
 		emailRegex: regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,16}$`),
 	}
 }
@@ -339,25 +338,25 @@ func (uv *userValidator) bcryptPassword(user *User) error {
 }
 
 func (uv *userValidator) passwordFormat(user *User) error {
-	
+
 	gotUC, gotLC, gotN := false, false, false
-    for _, c := range user.Password {
-        switch {
-			case unicode.IsNumber(c):
-				gotN = true
-			case unicode.IsUpper(c):
-				gotUC = true
-			case unicode.IsLower(c):
-				gotLC = true
-			default:
-        }
+	for _, c := range user.Password {
+		switch {
+		case unicode.IsNumber(c):
+			gotN = true
+		case unicode.IsUpper(c):
+			gotUC = true
+		case unicode.IsLower(c):
+			gotLC = true
+		default:
+		}
 	}
 
 	if !(gotUC && gotLC && gotN && len(user.Password) >= 8) {
 		return ErrPasswordIncorrect
 	}
-	
-    return nil
+
+	return nil
 }
 
 func (uv *userValidator) idGreaterThan(n uint) userValFunc {
@@ -421,7 +420,6 @@ func (uv *userValidator) passwordHashRequired(user *User) error {
 	return nil
 }
 
-
 // ensure interface is matching
 var _ UserDB = &userGorm{}
 
@@ -471,6 +469,9 @@ func (ug *userGorm) Update(user *User) error {
 
 //Delete will delete the user with the provided ID
 func (ug *userGorm) Delete(id uint) error {
+	if id <= 0 {
+		return ErrIDInvalid
+	}
 	user := User{Model: gorm.Model{ID: id}}
 	return ug.db.Delete(&user).Error
 }
