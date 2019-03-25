@@ -1,4 +1,6 @@
 import React, { Component, Fragment } from 'react';
+import { withToastManager } from 'react-toast-notifications';
+
 import { login } from '../../api/login/login';
 import { Button, Buttons, Instagram, } from '../styles/Button';
 import { Inputs, Input } from '../styles/Input';
@@ -14,10 +16,14 @@ class Form extends Component {
 
     attemptLogin = async () => {
         this.setState({ loading: true });
-
         const response = await login(this.state.email, this.state.password);
-        console.log(response);
 
+        // display notification status
+        const { toastManager } = this.props;
+        toastManager.add(response.status < 400 ? response.message : response.error, {
+            appearance: response.status < 400 ? 'success' : 'error',
+            autoDismiss: !response.newUser
+        })
         this.setState({ loading: false })
     }
 
@@ -63,7 +69,7 @@ class Form extends Component {
     }
 }
 
-export default Form;
+export default Form = withToastManager(Form);
 
 const StyledOr = styled.span`
     text-align: center;

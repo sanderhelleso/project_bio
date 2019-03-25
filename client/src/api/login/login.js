@@ -7,11 +7,11 @@ export async function login(email, password) {
 
     try {
         const response = await API.post(ENDPOINTS.login, data)
-        return response
+        return response.data
     }
 
     catch(error) {
         console.log(error)
-        return error.response
+        return error.response.data
     }
 }
