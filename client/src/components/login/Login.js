@@ -3,13 +3,13 @@ import styled from 'styled-components';
 
 import Container from '../styles/Container';
 import Form from './Form';
-import { ShapeSquareLeft } from '../styles/Shapes';
+import { SquareLeftBorder } from '../styles/Shapes';
 
 const Login = () => (
     <main>
         <Container>
             <StyledCont>
-                <ShapeSquareLeft />
+                <SquareLeftBorder />
                 <h1>Get Started</h1>
                 <p>
                     Your fans are waiting, it only takes a couple of seconds!<br/>

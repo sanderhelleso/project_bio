@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { rotateSquareRight, rotateSquareLeft } from './Keyframes';
+import { zoomIn } from './Keyframes';
 
 const defaultStyle = `
     z-index: -1;
@@ -8,21 +8,21 @@ const defaultStyle = `
     min-width: 25rem;
     display: block;
     position: absolute;
+    border: 15px solid #eeeeee;
 `;
 
-export const ShapeSquareRightWithBorder = styled.span`
+export const SquareRightBorder = styled.span`
     ${defaultStyle}
     top: -3.5%;
     right: -35%;
-    border: 15px solid #eeeeee;
-    animation: ${rotateSquareRight} 0.8s ease-in-out forwards;
+    transform: rotate(10deg);
+    animation: ${zoomIn} 0.5s ease-in-out forwards;
 `;
 
-export const ShapeSquareLeft = styled.span`
+export const SquareLeftBorder = styled.span`
     ${defaultStyle}
-    z-index: -1;
     top: -3.5%;
     left: -35%;
-    background-color: #eeeeee;
-    animation: ${rotateSquareLeft} 0.8s ease-in-out forwards;
+    transform: rotate(-10deg);
+    animation: ${zoomIn} 0.5s ease-in-out forwards;
 `;

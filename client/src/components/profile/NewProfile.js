@@ -14,7 +14,7 @@ import setProfileAction from '../../actions/profileActions/setProfileAction';
 
 import { createProfile } from '../../api/profile/profile';
 
-import { ShapeSquareRightWithBorder } from '../styles/Shapes';
+import { SquareRightBorder } from '../styles/Shapes';
 
 class NewProfile extends Component {
     state = {
@@ -113,7 +113,7 @@ class NewProfile extends Component {
         return (
             <Container>
                 <StyledCont>
-                    <ShapeSquareRightWithBorder />
+                    <SquareRightBorder />
                     <h1>New Profile</h1>
                     <Inputs stack={true} stretch={true}>
                         {this.renderFields()}
@@ -181,19 +181,4 @@ const StyledLabel = styled.span`
     margin: 0.5rem 0 2rem 0;
     font-size: 0.7rem;
     color: #9e9e9e;
-`;
-
-const StyledShape = styled.span`
-    background: #9796f0;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to left, #fbc7d4, #9796f0);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to left, #fbc7d4, #9796f0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    border-radius: 66% 34% 29% 71% / 38% 46% 54% 62%;
-    min-height: 20rem;
-    min-width: 20rem;
-    display: block;
-    position: absolute;
-    top: -7.5%;
-    left: -25%;
-    z-index: -1;
-    opacity: 0.5;
 `;

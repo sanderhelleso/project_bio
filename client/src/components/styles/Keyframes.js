@@ -1,20 +1,11 @@
 import styled, { keyframes } from 'styled-components';
  
-export const rotateSquareRight = keyframes`
-  0% {
-    transform: rotate(-40deg);
+export const zoomIn = keyframes`
+0% {
+    transform: scale(0.3);
   }
   100% {
-    transform: rotate(10deg);
-  }
-`;
-
-export const rotateSquareLeft = keyframes`
-  0% {
-    transform: rotate(60deg);
-  }
-  100% {
-    transform: rotate(10deg);
+    transform: rotate(1);
   }
 `;
 
