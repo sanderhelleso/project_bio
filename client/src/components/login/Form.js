@@ -12,7 +12,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import loginAction from '../../actions/userActions/loginAction';
 
-import { redirLoadProfile } from '../../lib/redirects';
 
 class Form extends Component {
     state = {
@@ -28,9 +27,6 @@ class Form extends Component {
         // login user if successfull
         if (response.status < 400) {
             this.props.loginAction(response.token)
-
-            // redir and fetch profile
-            this.props.history.push('/load_profile');
         }
 
         // display notification status
@@ -66,10 +62,12 @@ class Form extends Component {
                     />
                 </Inputs>
                <Buttons stretch={true}>
-                    <Button 
+                    <Button
+                        id="login" 
                         disabled={this.state.loading}
                         onClick={() => this.attemptLogin()}
                     >
+                        <FeatherIcon icon="arrow-right" />
                         Sign In
                     </Button>
                     <StyledOr>OR</StyledOr>

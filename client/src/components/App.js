@@ -38,5 +38,6 @@ const GlobalStyle = createGlobalStyle`
         @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,700');
         font-family: 'Poppins', sans-serif;
         background-color: ${props => props.bg};
+        overflow-x: hidden;
     } 
 `

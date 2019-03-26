@@ -1,10 +1,15 @@
 import axios from 'axios';
 import bearerToken from '../lib/bearerToken';
 
-export default axios.create({
+const api = axios.create({
     baseURL: 'http://localhost:5000/api/v1/',
     timeout: 1000,
-    headers: {
-        ...bearerToken()
-    }
+    headers: bearerToken()
 });
+
+api.interceptors.request.use(config => {
+    config.headers = bearerToken();
+    return config;
+}, err => { return Promise.reject(err) });
+
+export default api;

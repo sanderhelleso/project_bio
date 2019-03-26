@@ -1,4 +1,5 @@
 import styled  from 'styled-components';
+import { fadeIn } from './Keyframes';
 
 export default styled.div`
 
@@ -17,4 +18,5 @@ export default styled.div`
     }
 
     margin: 0 auto;
-`
+    animation: ${fadeIn} 0.5s ease-in-out;
+`;

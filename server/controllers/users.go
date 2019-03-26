@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"../email"
@@ -107,7 +108,9 @@ func (u *Users) Login(c *gin.Context) {
 			}
 
 			// generate verification token
-			token, _ := u.us.InitiateVerification(user.Email)
+			token, _ := u.us.InitiateVerification(form.Email)
+			fmt.Println("TOKEN: ------------- :")
+			fmt.Println(token)
 
 			// send welcome email with verification token
 			go u.emailer.Welcome(user.Email, token)
