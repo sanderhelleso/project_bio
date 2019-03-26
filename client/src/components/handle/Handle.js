@@ -13,6 +13,11 @@ class Handle extends Component {
     }
 
     async componentDidMount() {
+
+        if (this.props.profile.created) {
+            return this.setState({ loading: false });
+        }
+
         const response = await fetchProfile();
         console.log(response);
 

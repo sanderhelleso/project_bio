@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom'
 import styled from 'styled-components';
-import { Button, Buttons } from '../styles/Button';
+import { Button } from '../styles/Button';
 
 
 class NewAvatar extends Component {
     state = {
         loading: false
+    }
+
+    skipUpload = () => {
+        this.props.history.push('/');
     }
 
     render() {
@@ -15,13 +20,15 @@ class NewAvatar extends Component {
                 <p>...or dont, anyway is cool</p>
                 <StyledImg />
                 <Button>Upload</Button>
-                <a>Skip</a>
+                <a onClick={() => this.skipUpload()}>
+                    Skip
+                </a>
             </StyledCont>
         )
     }
 }
 
-export default NewAvatar;
+export default withRouter(NewAvatar);
 
 const StyledCont = styled.div`
     max-width: 500px;
