@@ -12,6 +12,16 @@ const buttonStyles = `
     transition: 0.3s ease-in-out;
     font-family: 'Poppins', sans-serif;
     transform: scale(1.001);
+    position: relative;
+
+    svg {
+        height: 1rem;
+        width: 1rem;
+        opacity: 0.5;
+        position: absolute;
+        right: 10%;
+        top: 35%;
+    }
 `
 
 const disabledStyles = `

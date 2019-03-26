@@ -158,16 +158,6 @@ const StyledCont = styled.div`
 
     button {
         margin: 3rem auto 1rem auto;
-        position: relative;
-
-        svg {
-            height: 1rem;
-            width: 1rem;
-            opacity: 0.5;
-            position: absolute;
-            right: 10%;
-            top: 35%;
-        }
     }
 
     a {
