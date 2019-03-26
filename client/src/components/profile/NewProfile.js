@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
+import FeatherIcon from 'feather-icons-react';
+import { withToastManager } from 'react-toast-notifications';
 
 import Container from '../styles/Container';
 import { Inputs, Input } from '../styles/Input';
@@ -72,7 +74,13 @@ class NewProfile extends Component {
         this.setState({ loading: true });
 
         const response = await createProfile(this.state.profile);
-        console.log(response);
+
+        // display notification status
+        const { toastManager } = this.props;
+        toastManager.add(response.message, {
+            appearance: response.status < 400 ? 'success' : 'error',
+            autoDismiss: response.status < 400
+        });
 
         this.setState({ loading: false });
     }
@@ -103,6 +111,8 @@ class NewProfile extends Component {
         return (
             <Container>
                 <StyledCont>
+                    <StyledShape />
+                    <h1>New Profile</h1>
                     <Inputs stack={true} stretch={true}>
                         {this.renderFields()}
                     </Inputs>
@@ -110,6 +120,7 @@ class NewProfile extends Component {
                         disabled={this.state.loading}
                         onClick={() => this.attemptCreateProfile()}
                     >
+                        <FeatherIcon icon="arrow-right" />
                         Create profile
                     </Button>
                     <a>Need help?</a>
@@ -124,27 +135,33 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(null, mapDispatchToProps)(NewProfile);
+export default connect(null, mapDispatchToProps)(NewProfile = withToastManager(NewProfile));
 
 const StyledCont = styled.div`
     max-width: 500px;
-    margin: 7.5rem auto 0 auto;
+    margin: 7.5rem auto;
     text-align: center;
     position: relative;
 
     h1 {
-        font-size: 7rem;
-        color: #eeeeee;
-        font-weight: 800;
-        z-index: -1;
-        position: absolute;
-        top: -17.5rem;
-        left: -15rem;
+        font-size: 3rem;
+        color: ${props => props.theme.primaryText};
+        margin-top: 0;
     }
 
 
     button {
         margin: 3rem auto 1rem auto;
+        position: relative;
+
+        svg {
+            height: 1rem;
+            width: 1rem;
+            opacity: 0.5;
+            position: absolute;
+            right: 10%;
+            top: 35%;
+        }
     }
 
     a {
@@ -162,4 +179,19 @@ const StyledLabel = styled.span`
     margin: 0.5rem 0 2rem 0;
     font-size: 0.7rem;
     color: #9e9e9e;
+`;
+
+const StyledShape = styled.span`
+    background: #9796f0;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #fbc7d4, #9796f0);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #fbc7d4, #9796f0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    border-radius: 66% 34% 29% 71% / 38% 46% 54% 62%;
+    min-height: 20rem;
+    min-width: 20rem;
+    display: block;
+    position: absolute;
+    top: -7.5%;
+    left: -25%;
+    z-index: -1;
+    opacity: 0.5;
 `
