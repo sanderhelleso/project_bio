@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import Dropzone from 'react-dropzone';
 import FeatherIcon from 'feather-icons-react';
@@ -6,15 +6,36 @@ import FeatherIcon from 'feather-icons-react';
 
 class UploadAvatar extends Component {
 
+    renderUploadState(isDragActive, isDragReject) {
+        
+        let message = 'Drop or drag';
+
+        if (isDragActive && !isDragReject) {
+            message = "Drop it like it's hot!";
+        }
+
+        else if (isDragReject) {
+            message = 'File type not allowed';
+        }
+
+        return <p>{message}</p>;
+    }
+
     render() {
         return (
-            <Dropzone onDrop={acceptedFiles => console.log(acceptedFiles)}>
-                {({getRootProps, getInputProps}) => (
+            <Dropzone 
+                accept="image/png, image/jpeg"
+                maxFiles={1}
+                minSize={0}
+                maxSize={1 << 20}
+                onDrop={acceptedFiles => console.log(acceptedFiles)}
+            >
+                {({getRootProps, getInputProps, isDragActive, isDragReject}) => (
                     <StyledUpload {...getRootProps()}>
                         <input {...getInputProps()} />
                         <div>
                             <FeatherIcon icon="upload" />
-                            <p>Click or drag</p>
+                            {this.renderUploadState(isDragActive, isDragReject)}
                         </div>
                     </StyledUpload>
                 )}
