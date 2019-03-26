@@ -44,6 +44,6 @@ func String(nBytes int) (string, error) {
 // RememberToken helper function designed to generate
 // remember tokens of a predetermined byte size
 func RememberToken() (string, error) {
-	b, _ := strconv.Atoi(os.Getenv("REMBR_TOK_BYTES"))
+	b, _ := strconv.Atoi(os.Getenv("TOKEN_BYTES"))
 	return String(b)
 }

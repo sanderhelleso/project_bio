@@ -15,7 +15,7 @@ func ProfilesRoutes(router *gin.Engine, pc *controllers.Profiles) {
 		v1.Use(middelware.RequireToken)
 		v1.GET("/get", pc.ByUserID, preflight)
 
-		v1.Use(middelware.RequireVerified)
+		//v1.Use(middelware.RequireVerified)
 		v1.POST("/new", pc.Create)
 		v1.PUT("/avatar", pc.AvatarUpload)
 		//v1.DELETE("/delete", pc.Delete)

@@ -58,6 +58,7 @@ class NewProfile extends Component {
 
     componentDidMount() {
         window.addEventListener('beforeunload', this.saveFormState);
+        document.querySelector('input').focus();
     }
 
 
