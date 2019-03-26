@@ -15,3 +15,21 @@ export async function fetchProfile() {
         return error.response.data
     }
 }
+
+export async function createProfile(data) {
+
+    try {
+        const response = await API.post(
+            ENDPOINTS.newProfile,
+            data
+        )
+
+        console.log(response);
+        return response.data
+    }
+
+    catch(error) {
+        console.log(error.response);
+        return error.response.data
+    }
+}

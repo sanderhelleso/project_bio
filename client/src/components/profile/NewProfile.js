@@ -10,8 +10,11 @@ import { connect } from 'react-redux';
 
 import setProfileAction from '../../actions/profileActions/setProfileAction';
 
+import { createProfile } from '../../api/profile/profile';
+
 class NewProfile extends Component {
     state = {
+        loading: false,
         profile: this.props.profile,
         fields: [
             {
@@ -65,6 +68,15 @@ class NewProfile extends Component {
         }
     }
 
+    attemptCreateProfile = async () => {
+        this.setState({ loading: true });
+
+        const response = await createProfile(this.state.profile);
+        console.log(response);
+
+        this.setState({ loading: false });
+    }
+
     renderFields() {
         return this.state.fields.map(field => {
             return (
@@ -94,7 +106,12 @@ class NewProfile extends Component {
                     <Inputs stack={true} stretch={true}>
                         {this.renderFields()}
                     </Inputs>
-                    <Button>Create profile</Button>
+                    <Button
+                        disabled={this.state.loading}
+                        onClick={() => this.attemptCreateProfile()}
+                    >
+                        Create profile
+                    </Button>
                     <a>Need help?</a>
                 </StyledCont>
             </Container>
