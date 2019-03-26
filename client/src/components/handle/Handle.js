@@ -19,7 +19,10 @@ class Handle extends Component {
         console.log(response);
 
         if (response.status < 400) {
-            this.props.setProfileAction(response.payload);
+            this.props.setProfileAction({
+                ...response.payload.profile,
+                created: true
+            });
         }
 
         this.setState({ loading: false })

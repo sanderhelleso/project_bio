@@ -51,8 +51,7 @@ class NewProfile extends Component {
 
     componentWillUnmount() {
 
-        // save form state to store on page exit / unmount
-        this.componentCleanup();
+        // save form state to store on page exit
         window.removeEventListener('beforeunload', this.saveFormState);
     }
 
@@ -84,6 +83,13 @@ class NewProfile extends Component {
             appearance: response.status < 400 ? 'success' : 'error',
             autoDismiss: response.status < 400
         });
+
+        if (response.status < 400) {
+            return this.props.setProfileAction({
+                ...this.state.profile,
+                created: true
+            });
+        }
 
         this.setState({ loading: false });
     }
