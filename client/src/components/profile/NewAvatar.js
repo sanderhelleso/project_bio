@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components';
 import { Button } from '../styles/Button';
+import FeatherIcon from 'feather-icons-react';
+
+import { fadeIn } from '../styles/Keyframes';
+import UploadAvatar from './UploadAvatar';
 
 
 class NewAvatar extends Component {
@@ -18,8 +22,10 @@ class NewAvatar extends Component {
             <StyledCont>
                 <h1>Upload your photo</h1>
                 <p>...or dont, anyway is cool</p>
-                <StyledImg />
-                <Button>Upload</Button>
+                <UploadAvatar />
+                <Button>
+                    Upload
+                </Button>
                 <a onClick={() => this.skipUpload()}>
                     Skip
                 </a>
@@ -34,6 +40,7 @@ const StyledCont = styled.div`
     max-width: 500px;
     margin: 12.5vh auto;
     text-align: center;
+    animation: ${fadeIn} 0.5s ease-in-out;
 
     button {
         display: block;
