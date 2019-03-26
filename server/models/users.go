@@ -5,6 +5,7 @@
 package models
 
 import (
+	"fmt"
 	"os"
 	"regexp"
 	"strings"
@@ -153,6 +154,8 @@ func (us *userService) InitiateVerification(email string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	fmt.Println("USER:")
+	fmt.Println(user)
 
 	accv := accVerify{
 		UserID: user.ID,

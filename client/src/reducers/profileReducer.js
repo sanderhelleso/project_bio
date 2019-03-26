@@ -14,7 +14,8 @@ export default (state = initialState, action) => {
         case SET_PROFILE:
             return {
                 ...state,
-                ...action.payload
+                ...action.payload,
+                created: true
             }
 
         case CREATE_PROFILE:

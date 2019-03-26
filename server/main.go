@@ -1,12 +1,13 @@
 package main
 
 import (
-	"./models"
-	"./controllers"
-	"./api"
-	"./lib"
 	"os"
+
+	"./api"
+	"./controllers"
 	"./email"
+	"./lib"
+	"./models"
 
 	"github.com/joho/godotenv"
 )
@@ -23,7 +24,7 @@ func main() {
 			os.Getenv("MAIL_DEFAULT_EMAIL"),
 		),
 		email.WithMailgun(
-			os.Getenv("MAILGUN_DOMAIN"), 
+			os.Getenv("MAILGUN_DOMAIN"),
 			os.Getenv("MAILGUN_API_KEY"),
 			os.Getenv("MAILGUN_PUB_KEY"),
 		),
@@ -33,14 +34,14 @@ func main() {
 	lib.Must(err)
 
 	defer services.Close()
-	//services.DestructiveReset()
+	services.DestructiveReset()
 	services.AutoMigrate()
 	services.CreateReleations()
 
-	usersC 		:= controllers.NewUsers(services.User, emailer)
-	followersC 	:= controllers.NewFollowers(services.Follower)
-	promosC	 	:= controllers.NewPromos(services.Promo, services.Image)
-	profilesC 	:= controllers.NewProfiles(services.Profile, services.Image)
+	usersC := controllers.NewUsers(services.User, emailer)
+	followersC := controllers.NewFollowers(services.Follower)
+	promosC := controllers.NewPromos(services.Promo, services.Image)
+	profilesC := controllers.NewProfiles(services.Profile, services.Image)
 
 	api.ConnectAndServe(usersC, followersC, promosC, profilesC)
 }
