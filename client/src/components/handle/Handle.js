@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 
 import setProfileAction from '../../actions/profileActions/setProfileAction';
 
+import NewProfile from '../profile/NewProfile';
+
 class Handle extends Component {
     state = {
         loading: true
@@ -28,7 +30,7 @@ class Handle extends Component {
         // if user has a profile, set profile,
         // if not, render create profile
         if (!this.state.loading && !this.props.profile.created) {
-            return <p>You need to create a profile</p>
+            return <NewProfile profile={this.props.profile} />
         }
 
         else if (!this.state.loading && this.props.profile.created) {
