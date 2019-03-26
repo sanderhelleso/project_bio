@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import Container from '../styles/Container';
 import NewProfile from '../profile/NewProfile';
 import NewAvatar from '../profile/NewAvatar';
 
@@ -13,6 +14,8 @@ class Profile extends Component {
     }
 
     renderProfile() {
+
+        return <NewAvatar />
 
         if (this.state.new && this.props.profile.created) {
             return <NewAvatar />
@@ -26,7 +29,11 @@ class Profile extends Component {
     }
 
     render() {
-        return this.renderProfile();
+        return (
+            <Container>
+                {this.renderProfile()}
+            </Container>
+        )
     }
 }
 

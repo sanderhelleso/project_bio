@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import FeatherIcon from 'feather-icons-react';
 import { withToastManager } from 'react-toast-notifications';
 
-import Container from '../styles/Container';
 import { Inputs, Input } from '../styles/Input';
 import { Button } from '../styles/Button';
 
@@ -118,23 +117,21 @@ class NewProfile extends Component {
 
     render() {
         return (
-            <Container>
-                <StyledCont>
-                    <SquareRightBorder />
-                    <h1>New Profile</h1>
-                    <Inputs stack={true} stretch={true}>
-                        {this.renderFields()}
-                    </Inputs>
-                    <Button
-                        disabled={this.state.loading}
-                        onClick={() => this.attemptCreateProfile()}
-                    >
-                        <FeatherIcon icon="arrow-right" />
-                        Create profile
-                    </Button>
-                    <a>Need help?</a>
-                </StyledCont>
-            </Container>
+            <StyledCont>
+                <SquareRightBorder />
+                <h1>New Profile</h1>
+                <Inputs stack={true} stretch={true}>
+                    {this.renderFields()}
+                </Inputs>
+                <Button
+                    disabled={this.state.loading}
+                    onClick={() => this.attemptCreateProfile()}
+                >
+                    <FeatherIcon icon="arrow-right" />
+                    Create profile
+                </Button>
+                <a>Need help?</a>
+            </StyledCont>
         )
     }
 }
