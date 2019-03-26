@@ -134,6 +134,8 @@ func (p *Profiles) ByUserID(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
 		"message": "Profile successfully fetched!",
-		"payload": profile,
+		"payload": gin.H {
+			"profile": profile,
+		},
 	})
 }

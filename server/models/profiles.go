@@ -17,7 +17,7 @@ type Profile struct {
 	Handle			string  `gorm:"size:30;not null;unique_index"`
 	Name		    string 	`gorm:"size:70;not null"`
 	Bio				string  `gorm:"size:150"`
-	Avatar 			string  `gorm:"unique"`
+	Avatar 			string  
 	InstagramURL	string  
 	UpdatedAt		time.Time
 }

@@ -24,17 +24,17 @@ class Form extends Component {
         this.setState({ loading: true });
         const response = await login(this.state.email, this.state.password);
 
-        // login user if successfull
-        if (response.status < 400) {
-            this.props.loginAction(response.token)
-        }
-
         // display notification status
         const { toastManager } = this.props;
         toastManager.add(response.message, {
             appearance: response.status < 400 ? 'success' : 'error',
             autoDismiss: !response.newUser
-        })
+        });
+
+        // login user if successfull
+        if (response.status < 400) {
+            return this.props.loginAction(response.token)
+        }
 
         this.setState({ loading: false })
     }
@@ -42,7 +42,6 @@ class Form extends Component {
     handleChange = e => {
         this.setState({ [e.target.name]: e.target.value });
     }
-
 
     render() {
         return (
