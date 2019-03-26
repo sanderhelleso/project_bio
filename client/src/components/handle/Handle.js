@@ -44,7 +44,6 @@ class Handle extends Component {
    render() {
        return(
             <div>
-                <h1>My Handle</h1>
                 {this.renderHandle()}
             </div>
        )
