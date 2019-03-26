@@ -111,7 +111,7 @@ class NewProfile extends Component {
         return (
             <Container>
                 <StyledCont>
-                    <StyledShape />
+                    <StyledShape2 />
                     <h1>New Profile</h1>
                     <Inputs stack={true} stretch={true}>
                         {this.renderFields()}
@@ -194,4 +194,17 @@ const StyledShape = styled.span`
     left: -25%;
     z-index: -1;
     opacity: 0.5;
-`
+`;
+
+const StyledShape2 = styled.span`
+    z-index: -1;
+    opacity: 0.5;
+    min-height: 25rem;
+    min-width: 25rem;
+    display: block;
+    position: absolute;
+    top: -3.5%;
+    right: -35%;
+    border: 15px solid #eeeeee;
+    transform: rotate(10deg);
+`;

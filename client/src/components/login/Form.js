@@ -62,10 +62,12 @@ class Form extends Component {
                     />
                 </Inputs>
                <Buttons stretch={true}>
-                    <Button 
+                    <Button
+                        id="login" 
                         disabled={this.state.loading}
                         onClick={() => this.attemptLogin()}
                     >
+                        <FeatherIcon icon="arrow-right" />
                         Sign In
                     </Button>
                     <StyledOr>OR</StyledOr>
