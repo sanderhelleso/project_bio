@@ -1,5 +1,6 @@
 import ENDPOINTS from '../endpoints';
 import API from '../api';
+import bearerToken from '../../lib/bearerToken';
 
 export async function fetchProfile() {
 
@@ -31,5 +32,27 @@ export async function createProfile(data) {
     catch(error) {
         console.log(error.response);
         return error.response.data
+    }
+}
+
+export async function uploadAvatar(data) {
+    
+    try {
+        const response = await API.put(
+            ENDPOINTS.uploadAvatar, data, {
+                headers: {
+                    ...bearerToken(),
+                    'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
+                }
+            }
+        )
+
+        console.log(response);
+        return response.data;
+    }  
+    
+    catch (error) {
+        console.log(error.response);
+        return error.response.data;
     }
 }

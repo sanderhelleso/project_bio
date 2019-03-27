@@ -15,7 +15,7 @@ class Profile extends Component {
 
     renderProfile() {
 
-        return <NewAvatar />
+        //return <NewAvatar />
 
         if (this.state.new && this.props.profile.created) {
             return <NewAvatar />

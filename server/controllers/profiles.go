@@ -7,6 +7,7 @@ import (
 	"../lib/response"
 	"../models"
 	"github.com/gin-gonic/gin"
+	"fmt"
 )
 
 // ProfileForm represents the request body to the endpoint /new and /update
@@ -88,6 +89,11 @@ func (p *Profiles) AvatarUpload(c *gin.Context) {
 
 	// get file from form
 	f, _ := c.FormFile("avatar")
+	if f == nil {
+		fmt.Println(f)
+		uploadAvatarErr(c, "Invalid file")
+		return
+	}
 
 	// create avatar
 	err = p.is.CreateAvatar(profile, f)

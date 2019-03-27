@@ -2,6 +2,9 @@ import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import Dropzone from 'react-dropzone';
 import FeatherIcon from 'feather-icons-react';
+import { withToastManager } from 'react-toast-notifications';
+
+import  { uploadAvatar } from '../../api/profile/profile';
 
 
 class UploadAvatar extends Component {
@@ -21,6 +24,21 @@ class UploadAvatar extends Component {
         return <p>{message}</p>;
     }
 
+    handleFile = async file => {
+        const data = new FormData();
+        data.append('avatar', file[0], file.name);
+        
+        const response = await uploadAvatar(data);
+
+        // display notification status
+        const { toastManager } = this.props;
+        toastManager.add(response.message, {
+             appearance: response.status < 400 ? 'success' : 'error',
+             autoDismiss: true
+        });
+
+    }
+
     render() {
         return (
             <Dropzone 
@@ -28,7 +46,7 @@ class UploadAvatar extends Component {
                 maxFiles={1}
                 minSize={0}
                 maxSize={1 << 20}
-                onDrop={acceptedFiles => console.log(acceptedFiles)}
+                onDrop={file => this.handleFile(file)}
             >
                 {({getRootProps, getInputProps, isDragActive, isDragReject}) => (
                     <StyledUpload {...getRootProps()}>
@@ -44,7 +62,7 @@ class UploadAvatar extends Component {
     }
 }
 
-export default UploadAvatar;
+export default withToastManager(UploadAvatar);
 
 const StyledUpload = styled.div`
     border-radius: 4px;
@@ -53,7 +71,7 @@ const StyledUpload = styled.div`
     max-width: 250px;
     max-height: 250px;
     background-color: #eeeeee;
-    margin: 2rem auto;
+    margin: 3rem auto;
     border: 2px solid #e0e0e0;
     outline: none;
     position: relative;
