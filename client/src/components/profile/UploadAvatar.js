@@ -8,6 +8,10 @@ import  { uploadAvatar } from '../../api/profile/profile';
 
 
 class UploadAvatar extends Component {
+    state = {
+        preview: null,
+        loading: false
+    }
 
     renderUploadState(isDragActive, isDragReject) {
         
@@ -27,16 +31,29 @@ class UploadAvatar extends Component {
     handleFile = async file => {
         const data = new FormData();
         data.append('avatar', file[0], file.name);
+
+        this.setPreview(file);
         
-        const response = await uploadAvatar(data);
+        
+        /*const response = await uploadAvatar(data);
 
         // display notification status
         const { toastManager } = this.props;
         toastManager.add(response.message, {
              appearance: response.status < 400 ? 'success' : 'error',
              autoDismiss: true
-        });
+        });*/
 
+    }
+
+    setPreview(file) {
+
+        // clear old file preview
+        window.URL.revokeObjectURL(this.state.preview);
+
+        // set new preview
+        const urlCreator = window.URL || window.webkitURL;
+        this.setState({ preview: urlCreator.createObjectURL(file[0]) });
     }
 
     render() {
@@ -51,10 +68,15 @@ class UploadAvatar extends Component {
                 {({getRootProps, getInputProps, isDragActive, isDragReject}) => (
                     <StyledUpload {...getRootProps()}>
                         <input {...getInputProps()} />
-                        <div>
-                            <FeatherIcon icon="upload" />
-                            {this.renderUploadState(isDragActive, isDragReject)}
-                        </div>
+                        {
+                            this.state.preview
+                            ? <img src={this.state.preview} />
+                            : <div>
+                                <FeatherIcon icon="upload" />
+                                {this.renderUploadState(isDragActive, isDragReject)}
+                            </div>
+                            
+                        }
                     </StyledUpload>
                 )}
             </Dropzone>
@@ -76,6 +98,16 @@ const StyledUpload = styled.div`
     outline: none;
     position: relative;
     cursor: pointer;
+
+    img {
+        max-width: 250px;
+        min-width: 250px;
+        max-height: 250px;
+        min-height: 250px;
+        border-radius: 4px;
+        transform: scale(1.05);
+        transition: 0.3s ease-in-out;
+    }
 
     div {
         position: absolute;
