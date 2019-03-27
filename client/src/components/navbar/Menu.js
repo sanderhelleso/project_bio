@@ -44,7 +44,7 @@ class Menu extends Component {
                     <div id="inner">
                         <p>{this.formatName()}</p>
                         <span onClick={() => this.setState({ active: !this.state.active })}>
-                            <FeaterIcons icon="chevron-down" />
+                            <FeaterIcons icon={!this.state.active ? 'chevron-down' : 'x'} />
                         </span>
                     </div>
                 </div>
