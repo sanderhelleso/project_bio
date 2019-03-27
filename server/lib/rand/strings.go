@@ -41,9 +41,9 @@ func String(nBytes int) (string, error) {
 	return base64.URLEncoding.EncodeToString(b), nil
 }
 
-// RememberToken helper function designed to generate
+// RandomToken helper function designed to generate
 // remember tokens of a predetermined byte size
-func RememberToken() (string, error) {
+func RandomToken() (string, error) {
 	b, _ := strconv.Atoi(os.Getenv("TOKEN_BYTES"))
 	return String(b)
 }

@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import Dropzone from 'react-dropzone';
 import FeatherIcon from 'feather-icons-react';
 
-
 class UploadAvatar extends Component {
+    state = { preview: null };
 
     renderUploadState(isDragActive, isDragReject) {
         
@@ -18,7 +18,33 @@ class UploadAvatar extends Component {
             message = 'File type not allowed';
         }
 
-        return <p>{message}</p>;
+        return (
+            <div>
+                <FeatherIcon icon="upload" />
+                <p>{message}</p>
+            </div>
+        )
+    }
+
+    handleFile = async file => {
+        const data = new FormData();
+
+        // set preview
+        data.append('avatar', file[0], file.name);
+        this.setPreview(file);
+
+        // pass blob to parennt
+        this.props.handleFile(data);
+    }
+
+    setPreview(file) {
+
+        // clear old file preview
+        window.URL.revokeObjectURL(this.state.preview);
+
+        // set new preview
+        const urlCreator = window.URL || window.webkitURL;
+        this.setState({ preview: urlCreator.createObjectURL(file[0]) });
     }
 
     render() {
@@ -28,15 +54,17 @@ class UploadAvatar extends Component {
                 maxFiles={1}
                 minSize={0}
                 maxSize={1 << 20}
-                onDrop={acceptedFiles => console.log(acceptedFiles)}
+                onDrop={file => this.handleFile(file)}
             >
                 {({getRootProps, getInputProps, isDragActive, isDragReject}) => (
                     <StyledUpload {...getRootProps()}>
                         <input {...getInputProps()} />
-                        <div>
-                            <FeatherIcon icon="upload" />
-                            {this.renderUploadState(isDragActive, isDragReject)}
-                        </div>
+                        {
+                            this.state.preview
+                            ? <img src={this.state.preview} />
+                            : this.renderUploadState(isDragActive, isDragReject)
+                            
+                        }
                     </StyledUpload>
                 )}
             </Dropzone>
@@ -53,11 +81,21 @@ const StyledUpload = styled.div`
     max-width: 250px;
     max-height: 250px;
     background-color: #eeeeee;
-    margin: 2rem auto;
+    margin: 3rem auto;
     border: 2px solid #e0e0e0;
     outline: none;
     position: relative;
     cursor: pointer;
+
+    img {
+        max-width: 250px;
+        min-width: 250px;
+        max-height: 250px;
+        min-height: 250px;
+        border-radius: 4px;
+        transform: scale(1.05);
+        transition: 0.3s ease-in-out;
+    }
 
     div {
         position: absolute;
