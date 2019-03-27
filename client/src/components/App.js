@@ -8,7 +8,7 @@ import theme from './styles/Theme';
 class App extends Component {
     render() {
         return (
-            <ToastProvider>
+            <ToastProvider placement="bottom-left">
                 <ThemeProvider theme={theme}>
                     <Routes />
                 </ThemeProvider>
@@ -39,5 +39,6 @@ const GlobalStyle = createGlobalStyle`
         font-family: 'Poppins', sans-serif;
         background-color: ${props => props.bg};
         overflow-x: hidden;
+        margin: 0;
     } 
 `
