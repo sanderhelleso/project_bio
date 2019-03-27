@@ -28,7 +28,7 @@ class Form extends Component {
         const { toastManager } = this.props;
         toastManager.add(response.message, {
             appearance: response.status < 400 ? 'success' : 'error',
-            autoDismiss: !response.newUser
+            autoDismiss: !response.newUser,
         });
 
         // login user if successfull

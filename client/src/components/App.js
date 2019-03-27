@@ -8,7 +8,7 @@ import theme from './styles/Theme';
 class App extends Component {
     render() {
         return (
-            <ToastProvider>
+            <ToastProvider placement="bottom-left">
                 <ThemeProvider theme={theme}>
                     <Routes />
                 </ThemeProvider>

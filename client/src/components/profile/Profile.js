@@ -13,6 +13,10 @@ class Profile extends Component {
         new: !this.props.profile.created,
     }
 
+    componentWillReceiveProps() {
+        window.scrollTo(0, 0);
+    }
+
     renderProfile() {
 
         //return <NewAvatar />
