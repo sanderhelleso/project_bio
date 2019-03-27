@@ -39,5 +39,6 @@ const GlobalStyle = createGlobalStyle`
         font-family: 'Poppins', sans-serif;
         background-color: ${props => props.bg};
         overflow-x: hidden;
+        margin: 0;
     } 
 `
