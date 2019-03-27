@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 
 import setProfileAction from '../../actions/profileActions/setProfileAction';
 
-import { objKeysToLower } from '../../lib/utils';
 
 class Handle extends Component {
     state = {

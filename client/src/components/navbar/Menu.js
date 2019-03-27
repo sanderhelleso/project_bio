@@ -2,14 +2,11 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import Avatar from './Avatar';
 import FeaterIcons from 'feather-icons-react';
+import Options from './Options';
 
 class Menu extends Component {
     state = {
         active: false
-    }
-
-    componentDidMount() {
-        console.log(this.props);
     }
 
     formatName() {
@@ -28,16 +25,30 @@ class Menu extends Component {
         return this.props.name;
     }
 
+    renderMenu() {
+        if (this.state.active) {
+            return <Options />
+        }
+
+        return null;
+    }
+
     render() {
         return (
             <StyledMenu>
-                <Avatar source={this.props.avatar} />
-                <div>
-                    <p>{this.formatName()}</p>
-                    <span>
-                        <FeaterIcons icon="chevron-down" />
-                    </span>
+                <div id="menu-cont">
+                    <Avatar 
+                        source={this.props.avatar}
+                        handle={this.props.handle}
+                    />
+                    <div id="inner">
+                        <p>{this.formatName()}</p>
+                        <span onClick={() => this.setState({ active: !this.state.active })}>
+                            <FeaterIcons icon="chevron-down" />
+                        </span>
+                    </div>
                 </div>
+                {this.renderMenu()}
             </StyledMenu>
         )
     }
@@ -55,35 +66,40 @@ const StyledMenu = styled.div`
     position: absolute;
     top: 1.25rem;
     right: 3rem;
-    display: flex;
     border-radius: 4px;
 
-    div {
-        min-width: 75%;
-    }
-    
-    p {
-        color: black;
-        font-size: 0.8rem;
-        margin-top: 1rem;
-        margin-left: 0.75rem;
-        min-width: 75%;
-        max-width: 75%;
-        display: inline-block;
-    }
+    #menu-cont {
+        display: flex;
+        min-height: 3.35rem;
+        max-height: 3.35rem;
 
-    span {
+        #inner {
+            min-width: 75%;
+        }
+        
+        p {
+            color: black;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+            margin-left: 0.75rem;
+            min-width: 75%;
+            max-width: 75%;
+            display: inline-block;
+        }
 
-        margin-top: 1rem;
-        margin-right: 0.75rem;
-        opacity: 0.7;
-        float: right;
-        cursor: pointer;
+        span {
 
-        svg {
-            stroke: #9e9e9e;
-            height: 1.35rem;
-            width: 1.35rem;
+            margin-top: 1rem;
+            margin-right: 0.75rem;
+            opacity: 0.7;
+            float: right;
+            cursor: pointer;
+
+            svg {
+                stroke: #9e9e9e;
+                height: 1.35rem;
+                width: 1.35rem;
+            }
         }
     }
 `;
