@@ -19,13 +19,16 @@ func ConnectAndServe(
 	// connect router and API v1
 	router := gin.Default()
 	router.Use(corsMiddleware())
-
 	router.MaxMultipartMemory = maxMultiPartMem
 
+	// routes
 	UsersRoutes(router, usersC)
 	FollowersRoutes(router, followersC)
 	PromosRoutes(router, promosC)
 	ProfilesRoutes(router, profilesC)
+
+	// connect fileserver
+	FileServer(router)
 
 	router.Run() // listen and serve on 0.0.0.0:5000
 }
