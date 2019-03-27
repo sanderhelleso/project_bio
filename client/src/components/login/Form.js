@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { withToastManager } from 'react-toast-notifications';
-import { withRouter } from 'react-router-dom'
 
 import { login } from '../../api/login/login';
 import { Button, Buttons, Instagram, } from '../styles/Button';
@@ -33,8 +32,7 @@ class Form extends Component {
 
         // login user if successfull
         if (response.status < 400) {
-            this.props.loginAction(response.token)
-            return this.props.history.replace('/me');
+            return this.props.loginAction(response.token)
         }
 
         this.setState({ loading: false })
@@ -87,7 +85,7 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators({ loginAction }, dispatch)
 }
 
-export default connect(null, mapDispatchToProps)(Form = withToastManager(withRouter(Form)));
+export default connect(null, mapDispatchToProps)(withToastManager(Form));
 
 const StyledOr = styled.span`
     text-align: center;
