@@ -10,7 +10,7 @@ import NewAvatar from '../profile/NewAvatar';
 
 class Profile extends Component {
     state = {
-        new: !this.props.profile.created
+        new: !this.props.profile.created,
     }
 
     renderProfile() {

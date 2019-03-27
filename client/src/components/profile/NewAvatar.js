@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components';
 import { Button } from '../styles/Button';
+import  { uploadAvatar } from '../../api/profile/profile';
 import FeatherIcon from 'feather-icons-react';
+import { withToastManager } from 'react-toast-notifications';
 
 import { fadeIn } from '../styles/Keyframes';
 import UploadAvatar from './UploadAvatar';
@@ -10,11 +12,27 @@ import UploadAvatar from './UploadAvatar';
 
 class NewAvatar extends Component {
     state = {
-        loading: false
+        loading: false,
+        file: null
     }
 
     skipUpload = () => {
         this.props.history.push('/');
+    }
+
+    handleFile = file => {
+        this.setState({ file });
+    }
+
+    uploadFile = async () => {
+        const response = await uploadAvatar(this.state.file);
+
+        // display notification status
+        const { toastManager } = this.props;
+        toastManager.add(response.message, {
+            appearance: response.status < 400 ? 'success' : 'error',
+            autoDismiss: true
+        });
     }
 
     render() {
@@ -22,8 +40,9 @@ class NewAvatar extends Component {
             <StyledCont>
                 <h1>Upload your photo</h1>
                 <p>...or dont, anyway is cool</p>
-                <UploadAvatar />
-                <Button>
+                <UploadAvatar handleFile={this.handleFile} />
+                <Button onClick={() => this.uploadFile()}>
+                    {this.state.file && <FeatherIcon icon="upload" />}
                     Upload
                 </Button>
                 <a onClick={() => this.skipUpload()}>
@@ -34,7 +53,7 @@ class NewAvatar extends Component {
     }
 }
 
-export default withRouter(NewAvatar);
+export default withToastManager(withRouter(NewAvatar));
 
 const StyledCont = styled.div`
     max-width: 500px;

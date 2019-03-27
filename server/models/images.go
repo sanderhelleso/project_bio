@@ -51,7 +51,7 @@ func (is *imageService) CreateAvatar(profile *Profile, f *multipart.FileHeader) 
 
 	// save image at path
 	path += fmt.Sprintf(name + ".jpg")
-	err = saveImage(path, file, 150, 150)
+	err = saveImage(path, file, 250, 250)
 	if err != nil {
 		return err
 	}

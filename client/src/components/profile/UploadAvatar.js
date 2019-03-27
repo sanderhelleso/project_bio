@@ -2,9 +2,6 @@ import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import Dropzone from 'react-dropzone';
 import FeatherIcon from 'feather-icons-react';
-import { withToastManager } from 'react-toast-notifications';
-
-import  { uploadAvatar } from '../../api/profile/profile';
 
 
 class UploadAvatar extends Component {
@@ -25,25 +22,23 @@ class UploadAvatar extends Component {
             message = 'File type not allowed';
         }
 
-        return <p>{message}</p>;
+        return (
+            <div>
+                <FeatherIcon icon="upload" />
+                <p>{message}</p>
+            </div>
+        )
     }
 
     handleFile = async file => {
         const data = new FormData();
+
+        // set preview
         data.append('avatar', file[0], file.name);
-
         this.setPreview(file);
-        
-        
-        /*const response = await uploadAvatar(data);
 
-        // display notification status
-        const { toastManager } = this.props;
-        toastManager.add(response.message, {
-             appearance: response.status < 400 ? 'success' : 'error',
-             autoDismiss: true
-        });*/
-
+        // pass blob to parennt
+        this.props.handleFile(data);
     }
 
     setPreview(file) {
@@ -71,10 +66,7 @@ class UploadAvatar extends Component {
                         {
                             this.state.preview
                             ? <img src={this.state.preview} />
-                            : <div>
-                                <FeatherIcon icon="upload" />
-                                {this.renderUploadState(isDragActive, isDragReject)}
-                            </div>
+                            : this.renderUploadState(isDragActive, isDragReject)
                             
                         }
                     </StyledUpload>
@@ -84,7 +76,7 @@ class UploadAvatar extends Component {
     }
 }
 
-export default withToastManager(UploadAvatar);
+export default UploadAvatar;
 
 const StyledUpload = styled.div`
     border-radius: 4px;
