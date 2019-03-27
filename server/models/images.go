@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"strings"
 	"errors"
+	"../lib/rand"
 )
 
 type ImageService interface {
@@ -42,8 +43,14 @@ func (is *imageService) CreateAvatar(profile *Profile, f *multipart.FileHeader) 
 		return err
 	}
 
+	// generate random name
+	name, err := rand.RandomToken()
+	if err != nil {
+		return err
+	}
+
 	// save image at path
-	path += "avatar.jpg"	
+	path += fmt.Sprintf(name + ".jpg")
 	err = saveImage(path, file, 150, 150)
 	if err != nil {
 		return err
@@ -71,8 +78,14 @@ func (is *imageService) CreatePromo(promo *Promo, f *multipart.FileHeader) error
 		return err
 	}
 
+	// generate random name
+	name, err := rand.RandomToken()
+	if err != nil {
+		return err
+	}
+
 	// save image at path
-	path += "promo.jpg"
+	path += fmt.Sprintf(name + ".jpg")
 	err = saveImage(path, file, 300, 300)
 	if err != nil {
 		return err

@@ -118,7 +118,7 @@ func (pwrv *pwResetValidator) setTokenIfUnset(pwr *pwReset) error {
 		return nil
 	}
 
-	token, err := rand.RememberToken()
+	token, err := rand.RandomToken()
 	if err != nil {
 		return err
 	}

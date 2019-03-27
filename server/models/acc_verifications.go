@@ -118,7 +118,7 @@ func (accvv *accVerifyValidator) setTokenIfUnset(accv *accVerify) error {
 		return nil
 	}
 
-	token, err := rand.RememberToken()
+	token, err := rand.RandomToken()
 	if err != nil {
 		return err
 	}
