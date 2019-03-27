@@ -33,7 +33,8 @@ class Form extends Component {
 
         // login user if successfull
         if (response.status < 400) {
-            return this.props.loginAction(response.token)
+            this.props.loginAction(response.token)
+            return this.props.history.replace('/me');
         }
 
         this.setState({ loading: false })

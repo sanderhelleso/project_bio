@@ -5,13 +5,14 @@ import Handle from '../handle/Handle';
 import Profile from '../profile/Profile';
 import Navbar from '../navbar/Navbar';
 
-const redirLogin = () => <Redirect to="/" />
+const redirMe = () => <Redirect to="/me" />
 
 const AuthenticatedRoutes = () => (
     <Fragment>
         <Route path="/" component={Navbar} />
-        <Route exact path="/" component={Handle} />
-        <Route exact path="/login" component={redirLogin} />
+        <Route exact path="/" component={redirMe} />
+        <Route exact path="/me" component={Handle} />
+        <Route exact path="/login" component={redirMe} />
         <Route exact path="/profile" component={Profile} /> 
     </Fragment>
 );
