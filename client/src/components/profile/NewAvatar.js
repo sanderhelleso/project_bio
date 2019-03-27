@@ -10,6 +10,9 @@ import { fadeIn } from '../styles/Keyframes';
 import UploadAvatar from './UploadAvatar';
 import { zoomIn } from '../styles/Keyframes';
 
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import createAvatarAction from '../../actions/profileActions/createAvatarAction';
 
 class NewAvatar extends Component {
     state = {
@@ -36,13 +39,13 @@ class NewAvatar extends Component {
 
         const response = await uploadAvatar(this.state.file);
 
-        // display notification status
         toastManager.add(response.message, {
             appearance: response.status < 400 ? 'success' : 'error',
             autoDismiss: true
         });
 
         if (response.status < 400) {
+            this.props.createAvatarAction(response.payload.avatar);
             return this.props.history.push('/');
         }
 
@@ -77,7 +80,11 @@ class NewAvatar extends Component {
     }
 }
 
-export default withToastManager(withRouter(NewAvatar));
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({ createAvatarAction }, dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(withToastManager(withRouter(NewAvatar)));
 
 const StyledCont = styled.div`
     max-width: 500px;

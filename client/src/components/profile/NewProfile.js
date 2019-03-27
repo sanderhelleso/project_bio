@@ -43,7 +43,6 @@ class NewProfile extends Component {
         ]
     };
 
-
     saveFormState = () => {
         this.props.setProfileAction(this.state.profile)
     }

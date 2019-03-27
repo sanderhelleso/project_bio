@@ -96,7 +96,7 @@ func (p *Profiles) AvatarUpload(c *gin.Context) {
 	}
 
 	// create avatar
-	err = p.is.CreateAvatar(profile, f)
+	avatar, err := p.is.CreateAvatar(profile, f)
 	if err != nil {
 		uploadAvatarErr(c, err.Error())
 		return
@@ -104,11 +104,14 @@ func (p *Profiles) AvatarUpload(c *gin.Context) {
 
 	// update profile
 	p.ps.Update(profile)
-	response.RespondWithSuccess(
-		c,
-		http.StatusCreated,
-		"Avatar successfully uploaded!",
-	)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  http.StatusCreated,
+		"message": "Avatar successfully uploaded!",
+		"payload": gin.H {
+			"avatar": avatar,
+		},
+	})
 }
 
 // helper func to send error message releated to avatar upload

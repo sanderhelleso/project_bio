@@ -29,7 +29,8 @@ export default (state = initialState, action) => {
 
         case CREATE_AVATAR:
             return {
-                state
+                ...state,
+                avatar: action.payload
             }
 
         case DELETE_AVATAR:

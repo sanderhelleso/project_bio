@@ -12,14 +12,14 @@ import (
 
 // Profile represents a users profile
 type Profile struct {
-	ID 				uint   	`gorm:"primmary_key"`
-	UserID			uint   	`gorm:"not null;unique"`
-	Handle			string  `gorm:"size:30;not null;unique_index"`
-	Name		    string 	`gorm:"size:70;not null"`
-	Bio				string  `gorm:"size:150"`
-	Avatar 			string  
-	InstagramURL	string  
-	UpdatedAt		time.Time
+	ID 				uint   	`gorm:"primmary_key" json:"-"`
+	UserID			uint   	`gorm:"not null;unique" json:"userID"`
+	Handle			string  `gorm:"size:30;not null;unique_index" json:"handle"`
+	Name		    string 	`gorm:"size:70;not null" json:"name"`
+	Bio				string  `gorm:"size:150" json:"bio"`
+	Avatar 			string  `json:"avatar"`
+	InstagramURL	string  `json:"instagramURL"`
+	UpdatedAt		time.Time `json:"-"`
 }
 
 type ProfileDB interface {

@@ -15,7 +15,7 @@ import (
 )
 
 type ImageService interface {
-	CreateAvatar(profile *Profile, f *multipart.FileHeader) error
+	CreateAvatar(profile *Profile, f *multipart.FileHeader) (string, error)
 	CreatePromo(promo *Promo, f *multipart.FileHeader) error
 }
 
@@ -27,37 +27,37 @@ type imageService struct {}
 
 // CreateAvatar takes in a pointer to a profile and fileheader and will
 // attempt to create a new avatar with the provided file from the user
-func (is *imageService) CreateAvatar(profile *Profile, f *multipart.FileHeader) error {
+func (is *imageService) CreateAvatar(profile *Profile, f *multipart.FileHeader) (string, error) {
 	err := validateExt(f.Filename)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	path, err := mkImagePath("avatars", profile.UserID)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	file, err := f.Open()
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	// generate random name
 	name, err := rand.RandomToken()
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	// save image at path
 	path += fmt.Sprintf(name + ".jpg")
 	err = saveImage(path, file, 250, 250)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	profile.Avatar = path
-	return nil
+	return path, nil
 }
 
 // CreatePromo takes in a pointer to a promo and fileheader and will
