@@ -8,6 +8,7 @@ import { withToastManager } from 'react-toast-notifications';
 
 import { fadeIn } from '../styles/Keyframes';
 import UploadAvatar from './UploadAvatar';
+import { zoomIn } from '../styles/Keyframes';
 
 
 class NewAvatar extends Component {
@@ -25,12 +26,32 @@ class NewAvatar extends Component {
     }
 
     uploadFile = async () => {
+        const { toastManager } = this.props;
+
+        if (!this.state.file) {
+            return this.errorAlert(toastManager);
+        }
+
+        this.setState({ loading: true });
+
         const response = await uploadAvatar(this.state.file);
 
         // display notification status
-        const { toastManager } = this.props;
         toastManager.add(response.message, {
             appearance: response.status < 400 ? 'success' : 'error',
+            autoDismiss: true
+        });
+
+        if (response.status < 400) {
+            return this.props.history.push('/');
+        }
+
+        this.setState({ loading: false });
+    }
+
+    errorAlert(toastManager) {
+        toastManager.add('Please select an image', {
+            appearance: 'error',
             autoDismiss: true
         });
     }
@@ -41,7 +62,10 @@ class NewAvatar extends Component {
                 <h1>Upload your photo</h1>
                 <p>...or dont, anyway is cool</p>
                 <UploadAvatar handleFile={this.handleFile} />
-                <Button onClick={() => this.uploadFile()}>
+                <Button 
+                    disabled={this.state.loading}
+                    onClick={() => this.uploadFile()}
+                >
                     {this.state.file && <FeatherIcon icon="upload" />}
                     Upload
                 </Button>
@@ -64,6 +88,10 @@ const StyledCont = styled.div`
     button {
         display: block;
         margin: 1rem auto;
+        
+        svg {
+            animation: ${zoomIn} 0.2s ease-in-out forwards;
+        }
     }
 
     a {

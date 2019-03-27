@@ -3,12 +3,8 @@ import styled from 'styled-components';
 import Dropzone from 'react-dropzone';
 import FeatherIcon from 'feather-icons-react';
 
-
 class UploadAvatar extends Component {
-    state = {
-        preview: null,
-        loading: false
-    }
+    state = { preview: null };
 
     renderUploadState(isDragActive, isDragReject) {
         
