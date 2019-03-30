@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 const inputStyles = `
@@ -43,3 +44,14 @@ export const Input = styled.input`
         }
     }
 `
+
+export const Label = ({ htmlFor, text }) => (
+    <StyledLabel htmlFor={htmlFor}>{text}</StyledLabel>
+)
+
+const StyledLabel = styled.label`
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    display: block;
+    font-size: 0.8rem;
+`;
