@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import SelectCategory from './SelectCategory';
 import { Inputs, Input } from '../../../styles/Input';
+import Price from './Price';
 
 class Form extends Component {
     state = {
@@ -60,8 +61,7 @@ class Form extends Component {
         return (
             <StyledForm>
                 <SelectCategory />
-                <Inputs stack={true} stretch={true}>
-                </Inputs>
+                <Price />
             </StyledForm>
         )
     }
@@ -70,8 +70,8 @@ class Form extends Component {
 export default Form;
 
 const StyledForm = styled.div`
-
     input {
         margin-bottom: 1rem;
+        max-height: 2.65rem;
     }
 `;
