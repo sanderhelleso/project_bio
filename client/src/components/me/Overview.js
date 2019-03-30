@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import Promos from '../promo/Promos';
 import Container from '../styles/Container';
+import { Grid } from '../styles/Grid';
 
 
 class Overview extends Component {
@@ -13,7 +14,9 @@ class Overview extends Component {
     render() {
         return (
             <Container>
-                <Promos />
+                <Grid>
+                    <Promos />
+                </Grid>
             </Container>
         )
     }

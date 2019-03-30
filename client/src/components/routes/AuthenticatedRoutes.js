@@ -4,6 +4,7 @@ import { Route, Redirect } from "react-router-dom";
 import Profile from '../profile/Profile';
 import Navbar from '../navbar/Navbar';
 import Me from '../me/Me';
+import NewPromo from '../promo/new/NewPromo';
 
 const redirHome = () => <Redirect to="/" />
 
@@ -12,7 +13,8 @@ const AuthenticatedRoutes = () => (
         <Route path="/" component={Navbar} />
         <Route exact path="/" component={Me} />
         <Route exact path="/login" component={redirHome} />
-        <Route exact path="/profile" component={Profile} /> 
+        <Route exact path="/profile" component={Profile} />
+        <Route exact path="/promos/new" component={NewPromo} /> 
     </Fragment>
 );
 

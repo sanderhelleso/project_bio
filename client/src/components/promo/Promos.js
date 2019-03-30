@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -17,13 +17,17 @@ class Promos extends Component {
             return <NoPromos />
         }
 
-        return <PromosList list={this.props.promos.list} />
+        return (
+            <Fragment>
+                <h5>My Promos</h5>
+                <PromosList list={this.props.promos.list} />
+            </Fragment>
+        )
     }
 
     render() {
         return (
             <div>
-                <h5>My Promos</h5>
                 {this.renderPromos()}
             </div>
         )
