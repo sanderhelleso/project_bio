@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import setProfileAction from '../../actions/profileActions/setProfileAction';
+import Overview from './Overview';
 
 
 class Me extends Component {
@@ -39,7 +40,7 @@ class Me extends Component {
     renderProfile() {
 
        if (!this.state.loading && this.props.profile.created) {
-            return <p>You have a profile!!</p>
+            return <Overview />
         }
 
         return <p>Loading...</p>
