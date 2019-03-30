@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-import { Inputs, Input } from '../../styles/Input';
+
+import SelectCategory from './SelectCategory';
+import { Inputs, Input } from '../../../styles/Input';
 
 class Form extends Component {
     state = {
@@ -42,6 +44,10 @@ class Form extends Component {
         ]
     }
 
+    rednerCategories() {
+        
+    }
+
     renderFields() {
         return this.state.fields.map(field => {
             return (
@@ -53,8 +59,8 @@ class Form extends Component {
     render() {
         return (
             <StyledForm>
+                <SelectCategory />
                 <Inputs stack={true} stretch={true}>
-                    {this.renderFields()}
                 </Inputs>
             </StyledForm>
         )
