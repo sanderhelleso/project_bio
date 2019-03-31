@@ -8,6 +8,8 @@ import Price from './Price';
 import { Button, FlatButton } from '../../styles/Button';
 import UploadPromoImage from './UploadPromoImage';
 import blobToSrc from '../../../lib/blobToSrc';
+import { validateProduct } from '../../../lib/validator';
+import { withToastManager } from 'react-toast-notifications';
 
 class Form extends Component {
     state = {
@@ -20,7 +22,8 @@ class Form extends Component {
                 min: 1,
                 name: 'name',
                 type: 'text',
-                required: true
+                required: true,
+                error: false
             },
             {
                 placeholder: 'Brand of product',
@@ -28,12 +31,14 @@ class Form extends Component {
                 min: 1,
                 name: 'brand',
                 type: 'text',
-                required: true
+                required: true,
+                error: false,
             },
             {
                 placeholder: 'Link to product',
                 name: 'link',
                 type: 'text',
+                error: false,
             },
         ]
     }
@@ -78,6 +83,23 @@ class Form extends Component {
     }
 
     addProduct() {
+
+
+        const valid = validateProduct(this.state.product);
+
+        // if errors, notify user
+        if (typeof valid === 'object') {
+            const { toastManager } = this.props;
+            valid.forEach(err => {
+                toastManager.add(err.error, {
+                    appearance: 'error',
+                    autoDismiss: true,
+                    autoDismissTimeout: 20000
+                });
+            });
+
+            return;
+        }
 
         // add product to list of previews and clear form
         this.props.updateProducts(this.state.product)
@@ -153,7 +175,6 @@ class Form extends Component {
                     <Inputs stretch={true} stack={true}>
                         {this.renderFields()}
                     </Inputs>
-                    <SelectCategory />
                     <Price onChange={this.handleChange} />
                     {this.renderButtons()}
                 </StyledForm>
@@ -162,24 +183,8 @@ class Form extends Component {
     }
 }
 
-export default Form;
+export default withToastManager(Form);
 
 const StyledForm = styled.div`
     margin-top: -1.5rem;
-    
-    input {
-        max-height: 2.65rem;
-    }
-
-    label {
-        margin-top: 1.35rem;
-    }
-
-    button {
-        float: right;
-        margin-top: 2rem;
-        margin-left: 2rem;
-        line-height: 2rem;
-        min-width: 150px;
-    }
 `;

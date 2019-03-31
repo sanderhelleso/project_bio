@@ -15,7 +15,6 @@ class UploadPromoImage extends Component {
         }
 
         if (nextProps.source) {
-            console.log(nextProps)
             this.setState({ 
                 preview: nextProps.source
             });
@@ -60,81 +59,33 @@ class UploadPromoImage extends Component {
         this.setState({ preview: blobToSrc(file[0]) });
     }
 
-    clearPreview() {
-
-        // clear old file preview
-        window.URL.revokeObjectURL(this.state.preview);
-
-        // update file state for current product
-        this.setState({ preview: null });
-        this.props.handleFile(null)
-    }
-
-    renderClear() {
-        
-        if (!this.state.preview) {
-            return null;
-        }
-
-        return (
-            <StyledClearImage onClick={() => this.clearPreview()}>
-                <FeatherIcon icon="trash" />
-                Clear Image
-            </StyledClearImage>
-        );
-    }
- 
     render() {
         return (
-            <StyledCont>
-                <Dropzone 
-                    accept="image/png, image/jpeg"
-                    maxFiles={1}
-                    minSize={0}
-                    maxSize={1 << 20}
-                    onDrop={file => this.handleFile(file)}
-                >
-                    {({getRootProps, getInputProps, isDragActive, isDragReject}) => (
-                        <StyledUpload {...getRootProps()}>
-                            <input {...getInputProps()} />
-                            {
-                                this.state.preview
-                                ? <img src={this.state.preview} />
-                                : this.renderUploadState(isDragActive, isDragReject)
-                                
-                            }
-                        </StyledUpload>
-                    )}
-                </Dropzone>
-                {this.renderClear()}
-            </StyledCont>
+            <Dropzone 
+                accept="image/png, image/jpeg"
+                maxFiles={1}
+                minSize={0}
+                maxSize={1 << 20}
+                onDrop={file => this.handleFile(file)}
+            >
+                {({getRootProps, getInputProps, isDragActive, isDragReject}) => (
+                    <StyledUpload {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        {
+                            this.state.preview
+                            ? <img src={this.state.preview} />
+                            : this.renderUploadState(isDragActive, isDragReject)
+                            
+                        }
+                    </StyledUpload>
+                )}
+            </Dropzone>
         )
     }
 }
 
 export default UploadPromoImage;
 
-const StyledCont = styled.div`
-    text-align: center;
-
-    a {
-        margin-top: 4rem;
-    }
-`;
-
-const StyledClearImage = styled.a`
-    min-width: 100%;
-    cursor: pointer;
-
-    svg {
-        height: 1.25rem;
-        width: 1.25rem;
-        margin-right: 0.5rem;
-        margin-bottom: -2.5px;
-        stroke: #ff1744;
-        opacity: 0.5;
-    }
-`;
 
 const StyledUpload = styled.div`
     border-radius: 4px;

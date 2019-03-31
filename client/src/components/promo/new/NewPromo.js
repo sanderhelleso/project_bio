@@ -3,12 +3,14 @@ import styled from 'styled-components';
 
 import Container from '../../styles/Container';
 import { Grid } from '../../styles/Grid';
-import Form from './Form';
+import Form from './ProductForm';
 import PreviewList from './PreviewList';
-import UploadPromoImage from './UploadPromoImage';
+import PromoForm from './PromoForm';
 
 class NewPromo extends Component {
     state = {
+        stage: 'promo',
+        promo: {},
         products: [],
         ...this.resetCurrProd()
     }
@@ -18,6 +20,13 @@ class NewPromo extends Component {
             currentProduct: null,
             currProdMalloc: null
         }
+    }
+
+    updatePromo = promo => {
+        this.setState({
+            promo,
+            stage: 'products'
+        });
     }
 
     updateProducts = product => {
@@ -54,22 +63,40 @@ class NewPromo extends Component {
     productIncluded(product) {
         return this.state.products.includes(product);
     }
+
+    renderStage() {
+        if (this.state.stage === 'promo') {
+            return (
+                <PromoForm 
+                    updatePromo={this.updatePromo}
+                />
+            )
+        }
+
+        else if (this.state.stage === 'products') {
+            return (
+                <Grid>
+                    <Form 
+                        updateProducts={this.updateProducts}
+                        removeProduct={this.removeProduct}
+                        currentProduct={this.state.currentProduct} 
+                    />
+                    <PreviewList 
+                        list={this.state.products} 
+                        selectProduct={this.selectProduct}
+                    />
+                </Grid>
+            );
+        }
+
+        return null;
+    }
     
     render() {
         return (
             <StyledNewPromo>
                 <Container id="cont">
-                    <Grid>
-                        <Form 
-                            updateProducts={this.updateProducts}
-                            removeProduct={this.removeProduct}
-                            currentProduct={this.state.currentProduct} 
-                        />
-                        <PreviewList 
-                            list={this.state.products} 
-                            selectProduct={this.selectProduct}
-                        />
-                    </Grid>
+                    {this.renderStage()}
                 </Container>
             </StyledNewPromo>
         )
@@ -83,6 +110,20 @@ const StyledNewPromo = styled.div`
 
     #cont {
         min-width: 85%;
+        input {
+            max-height: 2.65rem;
+        }
+
+        label {
+            margin-top: 1.35rem;
+        }
+
+        button {
+            float: right;
+            margin-top: 2rem;
+            margin-left: 2rem;
+            min-width: 150px;
+        }
     }
 
 `;
