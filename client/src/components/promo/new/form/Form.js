@@ -13,6 +13,8 @@ class Form extends Component {
         name: '',
         brand: '',
         link: '',
+        price: '',
+        currency: '',
         fields: [
             {
                 placeholder: 'Name of the product',
@@ -38,18 +40,15 @@ class Form extends Component {
         ]
     }
 
-    rednerCategories() {
-        
-    }
-
     handleChange = e => {
         this.setState({ [e.target.name]: e.target.value });
+        console.log(this.state)
     }
 
     renderFields() {
         return this.state.fields.map(field => {
             return (
-                <Fragment>
+                <Fragment key={field.name}>
                     <Label 
                         htmlFor={field.name} 
                         text={field.name} 
@@ -67,7 +66,7 @@ class Form extends Component {
                     {this.renderFields()}
                 </Inputs>
                 <SelectCategory />
-                <Price />
+                <Price onChange={this.handleChange} />
                 <Button size="small">Add to promo</Button>
             </StyledForm>
         )
