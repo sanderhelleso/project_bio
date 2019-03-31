@@ -27,19 +27,18 @@ class UploadPromoImage extends Component {
         )
     }
 
-    handleFile = async file => {
+    handleFile = file => {
         const data = new FormData();
 
         // set preview
         data.append('promo', file[0], file.name);
         this.setPreview(file);
 
-        // pass blob to parennt
-        //this.props.handleFile(data);
+        // pass blob to parent
+        this.props.handleFile(data);
     }
 
     setPreview(file) {
-
         this.clearPreview();
 
         // set new preview
@@ -51,7 +50,10 @@ class UploadPromoImage extends Component {
 
         // clear old file preview
         window.URL.revokeObjectURL(this.state.preview);
+
+        // update file state for current product
         this.setState({ preview: null });
+        this.props.handleFile(null)
     }
 
     renderClear() {

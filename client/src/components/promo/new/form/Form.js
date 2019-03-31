@@ -6,6 +6,7 @@ import SelectCategory from './SelectCategory';
 import { Inputs, Input, Label } from '../../../styles/Input';
 import Price from './Price';
 import { Button } from '../../../styles/Button';
+import UploadPromoImage from './UploadPromoImage';
 
 class Form extends Component {
     state = {
@@ -54,8 +55,15 @@ class Form extends Component {
                 [e.target.name]: e.target.value 
             }
         });
+    }
 
-        console.log(this.state)
+    handleFile = image => {
+        this.setState({ 
+            product: {
+                ...this.state.product,
+                image
+            }
+        });
     }
 
     renderFields() {
@@ -81,19 +89,22 @@ class Form extends Component {
 
     render() {
         return (
-            <StyledForm>
-                <Inputs stretch={true} stack={true}>
-                    {this.renderFields()}
-                </Inputs>
-                <SelectCategory />
-                <Price onChange={this.handleChange} />
-                <Button 
-                    size="small"
-                    onClick={() => this.addProduct()}
-                >
-                    Add to promo
-                </Button>
-            </StyledForm>
+            <Fragment>
+                <UploadPromoImage handleFile={this.handleFile} />
+                <StyledForm>
+                    <Inputs stretch={true} stack={true}>
+                        {this.renderFields()}
+                    </Inputs>
+                    <SelectCategory />
+                    <Price onChange={this.handleChange} />
+                    <Button 
+                        size="small"
+                        onClick={() => this.addProduct()}
+                    >
+                        Add to promo
+                    </Button>
+                </StyledForm>
+            </Fragment>
         )
     }
 }

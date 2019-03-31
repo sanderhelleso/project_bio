@@ -24,7 +24,6 @@ class NewPromo extends Component {
             <StyledNewPromo>
                 <Container id="cont">
                     <Grid>
-                        <UploadPromoImage />
                         <Form updateProducts={this.updateProducts} />
                         <PreviewList list={this.state.products} />
                     </Grid>
