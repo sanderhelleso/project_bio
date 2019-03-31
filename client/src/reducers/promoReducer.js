@@ -3,7 +3,7 @@ import {
     UNLIKE_PROMO, COMMENT_PROMO, UNCOMMENT_PROMO 
 } from '../actions/actionTypes';
 
-const initialState = { promos: 0 }
+const initialState = { amount: 0 }
 
 export default (state = initialState, action) => {
     switch(action.type) {

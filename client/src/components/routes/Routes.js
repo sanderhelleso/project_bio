@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import DefaultRoutes from './DefaultRoutes';
 import AuthenticatedRoutes from './AuthenticatedRoutes';
+import Handle from '../handle/Handle';
 
 import { connect } from 'react-redux';
 
@@ -21,6 +22,7 @@ class Routes extends Component {
         return (
             <Router>
                 {this.routeHandler()}
+                <Route exact path="/:handle" component={Handle} />
             </Router>
         )
     }

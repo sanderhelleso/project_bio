@@ -4,8 +4,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Container from '../styles/Container';
-import NewProfile from '../profile/NewProfile';
-import NewAvatar from '../profile/NewAvatar';
+import NewProfile from './NewProfile';
+import NewAvatar from './NewAvatar';
 
 
 class Profile extends Component {

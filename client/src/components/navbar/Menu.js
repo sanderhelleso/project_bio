@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Avatar from './Avatar';
 import FeaterIcons from 'feather-icons-react';
 import Options from './Options';
+import { fadeIn } from '../styles/Keyframes';
 
 class Menu extends Component {
     state = {
@@ -67,6 +68,7 @@ const StyledMenu = styled.div`
     top: 1.25rem;
     right: 3rem;
     border-radius: 4px;
+    animation: ${fadeIn} 1s ease-in-out;
 
     #menu-cont {
         display: flex;
