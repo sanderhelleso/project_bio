@@ -2,15 +2,19 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 import Preview from './Preview';
+import NoProductsPlaceholder from './NoProductsPlaceholder';
+import PreviewPlaceholder from './PreviewPlaceholder';
 
 class PreviewList extends Component {
+
+    maxProducts = 3;
 
     selectProduct = product => {
         this.props.selectProduct(product);
     }
 
     renderList() {
-        return this.props.list.map(product => {
+        const list = this.props.list.map(product => {
             return (
                 <li 
                     key={product.name} 
@@ -20,11 +24,24 @@ class PreviewList extends Component {
                 </li>
             )
         });
+
+        for (let i = 0; i < this.maxProducts - this.props.list.length; i++) {
+            list.push(
+                <li>
+                    <PreviewPlaceholder />
+                </li>
+            );
+        }
+
+        return list;
     }
 
     render() {
         return (
             <StyledPreview>
+                <StyledInfo>
+                    {this.props.list.length}/{this.maxProducts} products added
+                </StyledInfo>
                 <ul>
                     {this.renderList()}
                 </ul>
@@ -34,6 +51,11 @@ class PreviewList extends Component {
 }
 
 export default PreviewList;
+
+const StyledInfo = styled.h3`
+    text-align: center;
+    margin-bottom: 3.5rem;
+`
 
 const StyledPreview = styled.div`
     max-width: 275px;
@@ -45,7 +67,7 @@ const StyledPreview = styled.div`
 
         li {
            list-style: none;
-           margin-bottom: 2rem;
+           margin-bottom: 2.5rem;
         }
     }
 `;
