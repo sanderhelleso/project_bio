@@ -21,7 +21,6 @@ class NewPromo extends Component {
     }
 
     updateProducts = product => {
-
         this.setState({ 
             ...this.resetCurrProd(),
             products: this.productIncluded(this.state.currProdMalloc) 
@@ -34,6 +33,13 @@ class NewPromo extends Component {
         const prod = this.state.products;
         prod[prod.indexOf(this.state.currProdMalloc)] = product;
         return [...prod]
+    }
+
+    removeProduct = () => {
+        this.setState({ 
+            ...this.resetCurrProd(),
+            products: this.state.products.filter(p => p !== this.state.currProdMalloc)
+        });
     }
 
     selectProduct = product => {
@@ -56,6 +62,7 @@ class NewPromo extends Component {
                     <Grid>
                         <Form 
                             updateProducts={this.updateProducts}
+                            removeProduct={this.removeProduct}
                             currentProduct={this.state.currentProduct} 
                         />
                         <PreviewList 

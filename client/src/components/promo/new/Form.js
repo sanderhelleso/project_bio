@@ -84,6 +84,13 @@ class Form extends Component {
         this.setState({ product: this.resetProduct() })
     }
 
+    removeProduct() {
+
+        // remove product from list of previews and clear form
+        this.props.removeProduct()
+        this.setState({ product: this.resetProduct() })
+    }
+
     renderFields() {
         return this.state.fields.map(field => {
             return (
@@ -114,7 +121,10 @@ class Form extends Component {
         );
 
         const removeBtn = this.props.currentProduct ? (
-            <FlatButton size="small">
+            <FlatButton 
+                size="small"
+                onClick={() => this.removeProduct()}
+            >
                 Remove
             </FlatButton>
         ) : null;
