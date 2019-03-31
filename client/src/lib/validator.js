@@ -1,12 +1,15 @@
 
 
 export function validateProduct(p) {
-    const errors = Object.entries(p).map(([field, value]) => {
+    const errors = Object.entries(p)
+    .map(([field, value]) => {
         if (!value) {
-            return {
-                error: `Please fill out ${field}`,
-                field
+            let error = `Please fill out ${field}`;
+            if (field === 'image') { 
+                error = `Please upload an image`; 
             }
+
+            return { error, field }
         }
     }).filter(p => p);
 
