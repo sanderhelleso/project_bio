@@ -13,6 +13,7 @@ const buttonStyles = `
     font-family: 'Poppins', sans-serif;
     transform: scale(1.001);
     position: relative;
+    line-height: 2rem;
 
     svg {
         height: 1rem;
@@ -32,6 +33,12 @@ const disabledStyles = `
 	cursor: not-allowed;
 `
 
+const shadowStyles = `
+    -webkit-box-shadow: 0px 6px 25px 0px rgba(105, 39, 255, 0.5);
+    -moz-box-shadow:    0px 6px 25px 0px rgba(105, 39, 255, 0.5);
+    box-shadow:         0px 6px 25px 0px rgba(105, 39, 255, 0.5);
+`;
+
 export const Buttons = styled.div`
     
     button {
@@ -42,14 +49,12 @@ export const Buttons = styled.div`
 
 export const Button = styled.button`
     ${buttonStyles}
+    ${shadowStyles};
     background-color: ${props => props.theme.primaryColor};
     color: ${props => props.theme.fgColor};
     font-size: ${props => props.size === 'small' ? 0.7 : 0.9}rem;
     min-width: ${props => props.size === 'small' ? 125 : 225}px;
     min-height: ${props => props.size === 'small' ? 35 : 55}px;
-    -webkit-box-shadow: 0px 6px 25px 0px rgba(105, 39, 255, 0.5);
-    -moz-box-shadow:    0px 6px 25px 0px rgba(105, 39, 255, 0.5);
-    box-shadow:         0px 6px 25px 0px rgba(105, 39, 255, 0.5);
 
     &:hover {
         opacity: 0.8;
@@ -59,6 +64,19 @@ export const Button = styled.button`
         ${disabledStyles}
         background-color: ${props => props.theme.disabledBg};
         color: ${props => props.theme.disabledColor};
+    }
+`
+
+export const FlatButton = styled.button`
+    ${buttonStyles}
+    background-color: ${props => props.theme.disabledBg};
+    color: ${props => props.theme.disabledColor};
+    font-size: ${props => props.size === 'small' ? 0.7 : 0.9}rem;
+    min-width: ${props => props.size === 'small' ? 125 : 225}px;
+    min-height: ${props => props.size === 'small' ? 35 : 55}px;
+
+    &:disabled {
+        ${disabledStyles}
     }
 `
 

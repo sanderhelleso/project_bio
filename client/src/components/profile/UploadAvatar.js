@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import Dropzone from 'react-dropzone';
 import FeatherIcon from 'feather-icons-react';
+import blobToSrc from '../../lib/blobToSrc';
 
 class UploadAvatar extends Component {
     state = { preview: null };
@@ -33,7 +34,7 @@ class UploadAvatar extends Component {
         data.append('avatar', file[0], file.name);
         this.setPreview(file);
 
-        // pass blob to parennt
+        // pass blob to parent
         this.props.handleFile(data);
     }
 
@@ -43,8 +44,7 @@ class UploadAvatar extends Component {
         window.URL.revokeObjectURL(this.state.preview);
 
         // set new preview
-        const urlCreator = window.URL || window.webkitURL;
-        this.setState({ preview: urlCreator.createObjectURL(file[0]) });
+        this.setState({ preview: blobToSrc(file[0]) });
     }
 
     render() {

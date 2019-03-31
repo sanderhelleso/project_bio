@@ -6,13 +6,12 @@ import SelectCategory from './SelectCategory';
 import { Inputs, Input, Label } from '../../../styles/Input';
 import Price from './Price';
 import { Button } from '../../../styles/Button';
+import UploadPromoImage from './UploadPromoImage';
 
 class Form extends Component {
     state = {
         loading: false,
-        name: '',
-        brand: '',
-        link: '',
+        product: this.resetProduct(),
         fields: [
             {
                 placeholder: 'Name of the product',
@@ -38,18 +37,39 @@ class Form extends Component {
         ]
     }
 
-    rednerCategories() {
-        
+    resetProduct() {
+        return {
+            name: '',
+            brand: '',
+            link: '',
+            price: '',
+            currency: '',
+            image: null
+        }
     }
 
     handleChange = e => {
-        this.setState({ [e.target.name]: e.target.value });
+        this.setState({ 
+            product: {
+                ...this.state.product,
+                [e.target.name]: e.target.value 
+            }
+        });
+    }
+
+    handleFile = image => {
+        this.setState({ 
+            product: {
+                ...this.state.product,
+                image
+            }
+        });
     }
 
     renderFields() {
         return this.state.fields.map(field => {
             return (
-                <Fragment>
+                <Fragment key={field.name}>
                     <Label 
                         htmlFor={field.name} 
                         text={field.name} 
@@ -60,16 +80,34 @@ class Form extends Component {
         })
     }
 
+    addProduct() {
+
+        // add product to list of previews and clear form
+        this.props.updateProducts(this.state.product)
+        this.setState({ product: this.resetProduct() })
+    }
+
     render() {
         return (
-            <StyledForm>
-                <Inputs stretch={true} stack={true}>
-                    {this.renderFields()}
-                </Inputs>
-                <SelectCategory />
-                <Price />
-                <Button size="small">Add to promo</Button>
-            </StyledForm>
+            <Fragment>
+                <UploadPromoImage 
+                    handleFile={this.handleFile} 
+                    reset={!this.state.product.image} 
+                />
+                <StyledForm>
+                    <Inputs stretch={true} stack={true}>
+                        {this.renderFields()}
+                    </Inputs>
+                    <SelectCategory />
+                    <Price onChange={this.handleChange} />
+                    <Button 
+                        size="small"
+                        onClick={() => this.addProduct()}
+                    >
+                        Add to promo
+                    </Button>
+                </StyledForm>
+            </Fragment>
         )
     }
 }
