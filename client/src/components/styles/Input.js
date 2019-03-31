@@ -56,5 +56,5 @@ const StyledLabel = styled.label`
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 2px;
-    opacity: 0.3;
+    color: #253858;
 `;

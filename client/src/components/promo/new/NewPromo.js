@@ -8,14 +8,25 @@ import Form from './form/Form';
 import PreviewList from './PreviewList';
 
 class NewPromo extends Component {
+    state = {
+        products: []
+    }
+
+    updateProducts = product => {
+        this.setState({ 
+            products: [...this.state.products, product] 
+        }, () => console.log(this.state));
+    }
+    
+
     render() {
         return (
             <StyledNewPromo>
                 <Container id="cont">
                     <Grid>
                         <ImageUpload />
-                        <Form />
-                        <PreviewList />
+                        <Form updateProducts={this.updateProducts} />
+                        <PreviewList list={this.state.products} />
                     </Grid>
                 </Container>
             </StyledNewPromo>

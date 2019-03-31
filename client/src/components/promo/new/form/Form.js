@@ -10,11 +10,7 @@ import { Button } from '../../../styles/Button';
 class Form extends Component {
     state = {
         loading: false,
-        name: '',
-        brand: '',
-        link: '',
-        price: '',
-        currency: '',
+        product: this.resetProduct(),
         fields: [
             {
                 placeholder: 'Name of the product',
@@ -40,8 +36,22 @@ class Form extends Component {
         ]
     }
 
+    resetProduct() {
+        return {
+            name: '',
+            brand: '',
+            link: '',
+            price: '',
+            currency: '',
+        }
+    }
+
     handleChange = e => {
-        this.setState({ [e.target.name]: e.target.value });
+        this.setState({ 
+            ...this.stack.product,
+            [e.target.name]: e.target.value 
+        });
+
         console.log(this.state)
     }
 
@@ -59,6 +69,13 @@ class Form extends Component {
         })
     }
 
+    addProduct() {
+
+        // add product to list of previews and clear form
+        this.props.updateProducts(this.state.product)
+        this.setState({ product: this.resetProduct() })
+    }
+
     render() {
         return (
             <StyledForm>
@@ -67,7 +84,12 @@ class Form extends Component {
                 </Inputs>
                 <SelectCategory />
                 <Price onChange={this.handleChange} />
-                <Button size="small">Add to promo</Button>
+                <Button 
+                    size="small"
+                    onClick={() => this.addProduct()}
+                >
+                    Add to promo
+                </Button>
             </StyledForm>
         )
     }
