@@ -90,7 +90,10 @@ class Form extends Component {
     render() {
         return (
             <Fragment>
-                <UploadPromoImage handleFile={this.handleFile} />
+                <UploadPromoImage 
+                    handleFile={this.handleFile} 
+                    reset={!this.state.product.image} 
+                />
                 <StyledForm>
                     <Inputs stretch={true} stack={true}>
                         {this.renderFields()}

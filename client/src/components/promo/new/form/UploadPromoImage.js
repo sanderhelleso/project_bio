@@ -8,6 +8,12 @@ import blobToSrc from '../../../../lib/blobToSrc';
 class UploadPromoImage extends Component {
     state = { preview: null };
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.reset) {
+            this.setState({ preview: null });
+        }
+    }
+
     renderUploadState(isDragActive, isDragReject) {
         
         let message = 'Drop or drag an image of product';
