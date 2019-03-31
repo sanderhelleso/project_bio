@@ -5,11 +5,17 @@ import Preview from './Preview';
 
 class PreviewList extends Component {
 
+    selectProduct = product => {
+        this.props.selectProduct(product);
+    }
 
     renderList() {
         return this.props.list.map(product => {
             return (
-                <li key={product.name}>
+                <li 
+                    key={product.name} 
+                    onClick={() => this.selectProduct(product)}
+                >
                     <Preview {...product} />
                 </li>
             )

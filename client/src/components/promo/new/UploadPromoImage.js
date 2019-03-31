@@ -2,15 +2,23 @@ import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import Dropzone from 'react-dropzone';
 import FeatherIcon from 'feather-icons-react';
-import { Button, FlatButton, Buttons } from '../../../styles/Button';
-import blobToSrc from '../../../../lib/blobToSrc';
+import blobToSrc from '../../../lib/blobToSrc';
 
 class UploadPromoImage extends Component {
-    state = { preview: null };
+    state = { 
+        preview: this.props.source || null
+    };
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.reset) {
             this.setState({ preview: null });
+        }
+
+        if (nextProps.source) {
+            console.log(nextProps)
+            this.setState({ 
+                preview: nextProps.source
+            });
         }
     }
 
@@ -46,7 +54,7 @@ class UploadPromoImage extends Component {
     }
 
     setPreview(file) {
-        this.clearPreview();
+        window.URL.revokeObjectURL(this.state.preview);
 
         // set new preview
         this.setState({ preview: blobToSrc(file[0]) });

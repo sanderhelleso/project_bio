@@ -3,15 +3,16 @@ import styled from 'styled-components';
 
 
 import SelectCategory from './SelectCategory';
-import { Inputs, Input, Label } from '../../../styles/Input';
+import { Inputs, Input, Label } from '../../styles/Input';
 import Price from './Price';
-import { Button } from '../../../styles/Button';
+import { Button, FlatButton } from '../../styles/Button';
 import UploadPromoImage from './UploadPromoImage';
+import blobToSrc from '../../../lib/blobToSrc';
 
 class Form extends Component {
     state = {
         loading: false,
-        product: this.resetProduct(),
+        product: this.props.currentProduct || this.resetProduct(),
         fields: [
             {
                 placeholder: 'Name of the product',
@@ -35,6 +36,12 @@ class Form extends Component {
                 type: 'text',
             },
         ]
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.currentProduct) {
+            this.setState({ product: nextProps.currentProduct });
+        }
     }
 
     resetProduct() {
@@ -66,18 +73,8 @@ class Form extends Component {
         });
     }
 
-    renderFields() {
-        return this.state.fields.map(field => {
-            return (
-                <Fragment key={field.name}>
-                    <Label 
-                        htmlFor={field.name} 
-                        text={field.name} 
-                    />
-                    <Input {...field} onChange={e => this.handleChange(e)}/>
-                </Fragment>
-            )
-        })
+    selectProduct = product => {
+        this.props.selectProduct(product);
     }
 
     addProduct() {
@@ -87,12 +84,70 @@ class Form extends Component {
         this.setState({ product: this.resetProduct() })
     }
 
+    removeProduct() {
+
+        // remove product from list of previews and clear form
+        this.props.removeProduct()
+        this.setState({ product: this.resetProduct() })
+    }
+
+    renderFields() {
+        return this.state.fields.map(field => {
+            return (
+                <Fragment key={field.name}>
+                    <Label 
+                        htmlFor={field.name} 
+                        text={field.name} 
+                    />
+                    <Input 
+                        {...field} 
+                        value={this.state.product[field.name]}
+                        onChange={e => this.handleChange(e)}
+                    />
+                </Fragment>
+            )
+        })
+    }
+
+    renderButtons() {
+
+        const addBtn = (
+            <Button 
+                size="small"
+                onClick={() => this.addProduct()}
+            >
+                {this.props.currentProduct ? 'Update' : 'Add'} Product
+            </Button>
+        );
+
+        const removeBtn = this.props.currentProduct ? (
+            <FlatButton 
+                size="small"
+                onClick={() => this.removeProduct()}
+            >
+                Remove
+            </FlatButton>
+        ) : null;
+
+        return (
+            <Fragment>
+                {addBtn}
+                {removeBtn}
+            </Fragment>
+        )
+    }
+
     render() {
         return (
             <Fragment>
                 <UploadPromoImage 
                     handleFile={this.handleFile} 
-                    reset={!this.state.product.image} 
+                    reset={!this.state.product.image}
+                    source={this.props.currentProduct
+                        ? blobToSrc(this.state.product.image.get('promo')) || 
+                          blobToSrc(this.props.currentProduct.image.get('promo'))
+                        : null
+                    } 
                 />
                 <StyledForm>
                     <Inputs stretch={true} stack={true}>
@@ -100,12 +155,7 @@ class Form extends Component {
                     </Inputs>
                     <SelectCategory />
                     <Price onChange={this.handleChange} />
-                    <Button 
-                        size="small"
-                        onClick={() => this.addProduct()}
-                    >
-                        Add to promo
-                    </Button>
+                    {this.renderButtons()}
                 </StyledForm>
             </Fragment>
         )
@@ -128,6 +178,8 @@ const StyledForm = styled.div`
     button {
         float: right;
         margin-top: 2rem;
+        margin-left: 2rem;
         line-height: 2rem;
+        min-width: 150px;
     }
 `;

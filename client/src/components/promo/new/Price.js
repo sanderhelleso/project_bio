@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
-import { Grid } from '../../../styles/Grid';
-import { Input, Label } from '../../../styles/Input';
+import { Input, Label } from '../../styles/Input';
 
 class Price extends Component {
     fields = [

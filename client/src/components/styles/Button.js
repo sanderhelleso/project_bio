@@ -69,8 +69,8 @@ export const Button = styled.button`
 
 export const FlatButton = styled.button`
     ${buttonStyles}
-    background-color: ${props => props.theme.disabledBg};
-    color: ${props => props.theme.disabledColor};
+    background-color: #bdbdbd;
+    color: #616161;
     font-size: ${props => props.size === 'small' ? 0.7 : 0.9}rem;
     min-width: ${props => props.size === 'small' ? 125 : 225}px;
     min-height: ${props => props.size === 'small' ? 35 : 55}px;
