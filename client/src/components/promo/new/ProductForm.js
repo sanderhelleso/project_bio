@@ -187,12 +187,4 @@ export default withToastManager(Form);
 
 const StyledForm = styled.div`
     margin-top: -1.5rem;
-
-    button {
-        float: right;
-        margin-top: 2rem;
-        margin-left: 2rem;
-        line-height: 2rem;
-        min-width: 150px;
-    }
 `;

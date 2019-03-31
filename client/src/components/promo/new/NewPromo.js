@@ -9,13 +9,8 @@ import PromoForm from './PromoForm';
 
 class NewPromo extends Component {
     state = {
-        promo: {
-            active: true,
-            valid: false,
-            title: '',
-            description: '',
-            expiresAt: ''
-        },
+        stage: 'promo',
+        promo: {},
         products: [],
         ...this.resetCurrProd()
     }
@@ -25,6 +20,13 @@ class NewPromo extends Component {
             currentProduct: null,
             currProdMalloc: null
         }
+    }
+
+    updatePromo = promo => {
+        this.setState({
+            promo,
+            stage: 'products'
+        });
     }
 
     updateProducts = product => {
@@ -63,23 +65,31 @@ class NewPromo extends Component {
     }
 
     renderStage() {
-        if (this.state.promo.active) {
-            return <PromoForm promo={this.state.promo}/>
+        if (this.state.stage === 'promo') {
+            return (
+                <PromoForm 
+                    updatePromo={this.updatePromo}
+                />
+            )
         }
 
-        return (
-            <Grid>
-                <Form 
-                    updateProducts={this.updateProducts}
-                    removeProduct={this.removeProduct}
-                    currentProduct={this.state.currentProduct} 
-                />
-                <PreviewList 
-                    list={this.state.products} 
-                    selectProduct={this.selectProduct}
-                />
-            </Grid>
-        )
+        else if (this.state.stage === 'products') {
+            return (
+                <Grid>
+                    <Form 
+                        updateProducts={this.updateProducts}
+                        removeProduct={this.removeProduct}
+                        currentProduct={this.state.currentProduct} 
+                    />
+                    <PreviewList 
+                        list={this.state.products} 
+                        selectProduct={this.selectProduct}
+                    />
+                </Grid>
+            );
+        }
+
+        return null;
     }
     
     render() {
@@ -106,6 +116,13 @@ const StyledNewPromo = styled.div`
 
         label {
             margin-top: 1.35rem;
+        }
+
+        button {
+            float: right;
+            margin-top: 2rem;
+            margin-left: 2rem;
+            min-width: 150px;
         }
     }
 

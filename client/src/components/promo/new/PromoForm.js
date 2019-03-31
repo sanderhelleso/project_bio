@@ -3,9 +3,16 @@ import styled from 'styled-components';
 
 import SelectCategory from './SelectCategory';
 import { Inputs, Input, Label } from '../../styles/Input'; 
+import { Button } from '../../styles/Button';
+import FeatherIcons from 'feather-icons-react';
 
 class PromoForm extends Component {
     state = {
+        promo: {
+            title: '',
+            description: '',
+            expiresAt: ''
+        },
         fields: [
             {
                 placeholder: 'Title of promotion',
@@ -34,6 +41,13 @@ class PromoForm extends Component {
         ]
     }
 
+    validatePromo() {
+        
+        // handle validation
+
+        this.props.updatePromo(this.state.promo);
+    }
+
     renderFields() {
         return this.state.fields.map(field => {
             return (
@@ -44,7 +58,7 @@ class PromoForm extends Component {
                     />
                     <Input 
                         {...field} 
-                        value={this.props.promo[field.name]}
+                        value={this.state.promo[field.name]}
                         onChange={e => this.handleChange(e)}
                     />
                 </Fragment>
@@ -55,10 +69,17 @@ class PromoForm extends Component {
     render() {
         return (
             <StyledForm>
-               <Inputs stretch={true}>
+                <Inputs stretch={true}>
                     {this.renderFields()}
                     <SelectCategory />
-               </Inputs>
+                </Inputs>
+                <Button 
+                    size="small"
+                    onClick={() => this.validatePromo()}
+                >
+                    <FeatherIcons icon="arrow-right" />
+                    Continue
+                </Button>
             </StyledForm>
         )
     }
