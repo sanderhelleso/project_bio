@@ -175,7 +175,6 @@ class Form extends Component {
                     <Inputs stretch={true} stack={true}>
                         {this.renderFields()}
                     </Inputs>
-                    <SelectCategory />
                     <Price onChange={this.handleChange} />
                     {this.renderButtons()}
                 </StyledForm>
@@ -188,14 +187,6 @@ export default withToastManager(Form);
 
 const StyledForm = styled.div`
     margin-top: -1.5rem;
-    
-    input {
-        max-height: 2.65rem;
-    }
-
-    label {
-        margin-top: 1.35rem;
-    }
 
     button {
         float: right;
