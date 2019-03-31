@@ -8,6 +8,7 @@ import Price from './Price';
 import { Button, FlatButton } from '../../styles/Button';
 import UploadPromoImage from './UploadPromoImage';
 import blobToSrc from '../../../lib/blobToSrc';
+import { validateProduct } from '../../../lib/validator';
 
 class Form extends Component {
     state = {
@@ -79,9 +80,16 @@ class Form extends Component {
 
     addProduct() {
 
+
+        const valid = validateProduct(this.state.product);
+        if (typeof valid === 'object') {
+            console.log(valid);
+            return;
+        }
+
         // add product to list of previews and clear form
-        this.props.updateProducts(this.state.product)
-        this.setState({ product: this.resetProduct() })
+        //this.props.updateProducts(this.state.product)
+        //this.setState({ product: this.resetProduct() })
     }
 
     removeProduct() {
