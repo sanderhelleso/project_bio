@@ -40,7 +40,6 @@ class Form extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.currentProduct) {
-            console.log(nextProps.currentProduct)
             this.setState({ product: nextProps.currentProduct });
         }
     }
@@ -109,8 +108,9 @@ class Form extends Component {
                 <UploadPromoImage 
                     handleFile={this.handleFile} 
                     reset={!this.state.product.image}
-                    source={this.props.currentProduct 
-                        ? blobToSrc(this.props.currentProduct.image.get('promo'))
+                    source={this.props.currentProduct
+                        ? blobToSrc(this.state.product.image.get('promo')) || 
+                          blobToSrc(this.props.currentProduct.image.get('promo'))
                         : null
                     } 
                 />
