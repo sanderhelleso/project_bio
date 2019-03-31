@@ -2,8 +2,7 @@ import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import Dropzone from 'react-dropzone';
 import FeatherIcon from 'feather-icons-react';
-import { Button, FlatButton, Buttons } from '../../../styles/Button';
-import blobToSrc from '../../../../lib/blobToSrc';
+import blobToSrc from '../../../lib/blobToSrc';
 
 class UploadPromoImage extends Component {
     state = { preview: null };

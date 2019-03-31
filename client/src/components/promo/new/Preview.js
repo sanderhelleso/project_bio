@@ -28,7 +28,8 @@ const StyledPreview = styled.div`
     transition: 0.3s ease-in-out;
     animation: ${fadeIn};
     display: grid;
-    grid-template-columns: 25% 75%;
+    grid-template-columns: 30% 70%;
+    overflow: hidden;
 
     &:hover {
         box-shadow: 0px 10px 22px rgba(0,0,0,0.1);

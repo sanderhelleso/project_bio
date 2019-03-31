@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import { Label } from '../../../styles/Input';
+import { Label } from '../../styles/Input';
 
 export default class SelectCategory extends Component {
     options = [

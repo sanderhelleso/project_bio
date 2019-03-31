@@ -3,15 +3,15 @@ import styled from 'styled-components';
 
 
 import SelectCategory from './SelectCategory';
-import { Inputs, Input, Label } from '../../../styles/Input';
+import { Inputs, Input, Label } from '../../styles/Input';
 import Price from './Price';
-import { Button } from '../../../styles/Button';
+import { Button } from '../../styles/Button';
 import UploadPromoImage from './UploadPromoImage';
 
 class Form extends Component {
     state = {
         loading: false,
-        product: this.resetProduct(),
+        product: this.props.currentProduct || this.resetProduct(),
         fields: [
             {
                 placeholder: 'Name of the product',
@@ -35,6 +35,12 @@ class Form extends Component {
                 type: 'text',
             },
         ]
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.currentProduct) {
+            this.setState({ product: nextProps.currentProduct });
+        }
     }
 
     resetProduct() {
@@ -66,6 +72,17 @@ class Form extends Component {
         });
     }
 
+    selectProduct = product => {
+        this.props.selectProduct(product);
+    }
+
+    addProduct() {
+
+        // add product to list of previews and clear form
+        this.props.updateProducts(this.state.product)
+        this.setState({ product: this.resetProduct() })
+    }
+
     renderFields() {
         return this.state.fields.map(field => {
             return (
@@ -74,17 +91,14 @@ class Form extends Component {
                         htmlFor={field.name} 
                         text={field.name} 
                     />
-                    <Input {...field} onChange={e => this.handleChange(e)}/>
+                    <Input 
+                        {...field} 
+                        value={this.state.product[field.name]}
+                        onChange={e => this.handleChange(e)}
+                    />
                 </Fragment>
             )
         })
-    }
-
-    addProduct() {
-
-        // add product to list of previews and clear form
-        this.props.updateProducts(this.state.product)
-        this.setState({ product: this.resetProduct() })
     }
 
     render() {
@@ -104,7 +118,7 @@ class Form extends Component {
                         size="small"
                         onClick={() => this.addProduct()}
                     >
-                        Add to promo
+                        {this.props.currentProduct ? 'Update' : 'Add'} Product
                     </Button>
                 </StyledForm>
             </Fragment>
