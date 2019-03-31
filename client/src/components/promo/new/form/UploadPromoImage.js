@@ -40,12 +40,18 @@ class UploadPromoImage extends Component {
 
     setPreview(file) {
 
-        // clear old file preview
-        window.URL.revokeObjectURL(this.state.preview);
+        this.clearPreview();
 
         // set new preview
         const urlCreator = window.URL || window.webkitURL;
         this.setState({ preview: urlCreator.createObjectURL(file[0]) });
+    }
+
+    clearPreview() {
+
+        // clear old file preview
+        window.URL.revokeObjectURL(this.state.preview);
+        this.setState({ preview: null });
     }
 
     renderClear() {
@@ -55,7 +61,7 @@ class UploadPromoImage extends Component {
         }
 
         return (
-            <StyledClearImage>
+            <StyledClearImage onClick={() => this.clearPreview()}>
                 <FeatherIcon icon="trash" />
                 Clear Image
             </StyledClearImage>
