@@ -5,11 +5,15 @@ import FeatherIcon from 'feather-icons-react';
 import blobToSrc from '../../../lib/blobToSrc';
 
 class UploadPromoImage extends Component {
-    state = { preview: null };
+    state = { preview: this.props.source || null };
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.reset) {
             this.setState({ preview: null });
+        }
+
+        if (!this.state.preview && nextProps.source) {
+            this.setState({ preview: nextProps.source });
         }
     }
 

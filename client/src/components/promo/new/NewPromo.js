@@ -10,14 +10,20 @@ import UploadPromoImage from './UploadPromoImage';
 class NewPromo extends Component {
     state = {
         products: [],
-        currentProduct: null,
-        currProdMalloc: null // required to check if updated obj is in arr
+        ...this.resetCurrProd()
+    }
+
+    resetCurrProd() {
+        return {
+            currentProduct: null,
+            currProdMalloc: null
+        }
     }
 
     updateProducts = product => {
 
         this.setState({ 
-            currentProduct: null,
+            ...this.resetCurrProd(),
             products: this.productIncluded(this.state.currProdMalloc) 
             ? this.updateProduct(product)
             : [...this.state.products, product]
@@ -43,7 +49,6 @@ class NewPromo extends Component {
         return this.state.products.includes(product);
     }
     
-
     render() {
         return (
             <StyledNewPromo>

@@ -7,6 +7,7 @@ import { Inputs, Input, Label } from '../../styles/Input';
 import Price from './Price';
 import { Button } from '../../styles/Button';
 import UploadPromoImage from './UploadPromoImage';
+import blobToSrc from '../../../lib/blobToSrc';
 
 class Form extends Component {
     state = {
@@ -39,6 +40,7 @@ class Form extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.currentProduct) {
+            console.log(nextProps.currentProduct)
             this.setState({ product: nextProps.currentProduct });
         }
     }
@@ -106,7 +108,11 @@ class Form extends Component {
             <Fragment>
                 <UploadPromoImage 
                     handleFile={this.handleFile} 
-                    reset={!this.state.product.image} 
+                    reset={!this.state.product.image}
+                    source={this.props.currentProduct 
+                        ? blobToSrc(this.props.currentProduct.image.get('promo'))
+                        : null
+                    } 
                 />
                 <StyledForm>
                     <Inputs stretch={true} stack={true}>
