@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Dropzone from 'react-dropzone';
 import FeatherIcon from 'feather-icons-react';
 import { Button, FlatButton, Buttons } from '../../../styles/Button';
+import blobToSrc from '../../../../lib/blobToSrc';
 
 class UploadPromoImage extends Component {
     state = { preview: null };
@@ -42,8 +43,7 @@ class UploadPromoImage extends Component {
         this.clearPreview();
 
         // set new preview
-        const urlCreator = window.URL || window.webkitURL;
-        this.setState({ preview: urlCreator.createObjectURL(file[0]) });
+        this.setState({ preview: blobToSrc(file[0]) });
     }
 
     clearPreview() {
