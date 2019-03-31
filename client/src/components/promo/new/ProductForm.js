@@ -175,7 +175,11 @@ class Form extends Component {
                     <Inputs stretch={true} stack={true}>
                         {this.renderFields()}
                     </Inputs>
-                    <Price onChange={this.handleChange} />
+                    <Price 
+                        onChange={this.handleChange}
+                        price={this.state.product.price}
+                        currency={this.state.product.currency}
+                    />
                     {this.renderButtons()}
                 </StyledForm>
             </Fragment>
