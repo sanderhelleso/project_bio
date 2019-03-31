@@ -27,7 +27,7 @@ class PreviewList extends Component {
 
         for (let i = 0; i < this.maxProducts - this.props.list.length; i++) {
             list.push(
-                <li>
+                <li key={i}>
                     <PreviewPlaceholder />
                 </li>
             );

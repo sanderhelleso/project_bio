@@ -8,7 +8,7 @@ import Price from './Price';
 import { Button, FlatButton } from '../../styles/Button';
 import UploadPromoImage from './UploadPromoImage';
 import blobToSrc from '../../../lib/blobToSrc';
-import { validateProduct } from '../../../lib/validator';
+import { validateFormByObj } from '../../../lib/validator';
 import { withToastManager } from 'react-toast-notifications';
 
 class Form extends Component {
@@ -85,7 +85,7 @@ class Form extends Component {
     addProduct() {
 
 
-        const valid = validateProduct(this.state.product);
+        const valid = validateFormByObj(this.state.product);
 
         // if errors, notify user
         if (typeof valid === 'object') {

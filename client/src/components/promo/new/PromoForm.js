@@ -5,13 +5,14 @@ import SelectCategory from './SelectCategory';
 import { Inputs, Input, Label } from '../../styles/Input'; 
 import { Button } from '../../styles/Button';
 import FeatherIcons from 'feather-icons-react';
+import { validateFormByObj } from '../../../lib/validator';
 
 class PromoForm extends Component {
     state = {
         promo: {
             title: '',
             description: '',
-            expiresAt: ''
+            expires_at: ''
         },
         fields: [
             {
@@ -41,9 +42,22 @@ class PromoForm extends Component {
         ]
     }
 
+    handleChange = e => {
+        this.setState({ 
+            promo: {
+                ...this.state.promo,
+                [e.target.name]: e.target.value 
+            }
+        });
+    }
+
     validatePromo() {
         
         // handle validation
+        const valid = validateFormByObj(this.state.promo);
+        if (typeof valid === 'object') {
+            return;
+        }
 
         this.props.updatePromo(this.state.promo);
     }

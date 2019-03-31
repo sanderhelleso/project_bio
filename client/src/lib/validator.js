@@ -1,6 +1,6 @@
 
-
-export function validateProduct(p) {
+// validate form represented by objects field
+export function validateFormByObj(p) {
     const errors = Object.entries(p)
     .map(([field, value]) => {
         if (!value) {
@@ -13,5 +13,6 @@ export function validateProduct(p) {
         }
     }).filter(p => p);
 
+    // return true if no errors or list of error objs
     return errors.length === 0 || errors;
 };
