@@ -10,15 +10,15 @@ import PreviewList from './PreviewList';
 class NewPromo extends Component {
     render() {
         return (
-            <Container>
-                <StyledNewPromo>
+            <StyledNewPromo>
+                <Container id="cont">
                     <Grid>
                         <ImageUpload />
                         <Form />
                         <PreviewList />
                     </Grid>
-                </StyledNewPromo>
-            </Container>
+                </Container>
+            </StyledNewPromo>
         )
     }
 }
@@ -26,5 +26,10 @@ class NewPromo extends Component {
 export default NewPromo;
 
 const StyledNewPromo = styled.div`
-    margin-top: 15vh;
+    margin: 15vh auto;
+
+    #cont {
+        min-width: 85%;
+    }
+
 `;

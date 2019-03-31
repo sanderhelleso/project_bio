@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import { Grid } from '../../../styles/Grid';
 import { Input, Label } from '../../../styles/Input';
@@ -6,22 +6,18 @@ import { Input, Label } from '../../../styles/Input';
 class Price extends Component {
     render() {
         return (
-            <StyledDiv>
+            <Fragment>
                 <Label htmlFor="price" text="Price & Currency" />
                 <StyledPrice>
                     <Input placeholder="price"/>
                     <Input placeholder="currency"/>
                 </StyledPrice>
-            </StyledDiv>
+            </Fragment>
         )
     }
 }
 
 export default Price;
-
-const StyledDiv = styled.div`
-    margin-top: 2rem;
-`
 
 const StyledPrice = styled.div`
     input {

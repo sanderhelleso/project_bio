@@ -1,25 +1,29 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 
 
 import SelectCategory from './SelectCategory';
-import { Inputs, Input } from '../../../styles/Input';
+import { Inputs, Input, Label } from '../../../styles/Input';
 import Price from './Price';
+import { Button } from '../../../styles/Button';
 
 class Form extends Component {
     state = {
         loading: false,
+        name: '',
+        brand: '',
+        link: '',
         fields: [
             {
-                placeholder: 'Title of promotion',
+                placeholder: 'Name of the product',
                 max: 70,
                 min: 1,
-                name: 'title',
+                name: 'name',
                 type: 'text',
                 required: true
             },
             {
-                placeholder: 'Brand of product(s)',
+                placeholder: 'Brand of product',
                 max: 70,
                 min: 1,
                 name: 'brand',
@@ -27,21 +31,10 @@ class Form extends Component {
                 required: true
             },
             {
-                placeholder: 'Description of promo',
-                max: 255,
-                name: 'description',
-                type: 'text'
-            },
-            {
-                placeholder: 'Price of prduct',
-                name: 'description',
+                placeholder: 'Link to product',
+                name: 'link',
                 type: 'text',
             },
-            {
-                placeholder: 'Discount',
-                name: 'description',
-                type: 'text',
-            }
         ]
     }
 
@@ -49,10 +42,20 @@ class Form extends Component {
         
     }
 
+    handleChange = e => {
+        this.setState({ [e.target.name]: e.target.value });
+    }
+
     renderFields() {
         return this.state.fields.map(field => {
             return (
-                <Input {...field} />
+                <Fragment>
+                    <Label 
+                        htmlFor={field.name} 
+                        text={`${field.name.charAt(0).toUpperCase()} ${field.name.slice(1)}`} 
+                    />
+                    <Input {...field} onChange={e => this.handleChange(e)}/>
+                </Fragment>
             )
         })
     }
@@ -60,8 +63,12 @@ class Form extends Component {
     render() {
         return (
             <StyledForm>
+                <Inputs stretch={true} stack={true}>
+                    {this.renderFields()}
+                </Inputs>
                 <SelectCategory />
                 <Price />
+                <Button size="small">Add to promo</Button>
             </StyledForm>
         )
     }
@@ -70,8 +77,19 @@ class Form extends Component {
 export default Form;
 
 const StyledForm = styled.div`
+    margin-top: -1.5rem;
+    
     input {
-        margin-bottom: 1rem;
         max-height: 2.65rem;
+    }
+
+    label {
+        margin-top: 1.35rem;
+    }
+
+    button {
+        float: right;
+        margin-top: 2rem;
+        line-height: 2rem;
     }
 `;
