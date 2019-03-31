@@ -53,5 +53,8 @@ const StyledLabel = styled.label`
     font-weight: 600;
     margin-bottom: 0.75rem;
     display: block;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.3;
 `;

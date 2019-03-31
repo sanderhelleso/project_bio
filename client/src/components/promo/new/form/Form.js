@@ -52,7 +52,7 @@ class Form extends Component {
                 <Fragment>
                     <Label 
                         htmlFor={field.name} 
-                        text={`${field.name.charAt(0).toUpperCase()} ${field.name.slice(1)}`} 
+                        text={field.name} 
                     />
                     <Input {...field} onChange={e => this.handleChange(e)}/>
                 </Fragment>

@@ -22,6 +22,16 @@ export default class SelectCategory extends Component {
                     name="category"
                     isSearchable={false}
                     options={this.options}
+                    theme={(theme) => ({
+                        ...theme,
+                        borderRadius: '4px',
+                        outline: 'none',
+                        transform: '0.3s ease-in-out',
+                        colors: {
+                        ...theme.colors,
+                          primary: '#6927ff',
+                        },
+                    })}
                 />
             </div>
         )
