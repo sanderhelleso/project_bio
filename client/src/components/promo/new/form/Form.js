@@ -43,13 +43,16 @@ class Form extends Component {
             link: '',
             price: '',
             currency: '',
+            image: null
         }
     }
 
     handleChange = e => {
         this.setState({ 
-            ...this.stack.product,
-            [e.target.name]: e.target.value 
+            product: {
+                ...this.state.product,
+                [e.target.name]: e.target.value 
+            }
         });
 
         console.log(this.state)
