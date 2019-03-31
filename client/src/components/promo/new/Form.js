@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import SelectCategory from './SelectCategory';
 import { Inputs, Input, Label } from '../../styles/Input';
 import Price from './Price';
-import { Button } from '../../styles/Button';
+import { Button, FlatButton } from '../../styles/Button';
 import UploadPromoImage from './UploadPromoImage';
 import blobToSrc from '../../../lib/blobToSrc';
 
@@ -102,6 +102,31 @@ class Form extends Component {
         })
     }
 
+    renderButtons() {
+
+        const addBtn = (
+            <Button 
+                size="small"
+                onClick={() => this.addProduct()}
+            >
+                {this.props.currentProduct ? 'Update' : 'Add'} Product
+            </Button>
+        );
+
+        const removeBtn = this.props.currentProduct ? (
+            <FlatButton size="small">
+                Remove
+            </FlatButton>
+        ) : null;
+
+        return (
+            <Fragment>
+                {addBtn}
+                {removeBtn}
+            </Fragment>
+        )
+    }
+
     render() {
         return (
             <Fragment>
@@ -120,12 +145,7 @@ class Form extends Component {
                     </Inputs>
                     <SelectCategory />
                     <Price onChange={this.handleChange} />
-                    <Button 
-                        size="small"
-                        onClick={() => this.addProduct()}
-                    >
-                        {this.props.currentProduct ? 'Update' : 'Add'} Product
-                    </Button>
+                    {this.renderButtons()}
                 </StyledForm>
             </Fragment>
         )
@@ -148,6 +168,8 @@ const StyledForm = styled.div`
     button {
         float: right;
         margin-top: 2rem;
+        margin-left: 2rem;
         line-height: 2rem;
+        min-width: 150px;
     }
 `;
