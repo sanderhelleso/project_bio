@@ -5,11 +5,12 @@ import SelectCategory from './SelectCategory';
 import { Inputs, Input, Label } from '../../styles/Input'; 
 import { Button } from '../../styles/Button';
 import FeatherIcons from 'feather-icons-react';
-import { validateFormByObj } from '../../../validators/promo';
 import { alertFormError } from '../../../lib/alert';
 import { withToastManager } from 'react-toast-notifications';
 import {Checkbox } from '../../styles/Checkbox';
-import Container from '../../styles/Container';
+
+import { validateFormByObj } from '../../../validators/validate';
+import promoErrHandler from '../../../validators/promo';
 
 class PromoForm extends Component {
     state = {
@@ -121,9 +122,9 @@ class PromoForm extends Component {
         // handle validation
         const { category, title, description } = this.state.promo;
         const valid = validateFormByObj(
-            this.state.checked
-            ? this.state.promo
-            : { category, title, description }
+            this.state.checked 
+            ? this.state.promo : { category, title, description },
+            promoErrHandler
         );
 
         if (typeof valid === 'object') {
