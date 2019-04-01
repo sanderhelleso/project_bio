@@ -47,4 +47,19 @@ const GlobalStyle = createGlobalStyle`
         -webkit-appearance: none; 
         margin: 0; 
     }
+
+    ::-webkit-scrollbar {
+        width: 0.65em;
+    }
+    
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
+        background-color: #eeeeee;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background-color: #bdbdbd;
+        outline: 1px solid #9e9e9e;
+    }
+
 `
