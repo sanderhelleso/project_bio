@@ -111,7 +111,7 @@ class PromoForm extends Component {
         );
 
         if (typeof valid === 'object') {
-            return valid.forEach(err => alertFormError(this.props, err.error));
+            return valid.forEach(err => alertFormError(this.props, err));
         }
 
         this.props.updatePromo(this.state.promo);
