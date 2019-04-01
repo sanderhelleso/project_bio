@@ -11,19 +11,11 @@ export function validateFormByObj(p) {
 
 function setErrMsg(field, value) {
 
-    let error = '';
-
     // handle empty defaults
-    if (!value) {
-        switch(field) {
-            case 'category':
-                return `Please select a ${field}`
-            default: 
-                return `Please fill out ${field}`;
-        }
-    }
+    if (!value) return setEmpyErrMsg(field);
 
     // set message depending on field
+    let error = '';
     switch(field) {
         case 'title':
             if (value.length < 2 || value.length > 70) 
@@ -45,4 +37,13 @@ function setErrMsg(field, value) {
     }
 
     return error;
+}
+
+function setEmpyErrMsg(field) {
+    switch(field) {
+        case 'category':
+            return `Please select a ${field}`
+        default: 
+            return `Please fill out ${field}`;
+    }
 }
