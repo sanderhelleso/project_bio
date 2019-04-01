@@ -6,7 +6,7 @@ import Price from './Price';
 import { Button, FlatButton } from '../../styles/Button';
 import UploadPromoImage from './UploadPromoImage';
 import blobToSrc from '../../../lib/blobToSrc';
-import { validateFormByObj } from '../../../lib/validator';
+import { validateFormByObj } from '../../../validators/promo';
 import { withToastManager } from 'react-toast-notifications';
 import { alertFormError } from '../../../lib/alert';
 

@@ -5,7 +5,7 @@ import SelectCategory from './SelectCategory';
 import { Inputs, Input, Label } from '../../styles/Input'; 
 import { Button } from '../../styles/Button';
 import FeatherIcons from 'feather-icons-react';
-import { validateFormByObj } from '../../../lib/validator';
+import { validateFormByObj } from '../../../validators/promo';
 import { alertFormError } from '../../../lib/alert';
 import { withToastManager } from 'react-toast-notifications';
 import {Checkbox } from '../../styles/Checkbox';
