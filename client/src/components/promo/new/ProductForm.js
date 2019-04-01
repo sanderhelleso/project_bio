@@ -8,8 +8,9 @@ import Price from './Price';
 import { Button, FlatButton } from '../../styles/Button';
 import UploadPromoImage from './UploadPromoImage';
 import blobToSrc from '../../../lib/blobToSrc';
-import { validateProduct } from '../../../lib/validator';
+import { validateFormByObj } from '../../../lib/validator';
 import { withToastManager } from 'react-toast-notifications';
+import { alertFormError } from '../../../lib/alert';
 
 class Form extends Component {
     state = {
@@ -85,20 +86,11 @@ class Form extends Component {
     addProduct() {
 
 
-        const valid = validateProduct(this.state.product);
+        const valid = validateFormByObj(this.state.product);
 
         // if errors, notify user
         if (typeof valid === 'object') {
-            const { toastManager } = this.props;
-            valid.forEach(err => {
-                toastManager.add(err.error, {
-                    appearance: 'error',
-                    autoDismiss: true,
-                    autoDismissTimeout: 20000
-                });
-            });
-
-            return;
+            return valid.forEach(err => alertFormError(this.props, err.error));
         }
 
         // add product to list of previews and clear form
@@ -123,7 +115,7 @@ class Form extends Component {
                     />
                     <Input 
                         {...field} 
-                        value={this.state.product[field.name]}
+                        value={this.state.product[field.name] || ''}
                         onChange={e => this.handleChange(e)}
                     />
                 </Fragment>
@@ -175,7 +167,11 @@ class Form extends Component {
                     <Inputs stretch={true} stack={true}>
                         {this.renderFields()}
                     </Inputs>
-                    <Price onChange={this.handleChange} />
+                    <Price 
+                        onChange={this.handleChange}
+                        price={this.state.product.price}
+                        currency={this.state.product.currency}
+                    />
                     {this.renderButtons()}
                 </StyledForm>
             </Fragment>

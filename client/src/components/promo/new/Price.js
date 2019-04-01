@@ -24,6 +24,7 @@ class Price extends Component {
                 <Input 
                     key={field.name} 
                     {...field} 
+                    value={this.props[field.name]}
                     onChange={this.props.onChange} 
                 />
             )

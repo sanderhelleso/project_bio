@@ -8,7 +8,7 @@ const inputStyles = `
     -moz-box-shadow: none;
     box-shadow: none;
     font-size: 1rem;
-    padding: 0.75rem 1rem;
+    padding: 2px 8px;
     font-family: 'Poppins', sans-serif;
     border-radius: 4px;
     transition: 0.3s ease-in-out;

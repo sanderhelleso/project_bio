@@ -5,14 +5,13 @@ import SelectCategory from './SelectCategory';
 import { Inputs, Input, Label } from '../../styles/Input'; 
 import { Button } from '../../styles/Button';
 import FeatherIcons from 'feather-icons-react';
+import { validateFormByObj } from '../../../lib/validator';
+import { alertFormError } from '../../../lib/alert';
+import { withToastManager } from 'react-toast-notifications';
 
 class PromoForm extends Component {
     state = {
-        promo: {
-            title: '',
-            description: '',
-            expiresAt: ''
-        },
+        promo: this.props.promo,
         fields: [
             {
                 placeholder: 'Title of promotion',
@@ -41,9 +40,28 @@ class PromoForm extends Component {
         ]
     }
 
+    handleChange = e => {
+        
+        // handles all fields and select
+        const toUpdate = typeof e === 'object' 
+        ? { [e.target.name]: e.target.value }
+        : { ['category']: e }
+
+        this.setState({ 
+            promo: {
+                ...this.state.promo,
+                ...toUpdate
+            }
+        });
+    }
+
     validatePromo() {
         
         // handle validation
+        const valid = validateFormByObj(this.state.promo);
+        if (typeof valid === 'object') {
+            return valid.forEach(err => alertFormError(this.props, err.error));
+        }
 
         this.props.updatePromo(this.state.promo);
     }
@@ -58,7 +76,7 @@ class PromoForm extends Component {
                     />
                     <Input 
                         {...field} 
-                        value={this.state.promo[field.name]}
+                        value={this.state.promo[field.name] || ''}
                         onChange={e => this.handleChange(e)}
                     />
                 </Fragment>
@@ -71,7 +89,10 @@ class PromoForm extends Component {
             <StyledForm>
                 <Inputs stretch={true}>
                     {this.renderFields()}
-                    <SelectCategory />
+                    <SelectCategory 
+                        category={this.state.promo.category}
+                        handleChange={this.handleChange}
+                    />
                 </Inputs>
                 <Button 
                     size="small"
@@ -85,7 +106,7 @@ class PromoForm extends Component {
     }
 }
 
-export default PromoForm;
+export default withToastManager(PromoForm);
 
 const StyledForm = styled.div`
     max-width: 500px;

@@ -21,7 +21,7 @@ const buttonStyles = `
         opacity: 0.5;
         position: absolute;
         right: 10%;
-        top: 30%;
+        top: 32.5%;
     }
 `
 

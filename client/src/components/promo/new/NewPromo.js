@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 
 import Container from '../../styles/Container';
@@ -6,11 +6,17 @@ import { Grid } from '../../styles/Grid';
 import Form from './ProductForm';
 import PreviewList from './PreviewList';
 import PromoForm from './PromoForm';
+import DetailsOverview from './DetailsOverview';
 
 class NewPromo extends Component {
     state = {
         stage: 'promo',
-        promo: {},
+        promo: {
+            title: '',
+            description: '',
+            expires_at: '',
+            category: ''
+        },
         products: [],
         ...this.resetCurrProd()
     }
@@ -21,6 +27,8 @@ class NewPromo extends Component {
             currProdMalloc: null
         }
     }
+
+    backToPromo = () => this.setState({ stage: 'promo' });
 
     updatePromo = promo => {
         this.setState({
@@ -47,7 +55,8 @@ class NewPromo extends Component {
     removeProduct = () => {
         this.setState({ 
             ...this.resetCurrProd(),
-            products: this.state.products.filter(p => p !== this.state.currProdMalloc)
+            products: this.state.products
+            .filter(p => p !== this.state.currProdMalloc)
         });
     }
 
@@ -69,23 +78,31 @@ class NewPromo extends Component {
             return (
                 <PromoForm 
                     updatePromo={this.updatePromo}
+                    promo={this.state.promo}
                 />
             )
         }
 
         else if (this.state.stage === 'products') {
             return (
-                <Grid>
-                    <Form 
-                        updateProducts={this.updateProducts}
-                        removeProduct={this.removeProduct}
-                        currentProduct={this.state.currentProduct} 
+                <Fragment>
+                    <DetailsOverview 
+                        backToPromo={this.backToPromo}
+                        promo={this.state.promo}
+                        valid={this.state.products.length > 0} 
                     />
-                    <PreviewList 
-                        list={this.state.products} 
-                        selectProduct={this.selectProduct}
-                    />
-                </Grid>
+                    <Grid>
+                        <Form 
+                            updateProducts={this.updateProducts}
+                            removeProduct={this.removeProduct}
+                            currentProduct={this.state.currentProduct} 
+                        />
+                        <PreviewList 
+                            list={this.state.products} 
+                            selectProduct={this.selectProduct}
+                        />
+                    </Grid>
+                </Fragment>
             );
         }
 
@@ -106,11 +123,12 @@ class NewPromo extends Component {
 export default NewPromo;
 
 const StyledNewPromo = styled.div`
-    margin: 15vh auto;
+    margin: 3.5rem auto 12.5rem auto;
 
     #cont {
         min-width: 85%;
-        input {
+        input, select {
+            min-height: 2.65rem;
             max-height: 2.65rem;
         }
 
