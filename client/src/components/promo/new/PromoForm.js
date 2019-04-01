@@ -84,8 +84,9 @@ class PromoForm extends Component {
         const parsed = parseInt(e.target.value);
 
         // remove trailing zeros
-        e.target.value = e.target.value.split('')
-        .map(c => c === '0' ? '' : c).join('');
+        e.target.value = e.target.value.split('').map(c => 
+            c === '0' && e.target.value.length === 1 ? '' : c
+        ).join('');
 
         if (parsed < 0)    e.target.value = 1;
         if (parsed > 100)  e.target.value = 100;
@@ -205,6 +206,7 @@ const StyledCont = styled.div`
 
     button {
         min-width: 250px !important;
+        margin-top: 3rem !important;
     }
 `;
 

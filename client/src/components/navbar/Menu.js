@@ -69,6 +69,7 @@ const StyledMenu = styled.div`
     right: 3rem;
     border-radius: 4px;
     animation: ${fadeIn} 1s ease-in-out;
+    z-index: 1000;
 
     #menu-cont {
         display: flex;

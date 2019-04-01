@@ -92,7 +92,7 @@ class Form extends Component {
 
         // if errors, notify user
         if (typeof valid === 'object') {
-            return valid.forEach(err => alertFormError(this.props, err.error));
+            return valid.forEach(err => alertFormError(this.props, err));
         }
 
         // add product to list of previews and clear form
