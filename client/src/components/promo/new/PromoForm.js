@@ -8,11 +8,30 @@ import FeatherIcons from 'feather-icons-react';
 import { validateFormByObj } from '../../../lib/validator';
 import { alertFormError } from '../../../lib/alert';
 import { withToastManager } from 'react-toast-notifications';
+import {Checkbox } from '../../styles/Checkbox';
+import Container from '../../styles/Container';
 
 class PromoForm extends Component {
     state = {
         promo: this.props.promo,
+        checked: false,
         fields: [
+            {
+                placeholder: 'Promotion code',
+                max: 255,
+                min: 1,
+                name: 'promotion_code',
+                type: 'text',
+                required: true,
+                error: false
+            },
+            {
+                placeholder: 'When does the promotion expire?',
+                name: 'expires_at',
+                type: 'date',
+                min: new Date().toISOString().split('T')[0],
+                error: false,
+            },
             {
                 placeholder: 'Title of promotion',
                 max: 70,
@@ -29,13 +48,6 @@ class PromoForm extends Component {
                 name: 'description',
                 type: 'text',
                 required: true,
-                error: false,
-            },
-            {
-                placeholder: 'When does the promotion expire?',
-                name: 'expires_at',
-                type: 'date',
-                min: new Date().toISOString().split('T')[0],
                 error: false,
             },
         ]
@@ -58,6 +70,10 @@ class PromoForm extends Component {
                 ...toUpdate
             }
         });
+    }
+
+    handleCheckboxChange = e => {
+        this.setState({ checked: !this.state.checked })
     }
 
     validatePromo() {
@@ -91,22 +107,34 @@ class PromoForm extends Component {
 
     render() {
         return (
-            <StyledForm>
-                <Inputs stretch={true}>
-                    <SelectCategory 
-                        category={this.state.promo.category}
-                        handleChange={this.handleChange}
-                    />
-                    {this.renderFields()}
-                </Inputs>
-                <Button 
-                    size="small"
-                    onClick={() => this.validatePromo()}
-                >
-                    <FeatherIcons icon="arrow-right" />
-                    Continue
-                </Button>
-            </StyledForm>
+            <Container>
+                <StyledCont>
+                    <StyledForm>
+                        <Inputs stretch={true}>
+                            <SelectCategory 
+                                category={this.state.promo.category}
+                                handleChange={this.handleChange}
+                            />
+                            {this.renderFields()}
+                        </Inputs>
+                        <Button 
+                            size="small"
+                            onClick={() => this.validatePromo()}
+                        >
+                            <FeatherIcons icon="arrow-right" />
+                            Continue
+                        </Button>
+                    </StyledForm>
+                    <div>
+                        <label>
+                            <Checkbox
+                                checked={this.state.checked}
+                                onChange={e => this.handleCheckboxChange(e)}
+                            />
+                        </label>
+                    </div>
+                </StyledCont>
+            </Container>
         )
     }
 }
@@ -115,5 +143,10 @@ export default withToastManager(PromoForm);
 
 const StyledForm = styled.div`
     max-width: 500px;
-    margin: 15vh auto;
+`;
+
+const StyledCont = styled.div`
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-column-gap: 4rem;
 `;
