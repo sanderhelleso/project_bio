@@ -47,7 +47,7 @@ class PromoForm extends Component {
                 {
                     placeholder: 'Promotion code',
                     max: 255,
-                    min: 1,
+                    min: 2,
                     name: 'promotion_code',
                     type: 'text',
                     required: true,
@@ -62,18 +62,34 @@ class PromoForm extends Component {
                     type: 'text',
                     required: true,
                     error: false,
-                    disabled: !this.state.checked
+                    disabled: !this.state.checked,
+                    onChange: e => !isNaN(e.target.value) 
+                    ? this.formatStringNumFromEvent(e) : null
                 },
                 {
                     placeholder: 'When does the promotion expire?',
                     name: 'expires_at',
                     type: 'date',
+                    required: true,
                     min: new Date().toISOString().split('T')[0],
                     error: false,
                     disabled: !this.state.checked
                 }, 
             ]
         })
+    }
+
+    formatStringNumFromEvent = e => {
+        const parsed = parseInt(e.target.value);
+
+        // remove trailing zeros
+        e.target.value = e.target.value.split('')
+        .map(c => c === '0' ? '' : c).join('');
+
+        if (parsed < 0)    e.target.value = 1;
+        if (parsed > 100)  e.target.value = 100;
+
+        this.handleChange(e);
     }
 
     handleChange = e => {
@@ -128,7 +144,7 @@ class PromoForm extends Component {
                     <Input 
                         {...field}
                         value={this.state.promo[field.name] || ''}
-                        onChange={e => this.handleChange(e)}
+                        onChange={field.onChange || (e => this.handleChange(e))}
                     />
                 </Fragment>
             )
