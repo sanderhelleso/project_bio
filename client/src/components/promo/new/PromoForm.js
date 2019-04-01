@@ -5,11 +5,12 @@ import SelectCategory from './SelectCategory';
 import { Inputs, Input, Label } from '../../styles/Input'; 
 import { Button } from '../../styles/Button';
 import FeatherIcons from 'feather-icons-react';
-import { validateFormByObj } from '../../../lib/validator';
 import { alertFormError } from '../../../lib/alert';
 import { withToastManager } from 'react-toast-notifications';
 import {Checkbox } from '../../styles/Checkbox';
-import Container from '../../styles/Container';
+
+import { validateFormByObj } from '../../../validators/validate';
+import promoErrHandler from '../../../validators/promo';
 
 class PromoForm extends Component {
     state = {
@@ -47,7 +48,7 @@ class PromoForm extends Component {
                 {
                     placeholder: 'Promotion code',
                     max: 255,
-                    min: 1,
+                    min: 2,
                     name: 'promotion_code',
                     type: 'text',
                     required: true,
@@ -62,18 +63,35 @@ class PromoForm extends Component {
                     type: 'text',
                     required: true,
                     error: false,
-                    disabled: !this.state.checked
+                    disabled: !this.state.checked,
+                    onChange: e => !isNaN(e.target.value) 
+                    ? this.formatStringNumFromEvent(e) : null
                 },
                 {
                     placeholder: 'When does the promotion expire?',
                     name: 'expires_at',
                     type: 'date',
+                    required: true,
                     min: new Date().toISOString().split('T')[0],
                     error: false,
                     disabled: !this.state.checked
                 }, 
             ]
         })
+    }
+
+    formatStringNumFromEvent = e => {
+        const parsed = parseInt(e.target.value);
+
+        // remove trailing zeros
+        e.target.value = e.target.value.split('').map(c => 
+            c === '0' && e.target.value.length === 1 ? '' : c
+        ).join('');
+
+        if (parsed < 0)    e.target.value = 1;
+        if (parsed > 100)  e.target.value = 100;
+
+        this.handleChange(e);
     }
 
     handleChange = e => {
@@ -105,13 +123,13 @@ class PromoForm extends Component {
         // handle validation
         const { category, title, description } = this.state.promo;
         const valid = validateFormByObj(
-            this.state.checked
-            ? this.state.promo
-            : { category, title, description }
+            this.state.checked 
+            ? this.state.promo : { category, title, description },
+            promoErrHandler
         );
 
         if (typeof valid === 'object') {
-            return valid.forEach(err => alertFormError(this.props, err.error));
+            return valid.forEach(err => alertFormError(this.props, err));
         }
 
         this.props.updatePromo(this.state.promo);
@@ -128,7 +146,7 @@ class PromoForm extends Component {
                     <Input 
                         {...field}
                         value={this.state.promo[field.name] || ''}
-                        onChange={e => this.handleChange(e)}
+                        onChange={field.onChange || (e => this.handleChange(e))}
                     />
                 </Fragment>
             )
@@ -188,6 +206,7 @@ const StyledCont = styled.div`
 
     button {
         min-width: 250px !important;
+        margin-top: 3rem !important;
     }
 `;
 

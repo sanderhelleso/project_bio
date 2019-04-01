@@ -10,6 +10,6 @@ export function alertFormError(ctx, err) {
     toastManager.add(err.split('_').join(' '), {
         appearance: 'error',
         autoDismiss: true,
-        autoDismissTimeout: 20000
+        autoDismissTimeout: 4000
     });
 }

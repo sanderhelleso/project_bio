@@ -6,9 +6,11 @@ import Price from './Price';
 import { Button, FlatButton } from '../../styles/Button';
 import UploadPromoImage from './UploadPromoImage';
 import blobToSrc from '../../../lib/blobToSrc';
-import { validateFormByObj } from '../../../lib/validator';
 import { withToastManager } from 'react-toast-notifications';
 import { alertFormError } from '../../../lib/alert';
+
+import { validateFormByObj } from '../../../validators/validate';
+import productErrHandler from '../../../validators/product';
 
 class Form extends Component {
     state = {
@@ -86,11 +88,11 @@ class Form extends Component {
     addProduct() {
 
 
-        const valid = validateFormByObj(this.state.product);
+        const valid = validateFormByObj(this.state.product, productErrHandler);
 
         // if errors, notify user
         if (typeof valid === 'object') {
-            return valid.forEach(err => alertFormError(this.props, err.error));
+            return valid.forEach(err => alertFormError(this.props, err));
         }
 
         // add product to list of previews and clear form
