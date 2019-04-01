@@ -10,6 +10,7 @@ import UploadPromoImage from './UploadPromoImage';
 import blobToSrc from '../../../lib/blobToSrc';
 import { validateFormByObj } from '../../../lib/validator';
 import { withToastManager } from 'react-toast-notifications';
+import { alertFormError } from '../../../lib/alert';
 
 class Form extends Component {
     state = {
@@ -89,16 +90,7 @@ class Form extends Component {
 
         // if errors, notify user
         if (typeof valid === 'object') {
-            const { toastManager } = this.props;
-            valid.forEach(err => {
-                toastManager.add(err.error, {
-                    appearance: 'error',
-                    autoDismiss: true,
-                    autoDismissTimeout: 20000
-                });
-            });
-
-            return;
+            return valid.forEach(err => alertFormError(this.props, err.error));
         }
 
         // add product to list of previews and clear form

@@ -6,6 +6,8 @@ import { Inputs, Input, Label } from '../../styles/Input';
 import { Button } from '../../styles/Button';
 import FeatherIcons from 'feather-icons-react';
 import { validateFormByObj } from '../../../lib/validator';
+import { alertFormError } from '../../../lib/alert';
+import { withToastManager } from 'react-toast-notifications';
 
 class PromoForm extends Component {
     state = {
@@ -56,7 +58,7 @@ class PromoForm extends Component {
         // handle validation
         const valid = validateFormByObj(this.state.promo);
         if (typeof valid === 'object') {
-            return;
+            return valid.forEach(err => alertFormError(this.props, err.error));
         }
 
         this.props.updatePromo(this.state.promo);
@@ -99,7 +101,7 @@ class PromoForm extends Component {
     }
 }
 
-export default PromoForm;
+export default withToastManager(PromoForm);
 
 const StyledForm = styled.div`
     max-width: 500px;
