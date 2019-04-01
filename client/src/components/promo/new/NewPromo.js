@@ -86,7 +86,10 @@ class NewPromo extends Component {
         else if (this.state.stage === 'products') {
             return (
                 <Fragment>
-                    <DetailsOverview backToPromo={this.backToPromo} />
+                    <DetailsOverview 
+                        backToPromo={this.backToPromo}
+                        promo={this.state.promo} 
+                    />
                     <Grid>
                         <Form 
                             updateProducts={this.updateProducts}
@@ -119,7 +122,7 @@ class NewPromo extends Component {
 export default NewPromo;
 
 const StyledNewPromo = styled.div`
-    margin: 15vh auto;
+    margin: 3.5rem auto;
 
     #cont {
         min-width: 85%;
