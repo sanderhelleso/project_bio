@@ -88,7 +88,8 @@ class NewPromo extends Component {
                 <Fragment>
                     <DetailsOverview 
                         backToPromo={this.backToPromo}
-                        promo={this.state.promo} 
+                        promo={this.state.promo}
+                        valid={this.state.products.length > 0} 
                     />
                     <Grid>
                         <Form 
@@ -122,7 +123,7 @@ class NewPromo extends Component {
 export default NewPromo;
 
 const StyledNewPromo = styled.div`
-    margin: 3.5rem auto;
+    margin: 3.5rem auto 12.5rem auto;
 
     #cont {
         min-width: 85%;

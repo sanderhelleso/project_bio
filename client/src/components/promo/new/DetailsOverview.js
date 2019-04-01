@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import styled from 'styled-components';
 import { Button, FlatButton } from '../../styles/Button';
 import Container from '../../styles/Container';
@@ -6,6 +6,36 @@ import { Grid } from '../../styles/Grid';
 import FeaterIcons from 'feather-icons-react';
 
 class DetailsOverview extends Component {
+
+
+    renderButtons() {
+
+        const publishBtn = (
+            <Button
+                disabled={!this.props.valid}
+            >
+                <FeaterIcons icon="check" />
+                Publish
+            </Button>
+        );
+
+        const editBtn = (
+            <FlatButton 
+                onClick={() => this.props.backToPromo()}
+            >
+                <FeaterIcons icon="edit" />
+                Edit
+            </FlatButton>
+        );
+
+        return (
+            <Fragment>
+                {publishBtn}
+                {editBtn}
+            </Fragment>
+        );
+    }
+
     render() {
         return (
             <StyledCont>
@@ -18,16 +48,7 @@ class DetailsOverview extends Component {
                         <p>{this.props.promo.description}</p>
                     </div>
                     <div>
-                        <Button>
-                            <FeaterIcons icon="check" />
-                            Publish
-                        </Button>
-                        <FlatButton 
-                            onClick={() => this.props.backToPromo()}
-                        >
-                            <FeaterIcons icon="edit" />
-                            Edit
-                        </FlatButton>
+                        {this.renderButtons()}
                     </div>
                 </Grid>
             </StyledCont>
@@ -40,7 +61,10 @@ export default DetailsOverview;
 const StyledCont = styled.div`
     max-width: 95%;
     margin: 0 auto;
-    min-height: 200px;
+    min-height: 175px;
+    padding-bottom: 1rem;
+    margin-bottom: 4rem;
+    border-bottom: 1px solid #e0e0e0;
 
     #details {
         max-width: 900px;
@@ -52,8 +76,8 @@ const StyledCont = styled.div`
         }
 
         div {
-            min-width: 30%;
-            max-width: 30%;
+            min-width: 90%;
+            max-width: 90;
             margin-right: 1%;
             grid-column: 1;
 
