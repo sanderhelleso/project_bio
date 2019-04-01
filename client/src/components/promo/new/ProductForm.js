@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 
-
-import SelectCategory from './SelectCategory';
 import { Inputs, Input, Label } from '../../styles/Input';
 import Price from './Price';
 import { Button, FlatButton } from '../../styles/Button';
@@ -130,6 +128,7 @@ class Form extends Component {
         const addBtn = (
             <Button 
                 size="small"
+                disabled={!this.props.canAddMore && !this.props.currentProduct}
                 onClick={() => this.addProduct()}
             >
                 {this.props.currentProduct ? 'Update' : 'Add'} Product
@@ -184,5 +183,5 @@ class Form extends Component {
 export default withToastManager(Form);
 
 const StyledForm = styled.div`
-    margin-top: -1.5rem;
+    margin-top: -1rem;
 `;

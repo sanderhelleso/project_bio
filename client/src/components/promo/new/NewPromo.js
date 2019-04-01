@@ -9,13 +9,16 @@ import PromoForm from './PromoForm';
 import DetailsOverview from './DetailsOverview';
 
 class NewPromo extends Component {
+
     state = {
         stage: 'promo',
         promo: {
             title: '',
             description: '',
+            category: '',
             expires_at: '',
-            category: ''
+            promotion_code: '',
+            discount_amount: ''
         },
         products: [],
         ...this.resetCurrProd()
@@ -95,7 +98,8 @@ class NewPromo extends Component {
                         <Form 
                             updateProducts={this.updateProducts}
                             removeProduct={this.removeProduct}
-                            currentProduct={this.state.currentProduct} 
+                            currentProduct={this.state.currentProduct}
+                            canAddMore={this.state.products.length < 3} 
                         />
                         <PreviewList 
                             list={this.state.products} 

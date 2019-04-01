@@ -62,4 +62,15 @@ const GlobalStyle = createGlobalStyle`
         outline: 1px solid #9e9e9e;
     }
 
+    /* class for text not to be selected or focused */
+    .no-select {
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+                user-select: none; /* Non-prefixed version, currently
+                                        supported by Chrome and Opera */
+    }
+
 `

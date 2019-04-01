@@ -32,6 +32,7 @@ export const Input = styled.input`
 
     &:focus, &:active {
         border: 1.5px solid ${props => props.theme.primaryColor};
+        box-shadow: 0 0 0 2px ${props => props.theme.secondaryColor};
     }
 
     &:disabled {
@@ -41,6 +42,7 @@ export const Input = styled.input`
 
         &:focus, &:active {
             border: 1.5px solid ${props => props.theme.disabledBg};
+            box-shadow: none;
         }
     }
 `
