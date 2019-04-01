@@ -41,4 +41,10 @@ const GlobalStyle = createGlobalStyle`
         overflow-x: hidden;
         margin: 0;
     } 
+
+    input::-webkit-inner-spin-button, 
+    input::-webkit-outer-spin-button { 
+        -webkit-appearance: none; 
+        margin: 0; 
+    }
 `

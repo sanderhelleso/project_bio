@@ -6,6 +6,8 @@
     "axios": "^0.18.0",
     "feather-icons-react": "^0.3.1",
     "react": "^16.8.5",
+    "react-date-picker": "^7.5.0",
+    "react-day-picker": "^7.3.0",
     "react-dom": "^16.8.5",
     "react-dropzone": "^10.0.6",
     "react-redux": "^6.0.1",

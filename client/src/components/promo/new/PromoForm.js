@@ -34,11 +34,13 @@ class PromoForm extends Component {
             {
                 placeholder: 'When does the promotion expire?',
                 name: 'expires_at',
-                type: 'text',
+                type: 'date',
                 error: false,
             },
         ]
     }
+
+    componentDidMount = () => window.scrollTo(0, 0);
 
     handleChange = e => {
         
