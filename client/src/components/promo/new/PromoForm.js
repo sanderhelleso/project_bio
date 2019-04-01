@@ -34,10 +34,15 @@ class PromoForm extends Component {
             {
                 placeholder: 'When does the promotion expire?',
                 name: 'expires_at',
-                type: 'text',
+                type: 'date',
+                min: new Date().toISOString().split('T')[0],
                 error: false,
             },
         ]
+    }
+
+    componentDidMount = () => {
+        window.scrollTo(0, 0);
     }
 
     handleChange = e => {
@@ -88,11 +93,11 @@ class PromoForm extends Component {
         return (
             <StyledForm>
                 <Inputs stretch={true}>
-                    {this.renderFields()}
                     <SelectCategory 
                         category={this.state.promo.category}
                         handleChange={this.handleChange}
                     />
+                    {this.renderFields()}
                 </Inputs>
                 <Button 
                     size="small"

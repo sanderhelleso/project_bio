@@ -89,12 +89,13 @@ export default UploadPromoImage;
 
 const StyledUpload = styled.div`
     border-radius: 4px;
-    min-height: 25rem;
+    min-height: 24rem;
     min-width: 20rem;
-    max-height: 25rem;
+    max-height: 24rem;
     max-width: 20rem;
     background-color: #eeeeee;
     margin: 2rem auto;
+    margin-right: 4rem;
     border: 2px solid #e0e0e0;
     outline: none;
     position: relative;

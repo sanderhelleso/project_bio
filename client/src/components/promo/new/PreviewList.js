@@ -55,6 +55,7 @@ export default PreviewList;
 const StyledInfo = styled.h3`
     text-align: center;
     margin-bottom: 3.5rem;
+    margin-top: 0;
 `
 
 const StyledPreview = styled.div`

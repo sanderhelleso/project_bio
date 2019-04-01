@@ -50,6 +50,8 @@ class Form extends Component {
         }
     }
 
+    componentDidMount = () => window.scrollTo(0, 0);
+
     resetProduct() {
         return {
             name: '',

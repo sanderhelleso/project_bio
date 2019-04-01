@@ -127,9 +127,10 @@ const StyledNewPromo = styled.div`
 
     #cont {
         min-width: 85%;
-        input, select {
+        input {
             min-height: 2.65rem;
             max-height: 2.65rem;
+            padding: 26.5px 8px;
         }
 
         label {

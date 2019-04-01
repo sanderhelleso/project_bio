@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 import { Label } from '../../styles/Input';
+import { categories } from '../../../lib/data';
 
 class SelectCategory extends Component {
-    options = [
-        { value: 'fashion', label: '👗 Fashion' },
-        { value: 'car', label: '🚘 Vehicle' },
-    ];
-
+    options = categories;
 
     handleChange = e => {
         this.props.handleChange(e.value);
@@ -23,7 +20,6 @@ class SelectCategory extends Component {
                 <Label htmlFor="category" text="Category" />
                 <Select
                     name="category"
-                    isSearchable={false}
                     value={this.options.find(o => o.value === this.props.category)}
                     options={this.options}
                     onChange={e => this.handleChange(e)}
