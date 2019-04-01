@@ -41,10 +41,16 @@ class PromoForm extends Component {
     }
 
     handleChange = e => {
+        
+        // handles all fields and select
+        const toUpdate = typeof e === 'object' 
+        ? { [e.target.name]: e.target.value }
+        : { ['category']: e }
+
         this.setState({ 
             promo: {
                 ...this.state.promo,
-                [e.target.name]: e.target.value 
+                ...toUpdate
             }
         });
     }
@@ -53,7 +59,6 @@ class PromoForm extends Component {
         
         // handle validation
         const valid = validateFormByObj(this.state.promo);
-        console.log(this.state.promo);
         if (typeof valid === 'object') {
             return valid.forEach(err => alertFormError(this.props, err.error));
         }
@@ -84,7 +89,10 @@ class PromoForm extends Component {
             <StyledForm>
                 <Inputs stretch={true}>
                     {this.renderFields()}
-                    <SelectCategory />
+                    <SelectCategory 
+                        category={this.state.promo.category}
+                        handleChange={this.handleChange}
+                    />
                 </Inputs>
                 <Button 
                     size="small"

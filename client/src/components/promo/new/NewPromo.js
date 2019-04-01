@@ -14,7 +14,8 @@ class NewPromo extends Component {
         promo: {
             title: '',
             description: '',
-            expires_at: ''
+            expires_at: '',
+            category: ''
         },
         products: [],
         ...this.resetCurrProd()
@@ -122,7 +123,8 @@ const StyledNewPromo = styled.div`
 
     #cont {
         min-width: 85%;
-        input {
+        input, select {
+            min-height: 2.65rem;
             max-height: 2.65rem;
         }
 

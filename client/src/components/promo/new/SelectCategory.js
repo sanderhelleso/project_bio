@@ -2,16 +2,19 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import { Label } from '../../styles/Input';
 
-export default class SelectCategory extends Component {
+class SelectCategory extends Component {
     options = [
         { value: 'fashion', label: '👗 Fashion' },
         { value: 'car', label: '🚘 Vehicle' },
     ];
 
+
+    handleChange = e => {
+        this.props.handleChange(e.value);
+    }
+
     formatGroupLabel = options => (
-        <div>
-          <span>{options.label}</span>
-        </div>
+        <span>{options.label}</span>
     );
 
     render() {
@@ -21,7 +24,9 @@ export default class SelectCategory extends Component {
                 <Select
                     name="category"
                     isSearchable={false}
+                    value={this.options.find(o => o.value === this.props.category)}
                     options={this.options}
+                    onChange={e => this.handleChange(e)}
                     theme={(theme) => ({
                         ...theme,
                         borderRadius: '4px',
@@ -37,3 +42,5 @@ export default class SelectCategory extends Component {
         )
     }
 }
+
+export default SelectCategory;
