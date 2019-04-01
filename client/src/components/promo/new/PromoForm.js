@@ -11,11 +11,7 @@ import { withToastManager } from 'react-toast-notifications';
 
 class PromoForm extends Component {
     state = {
-        promo: {
-            title: '',
-            description: '',
-            expires_at: ''
-        },
+        promo: this.props.promo,
         fields: [
             {
                 placeholder: 'Title of promotion',
@@ -57,6 +53,7 @@ class PromoForm extends Component {
         
         // handle validation
         const valid = validateFormByObj(this.state.promo);
+        console.log(this.state.promo);
         if (typeof valid === 'object') {
             return valid.forEach(err => alertFormError(this.props, err.error));
         }
@@ -74,7 +71,7 @@ class PromoForm extends Component {
                     />
                     <Input 
                         {...field} 
-                        value={this.state.promo[field.name]}
+                        value={this.state.promo[field.name] || ''}
                         onChange={e => this.handleChange(e)}
                     />
                 </Fragment>

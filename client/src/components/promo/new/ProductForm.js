@@ -115,7 +115,7 @@ class Form extends Component {
                     />
                     <Input 
                         {...field} 
-                        value={this.state.product[field.name]}
+                        value={this.state.product[field.name] || ''}
                         onChange={e => this.handleChange(e)}
                     />
                 </Fragment>
