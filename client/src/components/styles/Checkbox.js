@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import FeatherIcons from 'feather-icons-react';
 
 export const Checkbox =  ({ className, checked, ...props }) => (
     <CheckboxContainer className={className}>
@@ -21,6 +20,8 @@ export const Checkbox =  ({ className, checked, ...props }) => (
 const CheckboxContainer = styled.div`
     display: inline-block;
     vertical-align: middle;
+    min-height: 50px;
+    margin-bottom: -15px;
 `
 
 const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
