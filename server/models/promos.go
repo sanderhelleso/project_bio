@@ -110,7 +110,7 @@ func (pv *promoValidator) validateLength(field string) promoValFunc {
 
 func (pv *promoValidator) idGreaterThan(n uint) promoValFunc {
 	return promoValFunc(func(promo *Promo) error {
-		if promo.ID <= n {
+		if promo.ID <= n || promo.UserID <= n {
 			return ErrIDInvalid
 		}
 

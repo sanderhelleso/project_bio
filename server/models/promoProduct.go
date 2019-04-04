@@ -4,6 +4,7 @@ import (
 	"strings"
 	"github.com/jinzhu/gorm"
 	"../lib/parser"
+	"net/url"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
@@ -79,6 +80,15 @@ func newPromoProductValidator(ppdb PromoProductDB) *promoProductValidator {
 	}
 }
 
+func (ppv *promoProductValidator) idGreaterThan(n uint) promoProductValFunc {
+	return promoProductValFunc(func(promoProduct *PromoProduct) error {
+		if promoProduct.ID <= n || promoProduct.PromoID <= n {
+			return ErrIDInvalid
+		}
+
+		return nil
+	})
+}
 
 func (ppv *promoProductValidator) normalizePrice(promoProduct *PromoProduct) error {
 	promoProduct.Price = parser.RoundFloat64(promoProduct.Price)
@@ -89,6 +99,45 @@ func (ppv *promoProductValidator) normalizeCurrency(promoProduct *PromoProduct) 
 	promoProduct.Currency = strings.ToUpper(promoProduct.Currency)
 	return nil
 }
+
+func (ppv *promoProductValidator) validateName(promoProduct *PromoProduct) error {
+	if len(strings.TrimSpace(promoProduct.Name)) == 0 {
+		return ErrPromoProductNameRequired
+	}
+
+	if len(promoProduct.Name) < 2 || len(promoProduct.Name) > 100 {
+		return ErrPromoProductNameInvalid
+	}
+
+	return nil
+}
+
+func (ppv *promoProductValidator) validateBrand(promoProduct *PromoProduct) error {
+	if len(strings.TrimSpace(promoProduct.Brand)) == 0 {
+		return ErrPromoProductBrandRequired
+	}
+
+	if len(promoProduct.Brand) < 2 || len(promoProduct.Brand) > 100 {
+		return ErrPromoProductBrandInvalid
+	}
+
+	return nil
+}
+
+// ensure that provided url is valid
+func (ppv *promoProductValidator) validateLink(promoProduct *PromoProduct) error {
+	if len(strings.TrimSpace(promoProduct.Link)) == 0 {
+		return ErrPromoProductLinkRequired
+	}
+
+	_, err := url.ParseRequestURI(promoProduct.Link)
+	if err != nil {
+		return ErrPromoProductLinkInvalid
+	}
+	
+	return nil
+}
+
 
 func (ppv *promoProductValidator) validateCurrency() promoProductValFunc {
 	return promoProductValFunc(func(promoProduct *PromoProduct) error {

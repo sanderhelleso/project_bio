@@ -95,7 +95,19 @@ const (
 
 	// ErrPwResetTokenInvalid is returned when a user is attempting to 
 	// reset a password witn an invalid password reset token
-	ErrPwResetTokenInvalid modelError = "Token provided is not valid"	 
+	ErrPwResetTokenInvalid modelError = "Token provided is not valid"	
+	
+	ErrPromoProductNameRequired modelError = "Name is required"
+
+	ErrPromoProductNameInvalid modelError = "Name must be between 2 and 100 characters"
+
+	ErrPromoProductBrandRequired modelError = "Brand is required"
+
+	ErrPromoProductBrandInvalid modelError = "Brand must be between 2 and 100 characters"
+
+	ErrPromoProductLinkRequired modelError = "Link to product is required"
+
+	ErrPromoProductLinkInvalid modelError = "Link is in invalid format. Must be a valid link to site"
 )
 
 type modelError string
