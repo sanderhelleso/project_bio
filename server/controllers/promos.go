@@ -13,12 +13,9 @@ import (
 // PromoForms structure is used for create
 type PromoForm struct {
 	Title			string 	  `form:"title" binding:"required"`
-	Brand			string 	  `form:"brand" binding:"required"`
 	Description		string	  `form:"description"`
-	ProductURL		string	  `form:"productURL"`
-	Price			float64   `form:"price"`
-	PercantageOff	uint	  `form:"percentageOff"`
-	Currency		string    `form:"currency"`
+	Code			string	  `form:"promotion_code"`	
+	Discount		uint	  `form:"discount_amount"`	
 	ExpiresAt		time.Time `form:"expiresAt"`
 }
 
@@ -27,12 +24,9 @@ type PromoForm struct {
 type UpdatePromoForm struct {
 	ID				uint      `form:"id" binding:"required"`
 	Title			string 	  `form:"title" binding:"required"`
-	Brand			string 	  `form:"brand" binding:"required"`
 	Description		string	  `form:"description"`
-	ProductURL		string	  `form:"productURL"`
-	Price			float64   `form:"price"`
-	PercantageOff	uint	  `form:"percentageOff"`
-	Currency		string    `form:"currency"`
+	Code			string	  `form:"promotion_code"`	
+	Discount		uint	  `form:"discount_amount"`	
 	ExpiresAt		time.Time `form:"expiresAt"`
 }
 
@@ -79,12 +73,7 @@ func (p *Promos) Create(c *gin.Context) {
 	promo := models.Promo {
 		UserID: 		parser.GetIDFromCTX(c),
 		Title:			form.Title,
-		Brand:			form.Brand,
 		Description:	form.Description,
-		ProductURL:		form.ProductURL,
-		Price:			form.Price,
-		Currency:		form.Currency,
-		PercantageOff:	form.PercantageOff,
 		ExpiresAt:		form.ExpiresAt,
 	}
 

@@ -8,20 +8,13 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-// Promo represents a product promote in the application
+// Promo represents a promotion in the application
 type Promo struct {
-	ID        		uint 	`gorm:"primary_key"`
+	gorm.Model
 	UserID			uint 	`gorm:"not null;index"`
 	Title			string 	`gorm:"not null;size:100"`
 	Brand			string 	`gorm:"not null;size:100"`
 	Description		string	`gorm:"not null"`
-	Image			string	
-	ProductURL		string	 
-	Price			float64
-	PercantageOff	uint	
-	Currency		string	`gorm:"size:3"`
-	CreatedAt 		time.Time
-	UpdatedAt 		time.Time
 	ExpiresAt		time.Time
 }
 
