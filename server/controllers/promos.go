@@ -12,11 +12,13 @@ import (
 // PromoForm represents the request body to the endpoint /promos.
 // PromoForms structure is used for create
 type PromoForm struct {
-	Title			string 	  `form:"title" binding:"required"`
-	Description		string	  `form:"description"`
-	Code			string	  `form:"promotion_code"`	
-	Discount		uint	  `form:"discount_amount"`	
-	ExpiresAt		time.Time `form:"expiresAt"`
+	Title			string 	  	`form:"title" binding:"required"`
+	Description		string	  	`form:"description" binding:"required"`
+	Code			string	  	`form:"promotion_code"`	
+	Discount		uint	  	`form:"discount_amount"`	
+	ExpiresAt		time.Time 	`form:"expiresAt"`
+
+	Products 		[]*PromoProductForm `form:"products" binding:"required"`
 }
 
 // UpdatePromoForm represents the request body to the endpoint /promos/update.
@@ -24,10 +26,12 @@ type PromoForm struct {
 type UpdatePromoForm struct {
 	ID				uint      `form:"id" binding:"required"`
 	Title			string 	  `form:"title" binding:"required"`
-	Description		string	  `form:"description"`
+	Description		string	  `form:"description" binding:"required"`
 	Code			string	  `form:"promotion_code"`	
 	Discount		uint	  `form:"discount_amount"`	
 	ExpiresAt		time.Time `form:"expiresAt"`
+
+	Products 		[]*PromoProductForm `form:"products" binding:"required"`
 }
 
 // PromoFormWithID represents the request body to the endpoints
@@ -39,14 +43,14 @@ type PromoFormWithID struct {
 // Promos represents the controller for a promoer releationship in the app
 type Promos struct {
 	ps models.PromoService
-	is models.ImageService
+	pps models.PromoProductService
 }
 
 // NewPromos is used to create a new promoer controller
-func NewPromos(ps models.PromoService, is models.ImageService) *Promos {
+func NewPromos(ps models.PromoService, pps models.PromoProductService) *Promos {
 	return &Promos {
 		ps,
-		is,
+		pps,
 	}
 }
 
@@ -74,6 +78,8 @@ func (p *Promos) Create(c *gin.Context) {
 		UserID: 		parser.GetIDFromCTX(c),
 		Title:			form.Title,
 		Description:	form.Description,
+		Code:			form.Code,
+		Discount:		form.Discount,
 		ExpiresAt:		form.ExpiresAt,
 	}
 
@@ -83,6 +89,28 @@ func (p *Promos) Create(c *gin.Context) {
 			http.StatusInternalServerError, 
 			err.Error())
 		return
+	}
+
+	// TODO: get created promo ID
+	for _, product := range form.Products {
+
+		promoProduct := models.PromoProduct {
+			PromoID: 	12312313, // set that id from product here and we gooood,
+			Name:		product.Name,
+			Brand:		product.Brand,
+			Link:		product.Link,
+			Image:		product.Image, // create img and set src here
+			Price:		product.Price,
+			Currency:	product.Currency,
+		}
+
+		if err := p.pps.Create(&promoProduct); err != nil {
+			response.RespondWithError(
+				c, 
+				http.StatusInternalServerError, 
+				err.Error())
+			return
+		}
 	}
 
 	response.RespondWithSuccess(
@@ -110,16 +138,12 @@ func (p *Promos) Update(c *gin.Context) {
 		return
 	}
 
+	// attempt to update and store promo in DB
 	promo := models.Promo {
-		ID:				form.ID,
-		UserID:			parser.GetIDFromCTX(c),
 		Title:			form.Title,
-		Brand:			form.Brand,
 		Description:	form.Description,
-		ProductURL:		form.ProductURL,
-		Price:			form.Price,
-		Currency:		form.Currency,
-		PercantageOff:	form.PercantageOff,
+		Code:			form.Code,
+		Discount:		form.Discount,
 		ExpiresAt:		form.ExpiresAt,
 	}
 
@@ -171,7 +195,7 @@ func (p *Promos) Delete (c *gin.Context) {
 }
 
 // PromoUpload handle uploading of a promos image
-func (p *Promos) PromoUpload(c *gin.Context) {
+/*func (p *Promos) PromoUpload(c *gin.Context) {
 
 	// get file from form
 	f, _ := c.FormFile("image")
@@ -193,7 +217,7 @@ func (p *Promos) PromoUpload(c *gin.Context) {
 	}
 
 	// create promo
-	err = p.is.CreatePromo(promo, f)
+	err = pps.is.CreatePromoProduct(promo, f)
 	if err != nil {
 		uploadPromoErr(c, err.Error())
 		return
@@ -215,4 +239,4 @@ func uploadPromoErr(c *gin.Context, errMsg string) {
 		http.StatusInternalServerError, 
 		errMsg,
 	)
-}
+}*/
