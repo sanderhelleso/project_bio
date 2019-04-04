@@ -40,15 +40,20 @@ type PromoFormWithID struct {
 
 // Promos represents the controller for a promoer releationship in the app
 type Promos struct {
-	ps models.PromoService
+	ps 	models.PromoService
 	pps models.PromoProductService
+	is 	models.ImageService
 }
 
 // NewPromos is used to create a new promoer controller
-func NewPromos(ps models.PromoService, pps models.PromoProductService) *Promos {
+func NewPromos(
+	ps models.PromoService, 
+	pps models.PromoProductService, 
+	is models.ImageService) *Promos {
 	return &Promos {
 		ps,
 		pps,
+		is,
 	}
 }
 
@@ -99,9 +104,20 @@ func (p *Promos) Create(c *gin.Context) {
 			Name:		product.Name,
 			Brand:		product.Brand,
 			Link:		product.Link,
-			Image:		"randomurl", // create img and set src here
 			Price:		product.Price,
 			Currency:	product.Currency,
+		}
+
+		// get file from form
+		f, _ := c.FormFile("image")
+
+		// create and store product image
+		if err := p.is.CreatePromoProduct(&promoProduct, f); err != nil {
+			response.RespondWithError(
+				c, 
+				http.StatusInternalServerError, 
+				err.Error())
+			return
 		}
 
 		if err := p.pps.Create(&promoProduct); err != nil {
