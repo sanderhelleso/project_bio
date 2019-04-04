@@ -155,6 +155,10 @@ func (fg *followerGorm) Create(follower *Follower) error {
 
 //Delete will delete the follower with the provided ID
 func (fg *followerGorm) Delete(id uint) error {
+	if id <= 0 {
+		return ErrIDInvalid
+	}
+	
 	follower := Follower{ID: id}
 	return fg.db.Delete(&follower).Error
 }

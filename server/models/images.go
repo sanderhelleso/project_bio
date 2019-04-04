@@ -16,7 +16,7 @@ import (
 
 type ImageService interface {
 	CreateAvatar(profile *Profile, f *multipart.FileHeader) (string, error)
-	CreatePromo(promo *Promo, f *multipart.FileHeader) error
+	CreatePromoProduct(promoProduct *PromoProduct, f *multipart.FileHeader) error
 }
 
 func NewImageService() ImageService {
@@ -62,13 +62,13 @@ func (is *imageService) CreateAvatar(profile *Profile, f *multipart.FileHeader) 
 
 // CreatePromo takes in a pointer to a promo and fileheader and will
 // attempt to create a new promo with the provided file from the promo
-func (is *imageService) CreatePromo(promo *Promo, f *multipart.FileHeader) error {
+func (is *imageService) CreatePromoProduct(promoProduct *PromoProduct, f *multipart.FileHeader) error {
 	err := validateExt(f.Filename)
 	if err != nil {
 		return err
 	}
 
-	path, err := mkImagePath("promos", promo.ID)
+	path, err := mkImagePath("promos", promoProduct.ID)
 	if err != nil {
 		return err
 	}
@@ -91,8 +91,7 @@ func (is *imageService) CreatePromo(promo *Promo, f *multipart.FileHeader) error
 		return err
 	}
 
-	promo.Image = path
-	fmt.Println(promo)
+	promoProduct.Image = path
 	return nil
 }
 
