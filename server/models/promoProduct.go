@@ -1,7 +1,6 @@
 package models
 
 import (
-	"time"
 	"strings"
 	"github.com/jinzhu/gorm"
 	"../lib/parser"
@@ -23,12 +22,12 @@ type PromoProduct struct {
 type PromoProductDB interface {
 
 	// methods for quering specific promo products
-	ByID(id uint) (*Promo, error)
-	ByPromo(id uint) (*Promo, error)
+	ByID(id uint) (*PromoProduct, error)
+	ByPromoID(id uint) (*PromoProduct, error)
 
 	// methods for altering promo products
-	Create(*promoProduct *PromoProduct) error
-	Update(*promoProduct *PromoProduct) error
+	Create(promoProduct *PromoProduct) error
+	Update(promoProduct *PromoProduct) error
 	Delete(id uint) error
 }
 
@@ -40,16 +39,16 @@ type PromoProductService interface {
 
 // implementation of interface
 type promoProductService struct {
-	PromoDB
+	PromoProductDB
 }
 
 // ensure interface is matching
 var _PromoProductService = &promoProductService{}
 
-// NewPromoProductServie connects the PromoProduct db and validator
+// NewPromoProductService connects the PromoProduct db and validator
 func NewPromoProductService(db *gorm.DB) PromoProductService {
 	ppg := &promoProductGorm{db}
-	ppv := &newPromoProductValidator(ppg)
+	ppv := newPromoProductValidator(ppg)
 
 	return &promoProductService {
 		PromoProductDB: ppv,
@@ -64,9 +63,9 @@ type promoProductValidator struct {
 	PromoProductDB
 }
 
-func runPromoProductsValFunc(PromoProduct *PromoProduct, fns ...promoProductValFunc) error {
-	for _fn := range fns {
-		if err := fn(PromoProduct); err != nil {
+func runPromoProductsValFunc(promoProduct *PromoProduct, fns ...promoProductValFunc) error {
+	for _, fn := range fns {
+		if err := fn(promoProduct); err != nil {
 			return err
 		}
 	}
@@ -74,7 +73,7 @@ func runPromoProductsValFunc(PromoProduct *PromoProduct, fns ...promoProductValF
 	return nil
 }
 
-func newPromoProductsValidator(ppdb PromoProductDB) *promoProductValidator {
+func newPromoProductValidator(ppdb PromoProductDB) *promoProductValidator {
 	return &promoProductValidator {
 		PromoProductDB: ppdb,
 	}
@@ -82,39 +81,68 @@ func newPromoProductsValidator(ppdb PromoProductDB) *promoProductValidator {
 
 
 func (ppv *promoProductValidator) normalizePrice(promoProduct *PromoProduct) error {
-	promoProductPrice = parser.RoundFloat64(promoProductPrice)
+	promoProduct.Price = parser.RoundFloat64(promoProduct.Price)
 	return nil
-}
-
-func (ppv *promoProductValidator) pricePercentageBetween() promoValFunc {
-	return promoValFunc(func(promoProduct *PromoProduct) error {
-		if promoProductPrice != 0 {
-			if promoProductPercantageOff < 0 || promoProductPercantageOff > 100 {
-				return ErrPromoPercentageOffInvalid
-			}
-
-			return nil
-		}
-
-		return nil
-	})
 }
 
 func (ppv *promoProductValidator) normalizeCurrency(promoProduct *PromoProduct) error {
-	promoProductCurrency = strings.ToUpper(promoProductCurrency)
+	promoProduct.Currency = strings.ToUpper(promoProduct.Currency)
 	return nil
 }
 
-func (ppv *promoProductValidator) validateCurrency() promoValFunc {
-	return promoValFunc(func(promoProduct *PromoProduct) error {
-		if promoProductPrice != 0 {
-			if len(strings.TrimSpace(promoProductCurrency)) != 3 {
-				return ErrPromoCurrencyInvalid
-			}
-
-			return nil
+func (ppv *promoProductValidator) validateCurrency() promoProductValFunc {
+	return promoProductValFunc(func(promoProduct *PromoProduct) error {
+		if len(strings.TrimSpace(promoProduct.Currency)) != 3 {
+			return ErrPromoCurrencyInvalid
 		}
 
 		return nil
 	})
 }
+
+/****************************************************************/
+
+type promoProductGorm struct {
+	db *gorm.DB
+}
+
+// ensure interface is matching
+var _ PromoProductDB = &promoProductGorm{}
+
+// ByID will look up a promo product with the provided id
+func (ppg *promoProductGorm) ByID(id uint) (*PromoProduct, error) {
+	var promoProduct PromoProduct
+	db := ppg.db.Where("id = ?", id)
+	err := first(db, &promoProduct)
+	return &promoProduct, err
+}
+
+// ByPromoID will look up a promo product with the provided promos id
+func (ppg *promoProductGorm) ByPromoID(id uint) (*PromoProduct, error) {
+	var promoProduct PromoProduct
+	db := ppg.db.Where("promo_id = ?", id)
+	err := first(db, &promoProduct)
+	return &promoProduct, err
+}
+
+// Create will create the provided promo product
+func (ppg *promoProductGorm) Create(promoProduct *PromoProduct) error {
+	err := ppg.db.Create(promoProduct).Error
+	return isDuplicateError(err, "promoProducts")
+}
+
+// Update will update the releated promo product with all of the data
+// in the provided promo product object.
+func (ppg *promoProductGorm) Update(promoProduct *PromoProduct) error {	
+	return ppg.db.Save(promoProduct).Error
+}
+
+
+// Delete will delete the promo product with the provided ID
+func (ppg *promoProductGorm) Delete(id uint) error {
+	promoProduct := PromoProduct{Model: gorm.Model{ID: id}}
+	return ppg.db.Delete(&promoProduct).Error
+}
+
+
+

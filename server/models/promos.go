@@ -4,7 +4,6 @@ import (
 	"time"
 	"strings"
 	"github.com/jinzhu/gorm"
-	"../lib/parser"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
@@ -15,6 +14,8 @@ type Promo struct {
 	Title			string 	`gorm:"not null;size:100"`
 	Brand			string 	`gorm:"not null;size:100"`
 	Description		string	`gorm:"not null"`
+	Code			string  
+	Discount		uint
 	ExpiresAt		time.Time
 }
 
@@ -36,7 +37,7 @@ type PromoService interface {
 	PromoDB
 }
 
-// ensure interface is mathing
+// ensure interface is matching
 var _ PromoService = &promoService{}
 
 // implementation of interface
@@ -62,9 +63,9 @@ type promoValidator struct {
 	PromoDB
 }
 
-func runPromosValFunc(Promo *Promo, fns ...promoValFunc) error {
+func runPromosValFunc(promo *Promo, fns ...promoValFunc) error {
 	for _, fn := range fns {
-		if err := fn(Promo); err != nil {
+		if err := fn(promo); err != nil {
 			return err
 		}
 	}
@@ -117,44 +118,6 @@ func (pv *promoValidator) idGreaterThan(n uint) promoValFunc {
 	})
 }
 
-func (pv *promoValidator) normalizePrice(promo *Promo) error {
-	promo.Price = parser.RoundFloat64(promo.Price)
-	return nil
-}
-
-func (pv *promoValidator) pricePercentageBetween() promoValFunc {
-	return promoValFunc(func(promo *Promo) error {
-		if promo.Price != 0 {
-			if promo.PercantageOff < 0 || promo.PercantageOff > 100 {
-				return ErrPromoPercentageOffInvalid
-			}
-
-			return nil
-		}
-
-		return nil
-	})
-}
-
-func (pv *promoValidator) normalizeCurrency(promo *Promo) error {
-	promo.Currency = strings.ToUpper(promo.Currency)
-	return nil
-}
-
-func (pv *promoValidator) validateCurrency() promoValFunc {
-	return promoValFunc(func(promo *Promo) error {
-		if promo.Price != 0 {
-			if len(strings.TrimSpace(promo.Currency)) != 3 {
-				return ErrPromoCurrencyInvalid
-			}
-
-			return nil
-		}
-
-		return nil
-	})
-}
-
 func (pv *promoValidator) validateExpiresAt() promoValFunc {
 	return promoValFunc(func(promo *Promo) error {
 		if !promo.ExpiresAt.IsZero() {
@@ -175,10 +138,6 @@ func (pv *promoValidator) Create(promo *Promo) error {
 	pv.validateLength("title"),
 	pv.validateLength("brand"),
 	pv.validateLength("description"),
-	pv.normalizePrice,
-	pv.normalizeCurrency,
-	pv.validateCurrency(),
-	pv.pricePercentageBetween(),
 	pv.validateExpiresAt())
 
 	if err != nil {
@@ -195,10 +154,6 @@ func (pv *promoValidator) Update(promo *Promo) error {
 	pv.validateLength("title"),
 	pv.validateLength("brand"),
 	pv.validateLength("description"),
-	pv.normalizePrice,
-	pv.normalizeCurrency,
-	pv.validateCurrency(),
-	pv.pricePercentageBetween(),
 	pv.validateExpiresAt())
 
 	if err != nil {
@@ -241,8 +196,8 @@ func (pg *promoGorm) ByID(id uint) (*Promo, error) {
 }
 
 // Create will create the provided promo
-func (pg *promoGorm) Create(Promo *Promo) error {
-	err := pg.db.Create(Promo).Error
+func (pg *promoGorm) Create(promo *Promo) error {
+	err := pg.db.Create(promo).Error
 	return isDuplicateError(err, "promos")
 }
 
@@ -255,6 +210,20 @@ func (pg *promoGorm) Update(promo *Promo) error {
 
 // Delete will delete the promo with the provided ID
 func (pg *promoGorm) Delete(id uint) error {
-	Promo := Promo{ID: id}
-	return pg.db.Delete(&Promo).Error
+	promo := Promo{Model: gorm.Model{ID: id}}
+	return pg.db.Delete(&promo).Error
 }
+
+/*func (ppv *promoProductValidator) pricePercentageBetween() promoValFunc {
+	return promoValFunc(func(promoProduct *PromoProduct) error {
+		if promoProduct.Price != 0 {
+			if promoProduct.PercantageOff < 0 || promoProduct.PercantageOff > 100 {
+				return ErrPromoPercentageOffInvalid
+			}
+
+			return nil
+		}
+
+		return nil
+	})
+}*/
