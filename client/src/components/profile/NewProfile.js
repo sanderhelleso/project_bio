@@ -23,22 +23,30 @@ class NewProfile extends Component {
             {
                 placeholder: '@yourhandle',
                 maxLength: 30,
-                name: 'handle'
+                name: 'handle',
+                type: 'text',
+                onChange: e => {
+                    e.target.value = e.target.value.toLowerCase();
+                    this.handleChange(e);
+                }
             },
             {
                 placeholder: 'What is your name?',
                 maxLength: 70,
-                name: 'name'
+                name: 'name',
+                type: 'text' 
             },
             {
                 placeholder: 'Tell us about yourself, what do you promote?',
                 maxLength: 150,
-                name: 'bio'
+                name: 'bio',
+                type: 'text' 
             },
             {
                 placeholder: 'Got an Instagram account? Share it!',
                 maxLength: false,
-                name: 'instagramURL'
+                name: 'instagramURL',
+                type: 'text' 
             }
         ]
     };
@@ -97,11 +105,8 @@ class NewProfile extends Component {
             return (
                 <Fragment key={field.name}>
                     <Input 
-                        type="text" 
-                        name={field.name}
-                        placeholder={field.placeholder}
-                        value={this.state.profile[field.name]}
                         onChange={e => this.handleChange(e, field.maxLength)} 
+                        {...field}
                     />
                     {field.maxLength 
                         ? <StyledLabel>

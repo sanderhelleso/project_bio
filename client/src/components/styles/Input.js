@@ -8,10 +8,12 @@ const inputStyles = `
     -moz-box-shadow: none;
     box-shadow: none;
     font-size: 1rem;
-    padding: 2px 8px;
     font-family: 'Poppins', sans-serif;
     border-radius: 4px;
     transition: 0.3s ease-in-out;
+    min-height: 2.65rem;
+    max-height: 2.65rem;
+    padding: 26.5px 8px;
 `;
 
 export const Inputs = styled.div`
@@ -59,4 +61,5 @@ const StyledLabel = styled.label`
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #253858;
+    margin-top: 1.35rem;
 `;

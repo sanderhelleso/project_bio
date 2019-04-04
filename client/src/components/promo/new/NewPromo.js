@@ -131,16 +131,7 @@ const StyledNewPromo = styled.div`
 
     #cont {
         min-width: 85%;
-        input {
-            min-height: 2.65rem;
-            max-height: 2.65rem;
-            padding: 26.5px 8px;
-        }
-
-        label {
-            margin-top: 1.35rem;
-        }
-
+        
         button {
             float: right;
             margin-top: 2rem;
