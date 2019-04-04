@@ -16,23 +16,25 @@ func NewServices() (*Services, error) {
 
 	db.LogMode(true)
 	return &Services{
-		User:     NewUserService(db),
-		Profile:  NewProfileService(db),	
-		Follower: NewFollowerService(db),
-		Promo:	  NewPromoService(db),
-		Image:	  NewImageService(),	
-		db:       db,
+		User:     		NewUserService(db),
+		Profile:  		NewProfileService(db),	
+		Follower: 		NewFollowerService(db),
+		Promo:	  		NewPromoService(db),
+		PromoProduct: 	NewPromoProductService(db),
+		Image:	  		NewImageService(),	
+		db:       		db,
 	}, nil
 }
 
 // Services connects all of the application services
 type Services struct {
-	User     UserService
-	Profile  ProfileService
-	Follower FollowerService
-	Promo	 PromoService
-	Image	 ImageService
-	db       *gorm.DB
+	User     		UserService
+	Profile  		ProfileService
+	Follower 		FollowerService
+	Promo	 		PromoService
+	PromoProduct 	PromoProductService
+	Image	 		ImageService
+	db       		*gorm.DB
 }
 
 // CreateReleations create the table releationships
@@ -49,7 +51,16 @@ func (s *Services) Close() error {
 
 // DestructiveReset drops all tables and rebuilds it
 func (s *Services) DestructiveReset() error {
-	err := s.db.DropTableIfExists(&User{}, &Follower{}, &Promo{}, &Profile{}, &pwReset{}, &accVerify{}).Error
+	err := s.db.DropTableIfExists(
+		&User{},
+		&Follower{}, 
+		&Promo{}, 
+		&Profile{},
+		&pwReset{}, 
+		&accVerify{},
+		&PromoProduct{},
+	).Error
+
 	if err != nil {
 		return err
 	}
@@ -59,6 +70,15 @@ func (s *Services) DestructiveReset() error {
 
 // AutoMigrate will attempt to automatically migrate all tables
 func (s *Services) AutoMigrate() error {
-	err := s.db.AutoMigrate(&User{}, &Follower{}, &Promo{}, &Profile{}, &pwReset{}, &accVerify{}).Error
+	err := s.db.AutoMigrate(
+		&User{}, 
+		&Follower{}, 
+		&Promo{}, 
+		&Profile{}, 
+		&pwReset{}, 
+		&accVerify{},
+		&PromoProduct{},
+	).Error
+	
 	return err
 }

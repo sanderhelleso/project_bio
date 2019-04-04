@@ -25,7 +25,7 @@ type PromoDB interface {
 	ByID(id uint) (*Promo, error)
 
 	// methods for altering promos
-	Create(promo *Promo) error
+	Create(promo *Promo) (uint, error)
 	Update(promo *Promo) error
 	Delete(id uint) error
 }
@@ -143,7 +143,7 @@ func (pv *promoValidator) validateExpiresAt() promoValFunc {
 }
 
 // Create will validate and and backfill data
-func (pv *promoValidator) Create(promo *Promo) error {
+func (pv *promoValidator) Create(promo *Promo) (uint, error) {
 	err := runPromosValFunc(promo,
 	pv.validateLength("title"),
 	pv.validateLength("description"),
@@ -151,7 +151,7 @@ func (pv *promoValidator) Create(promo *Promo) error {
 	pv.validateExpiresAt())
 
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	return pv.PromoDB.Create(promo)
@@ -193,9 +193,9 @@ func (pg *promoGorm) ByID(id uint) (*Promo, error) {
 }
 
 // Create will create the provided promo
-func (pg *promoGorm) Create(promo *Promo) error {
+func (pg *promoGorm) Create(promo *Promo) (uint, error) {
 	err := pg.db.Create(promo).Error
-	return isDuplicateError(err, "promos")
+	return promo.ID, err
 }
 
 // Update will update the releated promo with all of the data

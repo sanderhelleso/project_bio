@@ -30,8 +30,6 @@ type UpdatePromoForm struct {
 	Code			string	  `form:"promotion_code"`	
 	Discount		uint	  `form:"discount_amount"`	
 	ExpiresAt		time.Time `form:"expiresAt"`
-
-	Products 		[]*PromoProductForm `form:"products" binding:"required"`
 }
 
 // PromoFormWithID represents the request body to the endpoints
@@ -83,7 +81,9 @@ func (p *Promos) Create(c *gin.Context) {
 		ExpiresAt:		form.ExpiresAt,
 	}
 
-	if err := p.ps.Create(&promo); err != nil {
+	// create promo
+	promoID, err := p.ps.Create(&promo)
+	if err != nil {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
@@ -91,15 +91,15 @@ func (p *Promos) Create(c *gin.Context) {
 		return
 	}
 
-	// TODO: get created promo ID
+	// create products connected to created promo
 	for _, product := range form.Products {
 
 		promoProduct := models.PromoProduct {
-			PromoID: 	12312313, // set that id from product here and we gooood,
+			PromoID: 	promoID,
 			Name:		product.Name,
 			Brand:		product.Brand,
 			Link:		product.Link,
-			Image:		product.Image, // create img and set src here
+			Image:		"randomurl", // create img and set src here
 			Price:		product.Price,
 			Currency:	product.Currency,
 		}

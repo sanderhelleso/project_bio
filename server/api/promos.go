@@ -13,7 +13,7 @@ func PromosRoutes(router *gin.Engine, pc *controllers.Promos) {
 		v1.Use(middelware.RequireToken)
 		v1.POST("/new", pc.Create)
 		v1.POST("/update", pc.Update)
-		v1.PUT("/image", pc.PromoUpload)		
+		//v1.PUT("/image", pc.PromoUpload)		
 		v1.DELETE("/delete", pc.Delete)
 	}
 }
