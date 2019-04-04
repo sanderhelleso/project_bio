@@ -12,7 +12,6 @@ type Promo struct {
 	gorm.Model
 	UserID			uint 	`gorm:"not null;index"`
 	Title			string 	`gorm:"not null;size:100"`
-	Brand			string 	`gorm:"not null;size:100"`
 	Description		string	`gorm:"not null"`
 	Code			string  
 	Discount		uint
@@ -89,19 +88,30 @@ func (pv *promoValidator) validateLength(field string) promoValFunc {
 			case "title":
 				s = promo.Title
 				e = ErrPromoTitleInvalid
-			case "brand":
-				s = promo.Brand
-				e = ErrPromoBrandInvalid
 			case "description":
 				s = promo.Description
 				e = ErrPromoDescriptionInvalid
 				max = 255
-			default:
+			default: break;
 		}
 
 		sLen := len(strings.TrimSpace(s))
 		if sLen < min || sLen > max {
 			return e
+		}
+
+		return nil
+	})
+}
+
+func (pv *promoValidator) discountBetween() promoValFunc {
+	return promoValFunc(func(promo *Promo) error {
+		if promo.Discount != 0 {
+			if promo.Discount < 0 || promo.Discount > 100 {
+				return ErrPromoPercentageOffInvalid
+			}
+
+			return nil
 		}
 
 		return nil
@@ -136,8 +146,8 @@ func (pv *promoValidator) validateExpiresAt() promoValFunc {
 func (pv *promoValidator) Create(promo *Promo) error {
 	err := runPromosValFunc(promo,
 	pv.validateLength("title"),
-	pv.validateLength("brand"),
 	pv.validateLength("description"),
+	pv.discountBetween(),
 	pv.validateExpiresAt())
 
 	if err != nil {
@@ -154,6 +164,7 @@ func (pv *promoValidator) Update(promo *Promo) error {
 	pv.validateLength("title"),
 	pv.validateLength("brand"),
 	pv.validateLength("description"),
+	pv.discountBetween(),
 	pv.validateExpiresAt())
 
 	if err != nil {
@@ -163,20 +174,6 @@ func (pv *promoValidator) Update(promo *Promo) error {
 	return pv.PromoDB.Update(promo)
 }
 
-// Delete will remove the provided Promo from the database,
-// removing all traces of the Promo and its data
-func (pv *promoValidator) Delete(id uint) error {
-	var promo Promo
-	promo.ID = id
-
-	err := runPromosValFunc(&promo, pv.idGreaterThan(0))
-
-	if err != nil {
-		return err
-	}
-
-	return pv.PromoDB.Delete(id)
-}
 
 /****************************************************************/
 
@@ -210,20 +207,10 @@ func (pg *promoGorm) Update(promo *Promo) error {
 
 // Delete will delete the promo with the provided ID
 func (pg *promoGorm) Delete(id uint) error {
+	if id <= 0 {
+		return ErrIDInvalid
+	}
+	
 	promo := Promo{Model: gorm.Model{ID: id}}
 	return pg.db.Delete(&promo).Error
 }
-
-/*func (ppv *promoProductValidator) pricePercentageBetween() promoValFunc {
-	return promoValFunc(func(promoProduct *PromoProduct) error {
-		if promoProduct.Price != 0 {
-			if promoProduct.PercantageOff < 0 || promoProduct.PercantageOff > 100 {
-				return ErrPromoPercentageOffInvalid
-			}
-
-			return nil
-		}
-
-		return nil
-	})
-}*/

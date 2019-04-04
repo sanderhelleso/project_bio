@@ -473,6 +473,7 @@ func (ug *userGorm) Delete(id uint) error {
 	if id <= 0 {
 		return ErrIDInvalid
 	}
+	
 	user := User{Model: gorm.Model{ID: id}}
 	return ug.db.Delete(&user).Error
 }

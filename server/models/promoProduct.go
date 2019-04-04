@@ -100,28 +100,29 @@ func (ppv *promoProductValidator) normalizeCurrency(promoProduct *PromoProduct) 
 	return nil
 }
 
-func (ppv *promoProductValidator) validateName(promoProduct *PromoProduct) error {
-	if len(strings.TrimSpace(promoProduct.Name)) == 0 {
-		return ErrPromoProductNameRequired
-	}
+// takes 's' argument and validates 's' length after requirment
+func (ppv *promoProductValidator) validateLength(field string) promoProductValFunc {
+	return promoProductValFunc(func(promoProduct *PromoProduct) error {
+		var s string
+		var e error
+		min, max := 2, 100
+		switch field {
+			case "name":
+				s = promoProduct.Name
+				e = ErrPromoProductNameInvalid
+			case "brand":
+				s = promoProduct.Brand
+				e = ErrPromoProductBrandInvalid
+			default: break;
+		}
 
-	if len(promoProduct.Name) < 2 || len(promoProduct.Name) > 100 {
-		return ErrPromoProductNameInvalid
-	}
+		sLen := len(strings.TrimSpace(s))
+		if sLen < min || sLen > max {
+			return e
+		}
 
-	return nil
-}
-
-func (ppv *promoProductValidator) validateBrand(promoProduct *PromoProduct) error {
-	if len(strings.TrimSpace(promoProduct.Brand)) == 0 {
-		return ErrPromoProductBrandRequired
-	}
-
-	if len(promoProduct.Brand) < 2 || len(promoProduct.Brand) > 100 {
-		return ErrPromoProductBrandInvalid
-	}
-
-	return nil
+		return nil
+	})
 }
 
 // ensure that provided url is valid
@@ -148,6 +149,41 @@ func (ppv *promoProductValidator) validateCurrency() promoProductValFunc {
 		return nil
 	})
 }
+
+// Create will validate and and backfill data
+func (ppv *promoProductValidator) Create(promoProduct *PromoProduct) error {
+	err := runPromoProductsValFunc(promoProduct,
+	ppv.validateLength("name"),
+	ppv.validateLength("brand"),
+	ppv.validateLink,
+	ppv.normalizeCurrency,
+	ppv.normalizeCurrency)
+
+	if err != nil {
+		return err
+	}
+
+	return ppv.PromoProductDB.Create(promoProduct)
+}
+
+// Update will validate update promo product
+func (ppv *promoProductValidator) Update(promoProduct *PromoProduct) error {
+	err := runPromoProductsValFunc(promoProduct,
+	ppv.idGreaterThan(0),
+	ppv.validateLength("name"),
+	ppv.validateLength("brand"),
+	ppv.validateLink,
+	ppv.normalizeCurrency,
+	ppv.normalizeCurrency)
+
+	if err != nil {
+		return err
+	}
+
+	return ppv.PromoProductDB.Update(promoProduct)
+}
+
+
 
 /****************************************************************/
 
@@ -189,6 +225,10 @@ func (ppg *promoProductGorm) Update(promoProduct *PromoProduct) error {
 
 // Delete will delete the promo product with the provided ID
 func (ppg *promoProductGorm) Delete(id uint) error {
+	if id <= 0 {
+		return ErrIDInvalid
+	}
+
 	promoProduct := PromoProduct{Model: gorm.Model{ID: id}}
 	return ppg.db.Delete(&promoProduct).Error
 }
