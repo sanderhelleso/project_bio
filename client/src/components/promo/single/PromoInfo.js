@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import PromoCode from './PromoCode';
 import PromoLink from './PromoLink';
 
-const PromoInfo = ({ promo }) => {
+const PromoInfo = ({ title, description, promotion_code, link }) => {
 	return (
 		<StyledInfoCont>
-			<h2>{promo.title}</h2>
-			<p>{promo.description}</p>
-			<PromoCode code={promo.promotion_code} />
-			<PromoLink link={promo.link} />
+			<h2>{title}</h2>
+			<p>{description}</p>
+			<PromoCode code={promotion_code} />
+			<PromoLink link={link} />
 		</StyledInfoCont>
 	);
 };
@@ -23,4 +23,6 @@ const StyledInfoCont = styled.div`
 		font-size: 0.8rem;
 		color: #252525;
 	}
+
+	border-right: 1px solid #eeeeee;
 `;

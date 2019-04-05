@@ -8,10 +8,9 @@ const cardStyles = `
 
 export const PromoCardSingle = styled.div`
 	${cardStyles};
-	min-width: 75%;
+	min-width: 85%;
 	max-width: 900px;
 	min-height: 400px;
-	max-height: 400px;
 	margin: 5rem auto;
 	display: grid;
 	grid-template-columns: 30% 55% 15%;

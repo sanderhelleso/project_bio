@@ -4,7 +4,7 @@ import PromoImg from './PromoImg';
 import PromoInfo from './PromoInfo';
 import SelectProductList from './SelectProductList';
 
-const PromoCard = (promo) => (
+const PromoCard = ({ promo }) => (
 	<PromoCardSingle>
 		<PromoImg />
 		<PromoInfo {...promo} />
