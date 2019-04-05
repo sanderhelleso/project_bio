@@ -5,10 +5,11 @@ import {
 	LIKE_PROMO,
 	UNLIKE_PROMO,
 	COMMENT_PROMO,
-	UNCOMMENT_PROMO
+	UNCOMMENT_PROMO,
+	VIEW_PROMO
 } from '../actions/actionTypes';
 
-const initialState = { amount: 0, list: {} };
+const initialState = { amount: 0, list: {}, viewing: null };
 
 export default (state = initialState, action) => {
 	switch (action.type) {
@@ -50,6 +51,12 @@ export default (state = initialState, action) => {
 		case UNCOMMENT_PROMO:
 			return {
 				state
+			};
+
+		case VIEW_PROMO:
+			return {
+				...state,
+				viewing: action.payload
 			};
 
 		default:

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Button } from '../../styles/Button';
 import FeaterIcons from 'feather-icons-react';
 import { createPromo, uploadPromo } from '../../../api/promo/promo';
+
 import createPromoAction from '../../../actions/promoActions/createPromoAction';
+import viewPromoAction from '../../../actions/promoActions/viewPromoAction';
 
 import { withRouter } from 'react-router-dom';
 
@@ -25,6 +27,8 @@ class Publish extends Component {
 	}
 
 	createPromo = async () => {
+		this.setState({ loading: true });
+
 		// create promo
 		const promo = this.normalizePromo();
 		const response = await createPromo(promo);
@@ -42,14 +46,7 @@ class Publish extends Component {
 			);
 		}
 
-		// add new promo to users promo list, and active promo
-		const id = response.payload.promoID;
-		this.props.createPromoAction({
-			[id]: promo
-		});
-
-		// redirect to promotion and render active promo
-		this.props.history.push(`/${this.props.handle}/promotions/${id}`);
+		this.updateAndRedir(response.payload.promoID, promo);
 	};
 
 	uploadPromoProductImg = async (blob, id) => {
@@ -67,9 +64,23 @@ class Publish extends Component {
 		return '';
 	};
 
+	updateAndRedir(id, promo) {
+		// add new promo to users promo list
+		this.props.createPromoAction({ [id]: promo });
+
+		// set new promo to be the users viewing promo for instant load
+		this.props.viewPromoAction({ id, promo });
+
+		// redirect to promotion and render new promo
+		this.props.history.push(`/${this.props.handle}/promos/${id}`);
+	}
+
 	render() {
 		return (
-			<Button disabled={this.props.disabled || this.state.loading} onClick={this.createPromo}>
+			<Button
+				disabled={this.props.disabled || this.state.loading}
+				onClick={this.props.disabled ? null : this.createPromo}
+			>
 				<FeaterIcons icon="check" />
 				Publish
 			</Button>
@@ -82,7 +93,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-	return bindActionCreators({ createPromoAction }, dispatch);
+	return bindActionCreators({ createPromoAction, viewPromoAction }, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Publish));
