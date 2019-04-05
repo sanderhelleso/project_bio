@@ -4,6 +4,8 @@ import FeaterIcons from 'feather-icons-react';
 import { createPromo, uploadPromo } from '../../../api/promo/promo';
 
 class Publish extends Component {
+	state = { loading: false };
+
 	normalizePromo() {
 		// normalizes the promo before sending
 		this.props.promo.products = this.props.promo.products.map((p) => {
@@ -21,12 +23,18 @@ class Publish extends Component {
 		const promo = this.normalizePromo();
 		const response = await createPromo(promo);
 
-		// upload products releated image
+		// if success, upload promo products releated image
 		if (response.status < 400) {
-			promo.products.forEach((product, i) => {
-				this.uploadPromoProductImg(product.image, response.payload[i]);
-			});
+			// resolve once all images has been saved
+			await Promise.all(
+				promo.products.map(async (product, i) => {
+					promo.products[i].image = await this.uploadPromoProductImg(product.image, response.payload[i]);
+				})
+			);
 		}
+
+		// update state and finish loading, redirect to promo
+		console.log(promo);
 	};
 
 	uploadPromoProductImg = async (blob, id) => {
@@ -37,12 +45,16 @@ class Publish extends Component {
 
 		// upload images for promo products
 		const response = await uploadPromo(data);
-		console.log(response);
+		if (response.status < 400) {
+			return response.payload.image;
+		}
+
+		return '';
 	};
 
 	render() {
 		return (
-			<Button disabled={this.props.disabled} onClick={this.createPromo}>
+			<Button disabled={this.props.disabled || this.state.loading} onClick={this.createPromo}>
 				<FeaterIcons icon="check" />
 				Publish
 			</Button>
