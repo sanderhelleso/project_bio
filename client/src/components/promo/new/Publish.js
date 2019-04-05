@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { Button } from '../../styles/Button';
 import FeaterIcons from 'feather-icons-react';
 import { createPromo, uploadPromo } from '../../../api/promo/promo';
+import createPromoAction from '../../../actions/promoActions/createPromoAction';
+
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 class Publish extends Component {
 	state = { loading: false };
@@ -28,13 +32,19 @@ class Publish extends Component {
 			// resolve once all images has been saved
 			await Promise.all(
 				promo.products.map(async (product, i) => {
-					promo.products[i].image = await this.uploadPromoProductImg(product.image, response.payload[i]);
+					promo.products[i].image = await this.uploadPromoProductImg(
+						product.image,
+						response.payload.promoProductIDs[i]
+					);
 				})
 			);
 		}
 
 		// update state and finish loading, redirect to promo
 		console.log(promo);
+		this.props.createPromoAction({
+			[response.payload.promoID]: promo
+		});
 	};
 
 	uploadPromoProductImg = async (blob, id) => {
@@ -62,4 +72,8 @@ class Publish extends Component {
 	}
 }
 
-export default Publish;
+const mapDispatchToProps = (dispatch) => {
+	return bindActionCreators({ createPromoAction }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(Publish);

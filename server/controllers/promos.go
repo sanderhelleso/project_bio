@@ -101,7 +101,7 @@ func (p *Promos) Create(c *gin.Context) {
 	}
 
 	// create products connected to created promo
-	promoProcutIDs := make([]uint, 0)
+	promoProductIDs := make([]uint, 0)
 	for _, product := range form.Products {
 
 		promoProduct := models.PromoProduct {
@@ -121,13 +121,16 @@ func (p *Promos) Create(c *gin.Context) {
 			return
 		}
 
-		promoProcutIDs = append(promoProcutIDs, promoProduct.ID)
+		promoProductIDs = append(promoProductIDs, promoProduct.ID)
 	}
 
 	c.JSON(http.StatusCreated, gin.H {
 		"message": 	"Promo successfully created",
 		"status": 	http.StatusCreated,
-		"payload": 	promoProcutIDs,
+		"payload": 	gin.H {
+			"promoProductIDs": promoProductIDs,
+			"promoID": promoID,
+		},
 	})
 }
 
