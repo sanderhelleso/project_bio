@@ -11,7 +11,7 @@ type PromoProductForm struct {
 	Name			string	  `form:"name" binding:"required"`
 	Brand			string	  `form:"brand" binding:"required"`
 	Link            string    `form:"link" binding:"required"`
-	Image			string    `form:"image" binding:"required"`
+	//Image			string    `form:"image" binding:"required"`
 	Price			float64   `form:"price" binding:"required"`
 	Currency		string    `form:"currency" binding:"required"`
 }

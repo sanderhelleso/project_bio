@@ -9,24 +9,28 @@ class Price extends Component {
 			max: 10,
 			name: 'price',
 			type: 'text',
-			onChange: (e) => {
-				e.target.value = e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
-				this.props.onChange(e);
-			}
+			onChange: (e) => this.formatPrice(e)
 		},
 		{
 			placeholder: 'Currency',
 			max: 3,
 			name: 'currency',
 			type: 'text',
-			onChange: (e) => {
-				if (e.target.value.length > 3) return;
-
-				e.target.value = e.target.value.toUpperCase();
-				this.props.onChange(e);
-			}
+			onChange: (e) => this.formatCurrency(e)
 		}
 	];
+
+	formatPrice = (e) => {
+		e.target.value = e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+		this.props.onChange(e);
+	};
+
+	formatCurrency = (e) => {
+		if (e.target.value.length > 3) return;
+
+		e.target.value = e.target.value.toUpperCase();
+		this.props.onChange(e);
+	};
 
 	renderFields() {
 		return this.fields.map((field) => {

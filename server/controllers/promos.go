@@ -73,14 +73,13 @@ func (p *Promos) Create(c *gin.Context) {
 
 	var form PromoForm
 	if c.Bind(&form) != nil {
-		fmt.Printf("%+v\n",&form) // Print with Variable Name
+		fmt.Println(fmt.Println(&form))
 		response.RespondWithError(
 			c, 
 			http.StatusUnprocessableEntity, 
 			"Unable to process form data due to invalid format")
 		return
 	}
-	fmt.Printf("%+v\n",&form) // Print with Variable Name
 
 	// attempt to create and store promo in DB
 	promo := models.Promo {
@@ -104,9 +103,8 @@ func (p *Promos) Create(c *gin.Context) {
 		return
 	}
 
-	fmt.Println("ERROR CREATION")
-
 	// create products connected to created promo
+	promoProcutIDs := make([]uint, 0)
 	for _, product := range form.Products {
 
 		promoProduct := models.PromoProduct {
@@ -118,11 +116,11 @@ func (p *Promos) Create(c *gin.Context) {
 			Currency:	product.Currency,
 		}
 
-		// get file from form
-		//f, _ := c.FormFile("image")
+		/*// get file from form
+		f, _ := c.FormFile("image")
 
 		// create and store product image
-		/*if err := p.is.CreatePromoProduct(&promoProduct, f); err != nil {
+		if err := p.is.CreatePromoProduct(&promoProduct, f); err != nil {
 			response.RespondWithError(
 				c, 
 				http.StatusInternalServerError, 
@@ -137,12 +135,15 @@ func (p *Promos) Create(c *gin.Context) {
 				err.Error())
 			return
 		}
+
+		promoProcutIDs = append(promoProcutIDs, promoProduct.ID)
 	}
 
-	response.RespondWithSuccess(
-		c,
-		http.StatusCreated,
-		"Promo successfully created")
+	c.JSON(http.StatusCreated, gin.H {
+		"message": 	"Promo successfully created",
+		"status": 	http.StatusCreated,
+		"payload": 	promoProcutIDs,
+	})
 }
 
 // Update is used to process the promo form

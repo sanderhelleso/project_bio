@@ -3,9 +3,12 @@ import API from '../api';
 
 export async function createPromo(data) {
 	try {
-		const response = await API.post(ENDPOINTS.createPromo, data);
+		const response = await API.post(ENDPOINTS.createPromo, data, {
+			headers: {
+				'Content-Type': `multipart/form-data; boundary=${data._boundary}`
+			}
+		});
 
-		console.log(response);
 		return response.data;
 	} catch (error) {
 		console.log(error.response);
