@@ -24,3 +24,23 @@ export async function uploadPromo(data) {
 		return error.response.data;
 	}
 }
+
+export async function getPromo(id) {
+	try {
+		const response = await API.get(ENDPOINTS.getPromo(id));
+		return response.data;
+	} catch (error) {
+		console.log(error.response);
+		return error.response.data;
+	}
+}
+
+export async function getPromos(handle) {
+	try {
+		const response = await API.get(ENDPOINTS.getPromos(handle));
+		return response.data;
+	} catch (error) {
+		console.log(error.response);
+		return error.response.data;
+	}
+}

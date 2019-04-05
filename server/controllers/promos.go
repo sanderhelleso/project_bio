@@ -184,7 +184,7 @@ func (p *Promos) Update(c *gin.Context) {
 // ROUTE:	/promos/delete
 //
 // BODY:	PromoID
-func (p *Promos) Delete (c *gin.Context) {
+func (p *Promos) Delete(c *gin.Context) {
 
 	var form PromoFormWithID
 	if c.Bind(&form) != nil {
@@ -209,49 +209,16 @@ func (p *Promos) Delete (c *gin.Context) {
 		"Promo succesfully removed!")
 }
 
-// PromoUpload handle uploading of a promos image
-/*func (p *Promos) PromoUpload(c *gin.Context) {
+// ByID is used to find a promotion
+// by the passed in promo id
+//
+// METHOD: 	GET
+// ROUTE:	/promos/{:id}
+//
+func (p *Promos) ByID(c *gin.Context) {
 
-	// get file from form
-	f, _ := c.FormFile("image")
-
-	var form PromoFormWithID
-	if c.Bind(&form) != nil || f == nil {
-		response.RespondWithError(
-			c, 
-			http.StatusUnprocessableEntity, 
-			"Unable to process form data due to invalid format")
-		return
-	}
-
-	// find promo releated to id
-	promo, err := p.ps.ByID(form.ID)
-	if err != nil {
-		uploadPromoErr(c, err.Error())
-		return
-	}
-
-	// create promo
-	err = pps.is.CreatePromoProduct(promo, f)
-	if err != nil {
-		uploadPromoErr(c, err.Error())
-		return
-	}
-
-	// update promo
-	p.ps.Update(promo)
 	response.RespondWithSuccess(
 		c,
-		http.StatusCreated,
-		"Promo image successfully uploaded!",
-	)
+		http.StatusOK,
+		"Promo succesfully fetched!")
 }
-
-// helper func to send error message releated to promo upload
-func uploadPromoErr(c *gin.Context, errMsg string) {
-	response.RespondWithError(
-		c, 
-		http.StatusInternalServerError, 
-		errMsg,
-	)
-}*/
