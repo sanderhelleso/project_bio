@@ -1,8 +1,10 @@
 const ENDPOINTS = {
-    login: 'users/login',
-    profileByID: 'profiles/get',
-    newProfile: 'profiles/new',
-    uploadAvatar: 'profiles/avatar' 
-}
+	login: 'users/login',
+	profileByID: 'profiles/get',
+	newProfile: 'profiles/new',
+	uploadAvatar: 'profiles/avatar',
+	createPromo: 'promos/new',
+	uploadPromo: 'promos/products/image'
+};
 
 export default ENDPOINTS;

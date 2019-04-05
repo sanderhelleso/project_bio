@@ -16,7 +16,7 @@ import (
 
 type ImageService interface {
 	CreateAvatar(profile *Profile, f *multipart.FileHeader) (string, error)
-	CreatePromoProduct(promoProduct *PromoProduct, f *multipart.FileHeader) error
+	CreatePromoProduct(promoProduct *PromoProduct, f *multipart.FileHeader) (string, error)
 }
 
 func NewImageService() ImageService {
@@ -60,39 +60,40 @@ func (is *imageService) CreateAvatar(profile *Profile, f *multipart.FileHeader) 
 	return path, nil
 }
 
-// CreatePromo takes in a pointer to a promo and fileheader and will
-// attempt to create a new promo with the provided file from the promo
-func (is *imageService) CreatePromoProduct(promoProduct *PromoProduct, f *multipart.FileHeader) error {
+// CreatePromoProduct takes in a pointer to a promo product and fileheader and will
+// attempt to create a new promo product image with the provided file from the promo product
+func (is *imageService) CreatePromoProduct(promoProduct *PromoProduct, f *multipart.FileHeader) (string, error) {
 	err := validateExt(f.Filename)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	path, err := mkImagePath("promos", promoProduct.ID)
+	path, err := mkImagePath("products", promoProduct.ID)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	file, err := f.Open()
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	// generate random name
 	name, err := rand.RandomToken()
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	// save image at path
 	path += fmt.Sprintf(name + ".jpg")
 	err = saveImage(path, file, 300, 300)
 	if err != nil {
-		return err
+		return "", err
 	}
 
+	// set image to model and save
 	promoProduct.Image = path
-	return nil
+	return path, nil
 }
 
 func mkImagePath(service string, id uint) (string, error) {

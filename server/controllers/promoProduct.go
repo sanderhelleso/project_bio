@@ -2,6 +2,9 @@ package controllers
 
 import (
 	"../models"
+	"github.com/gin-gonic/gin"
+	"net/http"
+	"../lib/response"
 )
 
 
@@ -11,7 +14,6 @@ type PromoProductForm struct {
 	Name			string	  `form:"name" binding:"required"`
 	Brand			string	  `form:"brand" binding:"required"`
 	Link            string    `form:"link" binding:"required"`
-	Image			string    `form:"image" binding:"required"`
 	Price			float64   `form:"price" binding:"required"`
 	Currency		string    `form:"currency" binding:"required"`
 }
@@ -30,14 +32,14 @@ type UpdatePromoProductForm struct {
 }
 
 // PromoProductFormWithID represents the request body to the endpoints
-// /promos/products/delete
+// /promos/products/delete & /promos/products/image
 type PromoProductFormWithID struct {
 	ID 	uint `form:"id" binding:"required"`
 }
 
 // PromoProducts represents the controller for a promo product
 type PromoProducts struct {
-	pss models.PromoProductService
+	pps models.PromoProductService
 	is 	models.ImageService
 }
 
@@ -49,4 +51,55 @@ func NewPromoProducts(pps models.PromoProductService, is models.ImageService) *P
 	}
 }
 
+// ImageUpload handles uploading of a promo products image
+func (pp *PromoProducts) ImageUpload(c *gin.Context) {
+	var form PromoProductFormWithID
+	if c.Bind(&form) != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			"Unable to upload image due to missing product ID")
+		return
+	}
+
+	promoProduct, err := pp.pps.ByID(form.ID)
+	if err != nil {
+		uploadImageErr(c, err.Error())
+		return
+	}
+
+	// get file from form
+	f, _ := c.FormFile("image")
+	if f == nil {
+		uploadImageErr(c, "Invalid file")
+		return
+	}
+
+	// create image
+	image, err := pp.is.CreatePromoProduct(promoProduct, f)
+	if err != nil {
+		uploadImageErr(c, err.Error())
+		return
+	}
+
+	// update profile
+	pp.pps.Update(promoProduct)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  http.StatusCreated,
+		"message": "Promo image successfully uploaded!",
+		"payload": gin.H {
+			"image": image,
+		},
+	})
+}
+
+// helper func to send error message releated to image upload
+func uploadImageErr(c *gin.Context, errMsg string) {
+	response.RespondWithError(
+		c,
+		http.StatusInternalServerError,
+		errMsg,
+	)
+}
 
