@@ -229,7 +229,7 @@ func (p *Promos) ByID(c *gin.Context) {
 		response.RespondWithError(
 			c, 
 			http.StatusNotFound, 
-			"Could not find any profile with that handle")
+			fmt.Sprintf("Could not find any profiles with the handle: %s", handle))
 		return
 	}
 
