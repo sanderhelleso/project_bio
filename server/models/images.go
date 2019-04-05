@@ -68,7 +68,7 @@ func (is *imageService) CreatePromoProduct(promoProduct *PromoProduct, f *multip
 		return "", err
 	}
 
-	path, err := mkImagePath("promos", promoProduct.ID)
+	path, err := mkImagePath("products", promoProduct.ID)
 	if err != nil {
 		return "", err
 	}
@@ -91,7 +91,8 @@ func (is *imageService) CreatePromoProduct(promoProduct *PromoProduct, f *multip
 		return "", err
 	}
 
-	//promoProduct.Image = path
+	// set image to model and save
+	promoProduct.Image = path
 	return path, nil
 }
 

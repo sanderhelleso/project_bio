@@ -11,11 +11,11 @@ import (
 // PromoProduct represents a product in a promotion in the application
 type PromoProduct struct {
 	gorm.Model
-	PromoID		uint 	`gorm:"not null;unique_index"`
+	PromoID		uint 	`gorm:"not null;index"`
 	Name 		string	`gorm:"not null;size:100"`
 	Brand 		string  `gorm:"not null;size:100"` 
 	Link		string  `gorm:"not null"`
-	Image		string  `gorm:";unique"` 
+	Image		string  
 	Price		float64 `gorm:"not null"`
 	Currency    string  `gorm:"not null;size:3"`  
 }

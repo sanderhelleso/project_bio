@@ -113,18 +113,6 @@ func (p *Promos) Create(c *gin.Context) {
 			Currency:	product.Currency,
 		}
 
-		/*// get file from form
-		f, _ := c.FormFile("image")
-
-		// create and store product image
-		if err := p.is.CreatePromoProduct(&promoProduct, f); err != nil {
-			response.RespondWithError(
-				c, 
-				http.StatusInternalServerError, 
-				err.Error())
-			return
-		}*/
-
 		if err := p.pps.Create(&promoProduct); err != nil {
 			response.RespondWithError(
 				c, 

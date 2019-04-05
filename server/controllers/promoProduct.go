@@ -14,7 +14,6 @@ type PromoProductForm struct {
 	Name			string	  `form:"name" binding:"required"`
 	Brand			string	  `form:"brand" binding:"required"`
 	Link            string    `form:"link" binding:"required"`
-	//Image			string    `form:"image" binding:"required"`
 	Price			float64   `form:"price" binding:"required"`
 	Currency		string    `form:"currency" binding:"required"`
 }
@@ -54,14 +53,23 @@ func NewPromoProducts(pps models.PromoProductService, is models.ImageService) *P
 
 // ImageUpload handles uploading of a promo products image
 func (pp *PromoProducts) ImageUpload(c *gin.Context) {
-	promoProduct, err := pp.pps.ByID(1)
+	var form PromoProductFormWithID
+	if c.Bind(&form) != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			"Unable to upload image due to missing product ID")
+		return
+	}
+
+	promoProduct, err := pp.pps.ByID(form.ID)
 	if err != nil {
 		uploadImageErr(c, err.Error())
 		return
 	}
 
 	// get file from form
-	f, _ := c.FormFile("promo")
+	f, _ := c.FormFile("image")
 	if f == nil {
 		uploadImageErr(c, "Invalid file")
 		return

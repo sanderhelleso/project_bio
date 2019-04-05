@@ -12,25 +12,31 @@ class Publish extends Component {
 				price: Math.round(p.price * 100) / 100
 			};
 		});
+
+		return this.props.promo;
 	}
 
 	createPromo = async () => {
 		// create promo
-		const response = await createPromo(this.props.promo);
+		const promo = this.normalizePromo();
+		const response = await createPromo(promo);
 
+		// upload products releated image
 		if (response.status < 400) {
-			this.props.promo.products.forEach((product, i) => {
+			promo.products.forEach((product, i) => {
 				this.uploadPromoProductImg(product.image, response.payload[i]);
 			});
 		}
 	};
 
 	uploadPromoProductImg = async (blob, id) => {
-		const fd = new FormData();
-		fd.append(blob, id);
+		// create combined formdata
+		const data = new FormData();
+		data.append('image', blob.get('promo'), 'product.jpg');
+		data.append('id', id);
 
 		// upload images for promo products
-		const response = await uploadPromo(fd);
+		const response = await uploadPromo(data);
 		console.log(response);
 	};
 
