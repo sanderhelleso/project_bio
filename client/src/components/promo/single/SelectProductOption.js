@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { fadeIn } from '../../styles/Keyframes';
 
-const SelectProductOption = ({ product }) => <StyledOption />;
+const SelectProductOption = ({ product, active }) => <StyledOption active={active} />;
 
 export default SelectProductOption;
 
@@ -13,13 +13,12 @@ const StyledOption = styled.li`
 	max-width: 4.5rem;
 	min-width: 4.5rem;
 	margin: 2rem auto;
-	border: 2px solid #9e9e9e;
+	border: 2px solid ${(props) => (props.active ? props.theme.secondaryColor : '#eeeeee')};
 	cursor: pointer;
 	transition: 0.3s ease-in-out;
 	${fadeIn};
 
-	&:hover,
-	&.active-option {
+	&:hover {
 		border: 2px solid ${(props) => props.theme.secondaryColor};
 	}
 `;

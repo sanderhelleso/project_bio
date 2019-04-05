@@ -8,7 +8,7 @@ const PromoCard = ({ promo }) => (
 	<PromoCardSingle>
 		<PromoImg />
 		<PromoInfo {...promo} />
-		<SelectProductList products={promo.products} />
+		<SelectProductList products={[ 1, 2, 3 ]} />
 	</PromoCardSingle>
 );
 
