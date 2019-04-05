@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
+import ReactTooltip from 'react-tooltip';
 
-const PromoCode = ({ code }) => <StyledCode>KAFFI20</StyledCode>;
+const PromoCode = ({ code }) => (
+	<Fragment>
+		<StyledCode data-tip="Click to Copy 👉">KAFFI20</StyledCode>
+		<ReactTooltip place="left" type="dark" effect="solid" />
+	</Fragment>
+);
 
 export default PromoCode;
 
