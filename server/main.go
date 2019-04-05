@@ -40,8 +40,9 @@ func main() {
 
 	usersC := controllers.NewUsers(services.User, emailer)
 	followersC := controllers.NewFollowers(services.Follower)
-	promosC := controllers.NewPromos(services.Promo, services.PromoProduct, services.Image)
+	promosC := controllers.NewPromos(services.Promo, services.PromoProduct)
+	promoProductsC := controllers.NewPromoProducts(services.PromoProduct, , services.Image)
 	profilesC := controllers.NewProfiles(services.Profile, services.Image)
 
-	api.ConnectAndServe(usersC, followersC, promosC, profilesC)
+	api.ConnectAndServe(usersC, followersC, promosC promoProductsC, profilesC)
 }

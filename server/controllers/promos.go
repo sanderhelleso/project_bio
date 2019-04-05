@@ -45,18 +45,15 @@ type PromoFormWithID struct {
 type Promos struct {
 	ps 	models.PromoService
 	pps models.PromoProductService
-	is 	models.ImageService
 }
 
 // NewPromos is used to create a new promoer controller
 func NewPromos(
 	ps models.PromoService, 
-	pps models.PromoProductService, 
-	is models.ImageService) *Promos {
+	pps models.PromoProductService) *Promos {
 	return &Promos {
 		ps,
 		pps,
-		is,
 	}
 }
 

@@ -11,11 +11,11 @@ import (
 // PromoProduct represents a product in a promotion in the application
 type PromoProduct struct {
 	gorm.Model
-	PromoID		uint 	`gorm:"not null;index"`
+	PromoID		uint 	`gorm:"not null;unique_index"`
 	Name 		string	`gorm:"not null;size:100"`
 	Brand 		string  `gorm:"not null;size:100"` 
 	Link		string  `gorm:"not null"`
-	//Image		string  `gorm:"not null;unique"` 
+	Image		string  `gorm:";unique"` 
 	Price		float64 `gorm:"not null"`
 	Currency    string  `gorm:"not null;size:3"`  
 }
@@ -232,6 +232,5 @@ func (ppg *promoProductGorm) Delete(id uint) error {
 	promoProduct := PromoProduct{Model: gorm.Model{ID: id}}
 	return ppg.db.Delete(&promoProduct).Error
 }
-
 
 

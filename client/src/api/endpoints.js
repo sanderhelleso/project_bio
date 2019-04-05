@@ -3,7 +3,8 @@ const ENDPOINTS = {
 	profileByID: 'profiles/get',
 	newProfile: 'profiles/new',
 	uploadAvatar: 'profiles/avatar',
-	createPromo: 'promos/new'
+	createPromo: 'promos/new',
+	uploadPromo: 'promos/products/image'
 };
 
 export default ENDPOINTS;

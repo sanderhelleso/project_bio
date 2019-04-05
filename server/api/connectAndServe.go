@@ -13,6 +13,7 @@ func ConnectAndServe(
 	usersC *controllers.Users,
 	followersC *controllers.Followers,
 	promosC *controllers.Promos,
+	promoProductsC *controllers.PromoProducts,
 	profilesC *controllers.Profiles,
 ) {
 
@@ -25,6 +26,7 @@ func ConnectAndServe(
 	UsersRoutes(router, usersC)
 	FollowersRoutes(router, followersC)
 	PromosRoutes(router, promosC)
+	PromoProductRoutes(router, promoProductsC)
 	ProfilesRoutes(router, profilesC)
 
 	// connect fileserver
