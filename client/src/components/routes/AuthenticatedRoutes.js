@@ -6,6 +6,7 @@ import Navbar from '../navbar/Navbar';
 import Me from '../me/Me';
 import NewPromo from '../promo/new/NewPromo';
 import Handle from '../handle/Handle';
+import Single from '../promo/single/Single';
 
 const redirHome = () => <Redirect to="/" />;
 
@@ -18,6 +19,7 @@ const AuthenticatedRoutes = () => (
 			<Route exact path="/login" component={redirHome} />
 			<Route exact path="/profile" component={Profile} />
 			<Route exact path="/:handle" component={Handle} />
+			<Route exact path="/:handle/promos/:id" component={Single} />
 		</Switch>
 	</Fragment>
 );

@@ -34,7 +34,7 @@ func main() {
 	lib.Must(err)
 
 	defer services.Close()
-	services.DestructiveReset()
+	//services.DestructiveReset()
 	services.AutoMigrate()
 	services.CreateReleations()
 

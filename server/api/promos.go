@@ -14,6 +14,6 @@ func PromosRoutes(router *gin.Engine, pc *controllers.Promos) {
 		v1.POST("/new", pc.Create)
 		v1.POST("/update", pc.Update)
 		v1.DELETE("/delete", pc.Delete)
-		v1.GET("/{:id}", pc.ByID)
+		v1.GET("/:id", pc.ByID)
 	}
 }
