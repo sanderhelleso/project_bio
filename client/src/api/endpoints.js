@@ -5,8 +5,8 @@ const ENDPOINTS = {
 	uploadAvatar: 'profiles/avatar',
 	createPromo: 'promos/new',
 	uploadPromo: 'promos/products/image',
-	getPromo: (id) => `promos/${id}`,
-	getPromos: (handle) => `promos/users/${handle}`
+	getPromo: (handle, id) => `promos/${handle}/${id}`,
+	getPromos: (handle) => `promos/${handle}`
 };
 
 export default ENDPOINTS;

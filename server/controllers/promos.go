@@ -45,15 +45,18 @@ type PromoFormWithID struct {
 type Promos struct {
 	ps 	models.PromoService
 	pps models.PromoProductService
+	profs  models.ProfileService
 }
 
 // NewPromos is used to create a new promoer controller
 func NewPromos(
 	ps models.PromoService, 
-	pps models.PromoProductService) *Promos {
+	pps models.PromoProductService,
+	profs models.ProfileService) *Promos {
 	return &Promos {
 		ps,
 		pps,
+		profs,
 	}
 }
 
@@ -170,9 +173,9 @@ func (p *Promos) Update(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusInternalServerError, gin.H {
+	c.JSON(http.StatusOK, gin.H {
 		"message": 	"Promo successfully updated",
-		"status": 	http.StatusInternalServerError,
+		"status": 	http.StatusOK,
 		"payload": 	promo,
 	})
 }
@@ -210,15 +213,43 @@ func (p *Promos) Delete(c *gin.Context) {
 }
 
 // ByID is used to find a promotion
-// by the passed in promo id
+// by the passed in handle and promo ID
 //
 // METHOD: 	GET
-// ROUTE:	/promos/{:id}
+// ROUTE:	/promos/:handle/:id
 //
+// PARAMS: handle, id
 func (p *Promos) ByID(c *gin.Context) {
 
-	response.RespondWithSuccess(
-		c,
-		http.StatusOK,
-		"Promo succesfully fetched!")
+	// attempt to find the user by the provided handle
+	handle := c.Params.ByName("handle")
+	profile , err := p.profs.ByHandle(handle)
+
+	if err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusNotFound, 
+			"Could not find any profile with that handle")
+		return
+	}
+
+	id, _ := parser.ParseUserID(c.Params.ByName("id"))
+	promo, err := p.ps.ByID(id)
+
+	if err != nil || promo.UserID != profile.UserID {
+		response.RespondWithError(
+			c, 
+			http.StatusNotFound, 
+			fmt.Sprintf("%s does not have any promotions with the ID: %d", handle, id))
+		return
+	} 
+
+	c.JSON(http.StatusOK, gin.H {
+		"message": 	"Promo successfully fetched",
+		"status": 	http.StatusOK,
+		"payload": 	gin.H {
+			"promo": promo,
+			"profile": profile,
+		},
+	})
 }

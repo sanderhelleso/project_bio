@@ -25,9 +25,9 @@ export async function uploadPromo(data) {
 	}
 }
 
-export async function getPromo(id) {
+export async function getPromo(handle, id) {
 	try {
-		const response = await API.get(ENDPOINTS.getPromo(id));
+		const response = await API.get(ENDPOINTS.getPromo(handle, id));
 		return response.data;
 	} catch (error) {
 		console.log(error.response);
