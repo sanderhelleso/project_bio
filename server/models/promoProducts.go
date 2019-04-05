@@ -15,7 +15,7 @@ type PromoProduct struct {
 	Name 		string	`gorm:"not null;size:100"`
 	Brand 		string  `gorm:"not null;size:100"` 
 	Link		string  `gorm:"not null"`
-	Image		string  `gorm:"not null;unique"` 
+	//Image		string  `gorm:"not null;unique"` 
 	Price		float64 `gorm:"not null"`
 	Currency    string  `gorm:"not null;size:3"`  
 }

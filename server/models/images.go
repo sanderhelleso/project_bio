@@ -91,7 +91,7 @@ func (is *imageService) CreatePromoProduct(promoProduct *PromoProduct, f *multip
 		return err
 	}
 
-	promoProduct.Image = path
+	//promoProduct.Image = path
 	return nil
 }
 

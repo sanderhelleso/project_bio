@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
+	"fmt"
 	"../lib/parser"
 	"../models"
 	"../lib/response"
@@ -14,9 +15,10 @@ import (
 type PromoForm struct {
 	Title			string 	  	`form:"title" binding:"required"`
 	Description		string	  	`form:"description" binding:"required"`
+	Category		string 	  	`form:"category" binding:"required"`
 	Code			string	  	`form:"promotion_code"`	
 	Discount		uint	  	`form:"discount_amount"`	
-	ExpiresAt		time.Time 	`form:"expiresAt"`
+	ExpiresAt		time.Time 	`form:"expires_at"`
 
 	Products 		[]*PromoProductForm `form:"products" binding:"required"`
 }
@@ -27,6 +29,7 @@ type UpdatePromoForm struct {
 	ID				uint      `form:"id" binding:"required"`
 	Title			string 	  `form:"title" binding:"required"`
 	Description		string	  `form:"description" binding:"required"`
+	Category		string 	  	`form:"category" binding:"required"`
 	Code			string	  `form:"promotion_code"`	
 	Discount		uint	  `form:"discount_amount"`	
 	ExpiresAt		time.Time `form:"expiresAt"`
@@ -67,20 +70,24 @@ func NewPromos(
 // BODY:	PromoForm
 func (p *Promos) Create(c *gin.Context) {
 
+
 	var form PromoForm
 	if c.Bind(&form) != nil {
+		fmt.Printf("%+v\n",&form) // Print with Variable Name
 		response.RespondWithError(
 			c, 
 			http.StatusUnprocessableEntity, 
 			"Unable to process form data due to invalid format")
 		return
 	}
+	fmt.Printf("%+v\n",&form) // Print with Variable Name
 
 	// attempt to create and store promo in DB
 	promo := models.Promo {
 		UserID: 		parser.GetIDFromCTX(c),
 		Title:			form.Title,
 		Description:	form.Description,
+		Category:		form.Category,
 		Code:			form.Code,
 		Discount:		form.Discount,
 		ExpiresAt:		form.ExpiresAt,
@@ -89,12 +96,15 @@ func (p *Promos) Create(c *gin.Context) {
 	// create promo
 	promoID, err := p.ps.Create(&promo)
 	if err != nil {
+		fmt.Println(err)
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
 			err.Error())
 		return
 	}
+
+	fmt.Println("ERROR CREATION")
 
 	// create products connected to created promo
 	for _, product := range form.Products {
@@ -109,16 +119,16 @@ func (p *Promos) Create(c *gin.Context) {
 		}
 
 		// get file from form
-		f, _ := c.FormFile("image")
+		//f, _ := c.FormFile("image")
 
 		// create and store product image
-		if err := p.is.CreatePromoProduct(&promoProduct, f); err != nil {
+		/*if err := p.is.CreatePromoProduct(&promoProduct, f); err != nil {
 			response.RespondWithError(
 				c, 
 				http.StatusInternalServerError, 
 				err.Error())
 			return
-		}
+		}*/
 
 		if err := p.pps.Create(&promoProduct); err != nil {
 			response.RespondWithError(

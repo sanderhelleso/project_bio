@@ -5,6 +5,7 @@ import { createPromo } from '../../../api/promo/promo';
 
 class Publish extends Component {
 	createPromo = async () => {
+		console.log(this.props.promo);
 		const response = await createPromo(this.props.promo);
 		console.log(response);
 	};

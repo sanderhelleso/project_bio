@@ -16,7 +16,7 @@ class DetailsOverview extends Component {
 
 		return (
 			<Fragment>
-				<Publish disabled={!this.props.valid} />
+				<Publish disabled={!this.props.valid} promo={this.props.promo} />
 				{editBtn}
 			</Fragment>
 		);

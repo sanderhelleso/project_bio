@@ -13,6 +13,7 @@ type Promo struct {
 	UserID			uint 	`gorm:"not null;index"`
 	Title			string 	`gorm:"not null;size:100"`
 	Description		string	`gorm:"not null"`
+	Category		string  `gorm:"not null"`
 	Code			string  
 	Discount		uint
 	ExpiresAt		time.Time
