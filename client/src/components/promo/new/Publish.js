@@ -4,6 +4,8 @@ import FeaterIcons from 'feather-icons-react';
 import { createPromo, uploadPromo } from '../../../api/promo/promo';
 import createPromoAction from '../../../actions/promoActions/createPromoAction';
 
+import { withRouter } from 'react-router-dom';
+
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -40,11 +42,14 @@ class Publish extends Component {
 			);
 		}
 
-		// update state and finish loading, redirect to promo
-		console.log(promo);
+		// add new promo to users promo list, and active promo
+		const id = response.payload.promoID;
 		this.props.createPromoAction({
-			[response.payload.promoID]: promo
+			[id]: promo
 		});
+
+		// redirect to promotion and render active promo
+		this.props.history.push(`/${this.props.handle}/promotions/${id}`);
 	};
 
 	uploadPromoProductImg = async (blob, id) => {
@@ -72,8 +77,12 @@ class Publish extends Component {
 	}
 }
 
+const mapStateToProps = (state) => {
+	return { handle: state.profile.handle };
+};
+
 const mapDispatchToProps = (dispatch) => {
 	return bindActionCreators({ createPromoAction }, dispatch);
 };
 
-export default connect(null, mapDispatchToProps)(Publish);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Publish));

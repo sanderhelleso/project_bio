@@ -8,7 +8,7 @@ import {
 	UNCOMMENT_PROMO
 } from '../actions/actionTypes';
 
-const initialState = { amount: 0, promos: {} };
+const initialState = { amount: 0, list: {} };
 
 export default (state = initialState, action) => {
 	switch (action.type) {
@@ -16,7 +16,8 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				amount: state.amount + 1,
-				promos: {
+				list: {
+					...state.list,
 					...action.payload
 				}
 			};

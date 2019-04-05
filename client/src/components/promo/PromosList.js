@@ -1,9 +1,9 @@
 import React from 'react';
 
 const PromosList = ({ list }) => {
-    return list.map(promo => {
-        return <li>{promo.name}</li>
-    });
-}
+	return Object.entries(list).map(([ id, promo ]) => {
+		return <li key={id}>{promo.title}</li>;
+	});
+};
 
 export default PromosList;
