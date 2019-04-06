@@ -13,5 +13,5 @@ export const PromoCardSingle = styled.div`
 	min-height: 400px;
 	margin: 5rem auto;
 	display: grid;
-	grid-template-columns: 35% 50% 15%;
+	grid-template-columns: 30% 55% 15%;
 `;

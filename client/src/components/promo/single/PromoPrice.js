@@ -19,12 +19,12 @@ const PromoPrice = ({ price, currency, discount_amount }) => {
 	};
 
 	return (
-		<p>
+		<div>
 			{renderPriceBefore()}
 			<StyledPriceAfter>
 				{renderPriceAfter()} {currency}
 			</StyledPriceAfter>
-		</p>
+		</div>
 	);
 };
 
