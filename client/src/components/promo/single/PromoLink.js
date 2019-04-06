@@ -18,6 +18,13 @@ const StyledLink = styled.a`
 	position: relative;
 	cursor: pointer;
 	letter-spacing: 1px;
+	text-decoration: none;
+
+	&:hover {
+		svg {
+			right: -30%;
+		}
+	}
 
 	svg {
 		height: 1.1rem;
@@ -26,5 +33,6 @@ const StyledLink = styled.a`
 		position: absolute;
 		right: -20%;
 		top: 15%;
+		transition: 0.3s ease-in-out;
 	}
 `;

@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import PromoCode from './PromoCode';
 import PromoLink from './PromoLink';
 import PromoOwner from './PromoOwner';
+import PromoPrice from './PromoPrice';
 
-const PromoInfo = ({ title, description, promotion_code, link, CreatedAt, profile }) => {
+const PromoInfo = ({ title, description, promotion_code, CreatedAt, profile, active }) => {
 	return (
 		<StyledInfoCont>
 			<StyledInfoHeader>
@@ -12,8 +13,11 @@ const PromoInfo = ({ title, description, promotion_code, link, CreatedAt, profil
 				<PromoOwner {...profile} postedAt={CreatedAt} />
 				<p>{description}</p>
 			</StyledInfoHeader>
-			<PromoCode code={promotion_code} />
-			<PromoLink link={link} />
+			<StyledInfoBody>
+				<PromoPrice price={active.price} currency={active.currency} />
+				<PromoCode code={promotion_code} />
+				<PromoLink link={active.link} />
+			</StyledInfoBody>
 		</StyledInfoCont>
 	);
 };
@@ -35,4 +39,10 @@ const StyledInfoCont = styled.div`
 	border-right: 1px solid #eeeeee;
 `;
 
-const StyledInfoHeader = styled.div`margin-bottom: 2rem;`;
+const StyledInfoHeader = styled.div`
+	margin-bottom: 2rem;
+	padding-bottom: 1rem;
+	border-bottom: 1px solid #eeeeee;
+`;
+
+const StyledInfoBody = styled.div``;

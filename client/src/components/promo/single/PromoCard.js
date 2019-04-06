@@ -14,7 +14,7 @@ const PromoCard = ({ promo, products, profile: { handle, avatar } }) => {
 	return (
 		<PromoCardSingle>
 			<PromoImg image={active.image} />
-			<PromoInfo {...promo} profile={{ handle, avatar }} />
+			<PromoInfo {...promo} profile={{ handle, avatar }} active={active} />
 			<SelectProductList products={products} active={active} updateState={updateState} />
 		</PromoCardSingle>
 	);
