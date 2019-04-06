@@ -19,6 +19,7 @@ class Single extends Component {
 		// attempt to load promo by the given handler and param ID
 		const { handle, id } = this.props.match.params;
 		const response = await getPromo(handle, id);
+		console.log(response);
 		if (response.status > 400) {
 			return this.setState({
 				error: response.message,
@@ -26,13 +27,10 @@ class Single extends Component {
 			});
 		}
 
-		this.setState(
-			{
-				promo: response.payload.promo,
-				loading: false
-			},
-			() => console.log(this.state)
-		);
+		this.setState({
+			promo: response.payload.promo,
+			loading: false
+		});
 	}
 
 	renderPromo() {

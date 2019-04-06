@@ -233,6 +233,7 @@ func (p *Promos) ByID(c *gin.Context) {
 		return
 	}
 
+	// find the promo by the given id
 	id, _ := parser.ParseUserID(c.Params.ByName("id"))
 	promo, err := p.ps.ByID(id)
 
@@ -242,13 +243,24 @@ func (p *Promos) ByID(c *gin.Context) {
 			http.StatusNotFound, 
 			fmt.Sprintf("%s does not have any promotions with the ID: %d", handle, id))
 		return
-	} 
+	}
+	
+	// find the promos products by the promos id
+	prroducts, err := p.pps.ByPromoID(promo.ID)
+	if err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusNotFound, 
+			fmt.Sprintf("Unable to get the promotions products at this time. Please try again."))
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H {
 		"message": 	"Promo successfully fetched",
 		"status": 	http.StatusOK,
 		"payload": 	gin.H {
 			"promo": promo,
+			"products": prroducts,
 			"profile": profile,
 		},
 	})
