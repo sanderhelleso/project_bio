@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { ToastConsumer, ToastProvider, withToastManager } from 'react-toast-notifications';
+import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
 
 import Routes from './routes/Routes';
 import theme from './styles/Theme';

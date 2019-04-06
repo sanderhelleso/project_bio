@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import FeaterIcons from 'feather-icons-react';
+import Lightbox from 'react-image-lightbox';
 
-const PromoImg = ({ image }) => (
-	<StyledImgCont>
-		<img src={`http://localhost:5000/${image}`} />
-		<span>
-			<FeaterIcons icon="zoom-in" /> Click to enlarge
-		</span>
-	</StyledImgCont>
-);
+const PromoImg = ({ image }) => {
+	const [ isOpen, modifyLightbox ] = useState(false);
+
+	return (
+		<StyledImgCont>
+			<img src={`http://localhost:5000/${image}`} />
+			<span onClick={() => modifyLightbox(!isOpen)}>
+				<FeaterIcons icon="zoom-in" /> Click to enlarge
+			</span>
+			<p>{isOpen ? 'open' : 'closed'}</p>
+		</StyledImgCont>
+	);
+};
 
 export default PromoImg;
 
