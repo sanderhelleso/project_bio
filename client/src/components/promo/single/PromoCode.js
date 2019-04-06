@@ -4,7 +4,7 @@ import ReactTooltip from 'react-tooltip';
 
 const PromoCode = ({ code }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
-		tooltip: 'Click to Copy 👉'
+		tooltip: 'Click to Copy 👆'
 	});
 
 	const { tooltip } = state;
