@@ -4,15 +4,16 @@ import FeaterIcons from 'feather-icons-react';
 import Lightbox from 'react-image-lightbox';
 
 const PromoImg = ({ image }) => {
+	const imageSrc = `http://localhost:5000/${image}`;
 	const [ isOpen, modifyLightbox ] = useState(false);
 
 	return (
 		<StyledImgCont>
-			<img src={`http://localhost:5000/${image}`} />
-			<span onClick={() => modifyLightbox(!isOpen)}>
-				<FeaterIcons icon="zoom-in" /> Click to enlarge
+			<img src={imageSrc} onClick={() => modifyLightbox(!isOpen)} />
+			<span className="no-select">
+				<FeaterIcons icon="zoom-in" /> Click image to enlarge
 			</span>
-			<p>{isOpen ? 'open' : 'closed'}</p>
+			{isOpen && <Lightbox mainSrc={imageSrc} onCloseRequest={() => modifyLightbox(!isOpen)} />}
 		</StyledImgCont>
 	);
 };
@@ -40,10 +41,11 @@ const StyledImgCont = styled.div`
 	span {
 		display: block;
 		margin: 2.5rem auto;
-		font-size: 0.8rem;
+		font-size: 0.7rem;
 		text-transform: uppercase;
 		letter-spacing: 1px;
 		color: #9e9e9e;
+		pointer-events: none;
 
 		svg {
 			height: 1rem;
