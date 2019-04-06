@@ -12,7 +12,7 @@ type Promo struct {
 	gorm.Model
 	UserID			uint 		`gorm:"not null;index" json:"-"`
 	Title			string 		`gorm:"not null;size:100" json:"title"`
-	Description		string		`gorm:"not null" json:"description"`
+	Description		string		`gorm:"not null;size:500" json:"description"`
 	Category		string  	`gorm:"not null" json:"category"`
 	Code			string  	`json:"promotion_code"`
 	Discount		uint		`json:"discount_amount"`
@@ -92,7 +92,7 @@ func (pv *promoValidator) validateLength(field string) promoValFunc {
 			case "description":
 				s = promo.Description
 				e = ErrPromoDescriptionInvalid
-				max = 255
+				max = 500
 			default: break;
 		}
 

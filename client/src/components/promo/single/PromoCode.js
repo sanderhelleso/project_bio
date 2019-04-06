@@ -20,10 +20,10 @@ const PromoCode = ({ code }) => {
 
 	return (
 		<Fragment>
-			<StyledCode data-tip={tooltip} onClick={copyToClipboard} className="no-select">
+			<StyledCode data-tip={tooltip} data-for="code-tooltip" onClick={copyToClipboard} className="no-select">
 				KAFFI20
 			</StyledCode>
-			<Tooltip place="bottom" type="dark" effect="solid" getContent={() => tooltip} />
+			<Tooltip id="code-tooltip" place="bottom" type="dark" effect="solid" getContent={() => tooltip} />
 		</Fragment>
 	);
 };
