@@ -17,6 +17,7 @@ const SelectProductOption = ({ product, active }) => {
 export default SelectProductOption;
 
 const StyledOption = styled.div`
+	background-color: ${(props) => props.theme.secondaryColor};
 	border-radius: 50%;
 	margin: 2rem auto;
 	cursor: pointer;
@@ -30,8 +31,9 @@ const StyledOption = styled.div`
 	${fadeIn};
 
 	img {
-		max-height: 5rem;
-		max-width: 5rem;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 		border-radius: 50%;
 	}
 `;

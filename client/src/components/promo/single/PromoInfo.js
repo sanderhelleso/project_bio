@@ -30,10 +30,13 @@ const PromoInfo = ({ title, description, promotion_code, CreatedAt, profile, act
 export default PromoInfo;
 
 const StyledInfoCont = styled.div`
-	padding: 2rem 4rem;
+	padding: 2rem;
+	overflow: hidden;
 
 	h2 {
 		margin-top: 0;
+		font-size: 1.75rem;
+		word-break: break-all;
 	}
 
 	p {

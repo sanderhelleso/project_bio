@@ -13,7 +13,7 @@ export default ProductNameBrand;
 const StyledNameBrandCont = styled.div`
 	h5 {
 		margin: 0;
-		font-size: 1.5rem;
+		font-size: 1.25rem;
 		margin-top: 0.35rem;
 	}
 
