@@ -39,6 +39,7 @@ const StyledCode = styled.span`
 	color: #ffffff;
 	letter-spacing: 2px;
 	cursor: pointer;
+	margin-right: 2rem;
 `;
 
 const Tooltip = styled(ReactTooltip)`

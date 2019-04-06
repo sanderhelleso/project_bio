@@ -19,16 +19,36 @@ const PromoPrice = ({ price, currency, discount_amount }) => {
 	};
 
 	return (
-		<div>
+		<StyledPriceCont>
 			{renderPriceBefore()}
 			<StyledPriceAfter>
 				{renderPriceAfter()} {currency}
 			</StyledPriceAfter>
-		</div>
+		</StyledPriceCont>
 	);
 };
 
 export default PromoPrice;
+
+const StyledPriceCont = styled.div`
+	grid-area: price;
+
+	h4,
+	h5 {
+		float: right;
+		clear: both;
+		word-wrap: break-word;
+	}
+
+	@media screen and (max-width: 600px) {
+		margin-top: 1rem;
+
+		h4,
+		h5 {
+			float: left;
+		}
+	}
+`;
 
 const StyledPriceBefore = styled.h5`
 	text-decoration: line-through;
@@ -36,12 +56,10 @@ const StyledPriceBefore = styled.h5`
 	margin: 0;
 	color: #9e9e9e;
 	font-weight: 100;
-	text-align: right;
 `;
 
 const StyledPriceAfter = styled.h4`
 	font-size: 1.5rem;
 	margin: 0;
 	font-weight: 100;
-	text-align: right;
 `;
