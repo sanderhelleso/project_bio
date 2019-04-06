@@ -30,7 +30,6 @@ const PromoInfo = ({ title, description, promotion_code, CreatedAt, profile, act
 export default PromoInfo;
 
 const StyledInfoCont = styled.div`
-	padding: 2rem 4rem 2rem 2rem;
 	overflow: hidden;
 	grid-area: info;
 
@@ -49,7 +48,6 @@ const StyledInfoCont = styled.div`
 
 	@media screen and (max-width: 1100px) {
 		border-right: none;
-		padding: 2rem 4rem;
 	}
 
 	@media screen and (max-width: 600px) {
@@ -67,7 +65,20 @@ const StyledInfoHeader = styled.div`
 const StyledInfoBody = styled.div`
 	display: grid;
 	grid-template-columns: 70% 30%;
+
+	/* prettier-ignore */
+	grid-template-areas: 
+		"header price"
+	;
 	margin-bottom: 1.5rem;
+
+	@media screen and (max-width: 600px) {
+		/* prettier-ignore */
+		grid-template-areas: 
+			"header header"
+			"price price"
+		;
+	}
 `;
 
 const StyledActionCont = styled.div`

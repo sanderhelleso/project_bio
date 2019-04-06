@@ -38,11 +38,11 @@ const StyledList = styled.ul`
 		margin: 2rem auto;
 	}
 
-	@media screen and (max-width: 1100px) {
+	@media screen and (max-width: 600px) {
 		display: flex;
 		justify-content: space-between;
-		max-width: 75%;
-		padding: 2rem 1rem 1rem 1rem;
+		max-width: 100%;
+		padding: 1rem;
 
 		li {
 			margin: 0 auto;

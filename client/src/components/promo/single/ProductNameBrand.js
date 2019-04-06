@@ -11,6 +11,13 @@ const ProductNameBrand = ({ name, brand }) => (
 export default ProductNameBrand;
 
 const StyledNameBrandCont = styled.div`
+	grid-area: header;
+
+	h5,
+	span {
+		word-wrap: break-word;
+	}
+
 	h5 {
 		margin: 0;
 		font-size: 1.25rem;

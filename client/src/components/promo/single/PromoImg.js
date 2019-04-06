@@ -32,7 +32,7 @@ const StyledImgCont = styled.div`
 		height: 80%;
 		max-height: 400px;
 		max-width: 400px;
-		border-radius: 20px;
+		border-radius: 12px;
 		margin: 0 auto;
 		box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
 		cursor: pointer;
