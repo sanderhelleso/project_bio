@@ -42,6 +42,7 @@ const StyledList = styled.ul`
 		display: flex;
 		justify-content: space-between;
 		max-width: 75%;
+		padding: 2rem 1rem 1rem 1rem;
 
 		li {
 			margin: 0 auto;

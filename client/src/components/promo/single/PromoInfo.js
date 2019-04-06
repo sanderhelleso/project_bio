@@ -46,6 +46,16 @@ const StyledInfoCont = styled.div`
 	}
 
 	border-right: 1px solid #eeeeee;
+
+	@media screen and (max-width: 1100px) {
+		border-right: none;
+		padding: 2rem 4rem;
+	}
+
+	@media screen and (max-width: 600px) {
+		border-right: none;
+		padding: 2rem;
+	}
 `;
 
 const StyledInfoHeader = styled.div`

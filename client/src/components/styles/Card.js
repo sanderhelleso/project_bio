@@ -20,8 +20,9 @@ export const PromoCardSingle = styled.div`
 
 		/* prettier-ignore */
 		grid-template-areas:
-			"image info" 
+			"info info"
 			"options options"
+			"image image" 
 		;
 	}
 `;
