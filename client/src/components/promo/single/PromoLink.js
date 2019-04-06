@@ -4,7 +4,7 @@ import FeaterIcons from 'feather-icons-react';
 
 const PromoLink = ({ link }) => (
 	<StyledLink href={link} target="blank">
-		Vist Website
+		Visit Website
 		<FeaterIcons icon="arrow-right" />
 	</StyledLink>
 );

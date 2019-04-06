@@ -1,13 +1,32 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useReducer } from 'react';
 import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
 
-const PromoCode = ({ code }) => (
-	<Fragment>
-		<StyledCode data-tip="Click to Copy 👉">KAFFI20</StyledCode>
-		<ReactTooltip place="left" type="dark" effect="solid" />
-	</Fragment>
-);
+const PromoCode = ({ code }) => {
+	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
+		tooltip: 'Click to Copy 👉'
+	});
+
+	const { tooltip } = state;
+
+	const copyToClipboard = () => {
+		updateState({ tooltip: 'Copied! 👌' });
+		ReactTooltip.rebuild();
+
+		setTimeout(() => {
+			updateState({ tooltip: 'Click to Copy 👆' });
+		}, 1500);
+	};
+
+	return (
+		<Fragment>
+			<StyledCode data-tip={tooltip} onClick={copyToClipboard} className="no-select">
+				KAFFI20
+			</StyledCode>
+			<Tooltip place="bottom" type="dark" effect="solid" getContent={() => tooltip} />
+		</Fragment>
+	);
+};
 
 export default PromoCode;
 
@@ -20,4 +39,9 @@ const StyledCode = styled.span`
 	color: #ffffff;
 	letter-spacing: 2px;
 	cursor: pointer;
+`;
+
+const Tooltip = styled(ReactTooltip)`
+	text-align: center !important;
+	min-width: 150px !important;
 `;
