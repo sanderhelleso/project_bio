@@ -5,7 +5,7 @@ import SelectProductOption from './SelectProductOption';
 const SelectProductList = ({ products }) => (
 	<StyledList>
 		{products.map((product) => {
-			return <SelectProductOption key={product} active={products[0] === product} />;
+			return <SelectProductOption key={product} active={products[0] === product} {...product} />;
 		})}
 	</StyledList>
 );

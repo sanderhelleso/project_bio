@@ -29,6 +29,7 @@ class Single extends Component {
 
 		this.setState({
 			promo: response.payload.promo,
+			products: response.payload.products,
 			loading: false
 		});
 	}
@@ -42,7 +43,7 @@ class Single extends Component {
 			return <p>Loading...</p>;
 		}
 
-		return <PromoCard promo={this.state.promo} />;
+		return <PromoCard promo={this.state.promo} products={this.state.products} />;
 	}
 
 	render() {

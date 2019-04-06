@@ -4,11 +4,11 @@ import PromoImg from './PromoImg';
 import PromoInfo from './PromoInfo';
 import SelectProductList from './SelectProductList';
 
-const PromoCard = ({ promo }) => (
+const PromoCard = ({ promo, products }) => (
 	<PromoCardSingle>
 		<PromoImg />
 		<PromoInfo {...promo} />
-		<SelectProductList products={[ 1, 2, 3 ]} />
+		<SelectProductList products={products} />
 	</PromoCardSingle>
 );
 

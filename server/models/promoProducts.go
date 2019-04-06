@@ -10,14 +10,14 @@ import (
 
 // PromoProduct represents a product in a promotion in the application
 type PromoProduct struct {
-	gorm.Model
-	PromoID		uint 	`gorm:"not null;index"`
-	Name 		string	`gorm:"not null;size:100"`
-	Brand 		string  `gorm:"not null;size:100"` 
-	Link		string  `gorm:"not null"`
-	Image		string  
-	Price		float64 `gorm:"not null"`
-	Currency    string  `gorm:"not null;size:3"`  
+	gorm.Model			`json:"-"`
+	PromoID		uint 	`gorm:"not null;index" json:"-"`
+	Name 		string	`gorm:"not null;size:100" json:"name"`
+	Brand 		string  `gorm:"not null;size:100" json:"brand"` 
+	Link		string  `gorm:"not null" json:"link"`
+	Image		string  `json:"image"`
+	Price		float64 `gorm:"not null" json:"price"`
+	Currency    string  `gorm:"not null;size:3" json:"currency"`  
 }
 
 type PromoProductDB interface {

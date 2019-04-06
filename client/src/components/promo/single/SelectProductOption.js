@@ -2,7 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { fadeIn } from '../../styles/Keyframes';
 
-const SelectProductOption = ({ product, active }) => <StyledOption active={active} />;
+const SelectProductOption = ({ Name, active }) => {
+	console.log(Name);
+	return <StyledOption active={active} />;
+};
 
 export default SelectProductOption;
 
