@@ -24,6 +24,7 @@ const StyledImgCont = styled.div`
 	min-width: 100%;
 	text-align: center;
 	margin-top: 2.5rem;
+	grid-area: image;
 
 	img {
 		object-fit: cover;

@@ -19,9 +19,9 @@ export default SelectProductOption;
 const StyledOption = styled.div`
 	background-color: ${(props) => props.theme.secondaryColor};
 	border-radius: 50%;
-	margin: 2rem auto;
 	cursor: pointer;
 	transition: 0.3s ease-in-out;
+	margin: 0 auto;
 	min-height: 5rem;
 	max-width: 5rem;
 	min-width: 5rem;

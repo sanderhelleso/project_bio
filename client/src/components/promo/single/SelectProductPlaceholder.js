@@ -6,9 +6,8 @@ const SelectProductPlaceholder = () => <StyledPlaceholder />;
 
 export default SelectProductPlaceholder;
 
-const StyledPlaceholder = styled.div`
+const StyledPlaceholder = styled.li`
 	border-radius: 50%;
-	margin: 2rem auto;
 	pointer-events: none;
 	min-height: 5rem;
 	max-width: 5rem;

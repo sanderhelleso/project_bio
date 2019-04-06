@@ -48,7 +48,7 @@ class Single extends Component {
 	}
 
 	render() {
-		return <Container>{this.renderPromo()}</Container>;
+		return <Container max={85}>{this.renderPromo()}</Container>;
 	}
 }
 

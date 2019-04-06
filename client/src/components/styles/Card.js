@@ -9,9 +9,19 @@ const cardStyles = `
 export const PromoCardSingle = styled.div`
 	${cardStyles};
 	min-width: 100%;
-	max-width: 1000px;
 	min-height: 400px;
 	margin: 5rem auto;
 	display: grid;
 	grid-template-columns: 30% 55% 15%;
+	grid-template-areas: "image info options";
+
+	@media screen and (max-width: 1100px) {
+		grid-template-columns: 50% 50%;
+
+		/* prettier-ignore */
+		grid-template-areas:
+			"image info" 
+			"options options"
+		;
+	}
 `;

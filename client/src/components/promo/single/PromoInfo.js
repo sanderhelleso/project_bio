@@ -30,8 +30,9 @@ const PromoInfo = ({ title, description, promotion_code, CreatedAt, profile, act
 export default PromoInfo;
 
 const StyledInfoCont = styled.div`
-	padding: 2rem;
+	padding: 2rem 4rem 2rem 2rem;
 	overflow: hidden;
+	grid-area: info;
 
 	h2 {
 		margin-top: 0;
