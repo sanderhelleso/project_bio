@@ -16,7 +16,7 @@ const SelectProductOption = ({ product, active }) => {
 
 export default SelectProductOption;
 
-const StyledOption = styled.li`
+const StyledOption = styled.div`
 	border-radius: 50%;
 	margin: 2rem auto;
 	cursor: pointer;

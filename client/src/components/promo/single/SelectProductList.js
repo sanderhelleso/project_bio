@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import SelectProductOption from './SelectProductOption';
 import SelectProductPlaceholder from './SelectProductPlaceholder';
 
-const SelectProductList = ({ products }) => {
+const SelectProductList = ({ products, active, updateState }) => {
+	console.log(active);
 	const renderProducts = () => {
 		for (let i = 0; i < 3 - products.length + i; i++) products.push(-1);
 		return products;
@@ -14,7 +15,11 @@ const SelectProductList = ({ products }) => {
 			{renderProducts().map((product) => {
 				if (product === -1) return <SelectProductPlaceholder />;
 
-				return <SelectProductOption key={product} active={products[0] === product} product={product} />;
+				return (
+					<li onClick={() => updateState({ active: product })}>
+						<SelectProductOption key={product.image} active={product === active} product={product} />
+					</li>
+				);
 			})}
 		</StyledList>
 	);
