@@ -45,15 +45,18 @@ type PromoFormWithID struct {
 type Promos struct {
 	ps 	models.PromoService
 	pps models.PromoProductService
+	profs  models.ProfileService
 }
 
 // NewPromos is used to create a new promoer controller
 func NewPromos(
 	ps models.PromoService, 
-	pps models.PromoProductService) *Promos {
+	pps models.PromoProductService,
+	profs models.ProfileService) *Promos {
 	return &Promos {
 		ps,
 		pps,
+		profs,
 	}
 }
 
@@ -101,7 +104,7 @@ func (p *Promos) Create(c *gin.Context) {
 	}
 
 	// create products connected to created promo
-	promoProcutIDs := make([]uint, 0)
+	promoProductIDs := make([]uint, 0)
 	for _, product := range form.Products {
 
 		promoProduct := models.PromoProduct {
@@ -121,13 +124,16 @@ func (p *Promos) Create(c *gin.Context) {
 			return
 		}
 
-		promoProcutIDs = append(promoProcutIDs, promoProduct.ID)
+		promoProductIDs = append(promoProductIDs, promoProduct.ID)
 	}
 
 	c.JSON(http.StatusCreated, gin.H {
 		"message": 	"Promo successfully created",
 		"status": 	http.StatusCreated,
-		"payload": 	promoProcutIDs,
+		"payload": 	gin.H {
+			"promoProductIDs": promoProductIDs,
+			"promoID": promoID,
+		},
 	})
 }
 
@@ -167,9 +173,9 @@ func (p *Promos) Update(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusInternalServerError, gin.H {
+	c.JSON(http.StatusOK, gin.H {
 		"message": 	"Promo successfully updated",
-		"status": 	http.StatusInternalServerError,
+		"status": 	http.StatusOK,
 		"payload": 	promo,
 	})
 }
@@ -181,7 +187,7 @@ func (p *Promos) Update(c *gin.Context) {
 // ROUTE:	/promos/delete
 //
 // BODY:	PromoID
-func (p *Promos) Delete (c *gin.Context) {
+func (p *Promos) Delete(c *gin.Context) {
 
 	var form PromoFormWithID
 	if c.Bind(&form) != nil {
@@ -206,49 +212,56 @@ func (p *Promos) Delete (c *gin.Context) {
 		"Promo succesfully removed!")
 }
 
-// PromoUpload handle uploading of a promos image
-/*func (p *Promos) PromoUpload(c *gin.Context) {
+// ByID is used to find a promotion
+// by the passed in handle and promo ID
+//
+// METHOD: 	GET
+// ROUTE:	/promos/:handle/:id
+//
+// PARAMS: handle, id
+func (p *Promos) ByID(c *gin.Context) {
 
-	// get file from form
-	f, _ := c.FormFile("image")
+	// attempt to find the user by the provided handle
+	handle := c.Params.ByName("handle")
+	profile , err := p.profs.ByHandle(handle)
 
-	var form PromoFormWithID
-	if c.Bind(&form) != nil || f == nil {
+	if err != nil {
 		response.RespondWithError(
 			c, 
-			http.StatusUnprocessableEntity, 
-			"Unable to process form data due to invalid format")
+			http.StatusNotFound, 
+			fmt.Sprintf("Could not find any profiles with the handle: %s", handle))
 		return
 	}
 
-	// find promo releated to id
-	promo, err := p.ps.ByID(form.ID)
+	// find the promo by the given id
+	id, _ := parser.ParseUserID(c.Params.ByName("id"))
+	promo, err := p.ps.ByID(id)
+
+	if err != nil || promo.UserID != profile.UserID {
+		response.RespondWithError(
+			c, 
+			http.StatusNotFound, 
+			fmt.Sprintf("%s does not have any promotions with the ID: %d", handle, id))
+		return
+	}
+	
+	// find the promos products by the promos id
+	prroducts, err := p.pps.ByPromoID(promo.ID)
 	if err != nil {
-		uploadPromoErr(c, err.Error())
+		response.RespondWithError(
+			c, 
+			http.StatusNotFound, 
+			fmt.Sprintf("Unable to get the promotions products at this time. Please try again."))
 		return
 	}
 
-	// create promo
-	err = pps.is.CreatePromoProduct(promo, f)
-	if err != nil {
-		uploadPromoErr(c, err.Error())
-		return
-	}
-
-	// update promo
-	p.ps.Update(promo)
-	response.RespondWithSuccess(
-		c,
-		http.StatusCreated,
-		"Promo image successfully uploaded!",
-	)
+	c.JSON(http.StatusOK, gin.H {
+		"message": 	"Promo successfully fetched",
+		"status": 	http.StatusOK,
+		"payload": 	gin.H {
+			"promo": promo,
+			"products": prroducts,
+			"profile": profile,
+		},
+	})
 }
-
-// helper func to send error message releated to promo upload
-func uploadPromoErr(c *gin.Context, errMsg string) {
-	response.RespondWithError(
-		c, 
-		http.StatusInternalServerError, 
-		errMsg,
-	)
-}*/
