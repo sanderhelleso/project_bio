@@ -14,11 +14,11 @@ export default PromoLink;
 const StyledLink = styled.a`
 	display: inline-block;
 	color: ${(props) => props.theme.secondaryColor};
-	margin: 0 2rem;
 	position: relative;
 	cursor: pointer;
 	letter-spacing: 1px;
 	text-decoration: none;
+	margin-top: 2rem;
 
 	&:hover {
 		svg {

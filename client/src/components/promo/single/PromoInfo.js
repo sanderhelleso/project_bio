@@ -32,6 +32,7 @@ export default PromoInfo;
 const StyledInfoCont = styled.div`
 	overflow: hidden;
 	grid-area: info;
+	padding: 2rem 2.5rem;
 
 	h2 {
 		margin-top: 0;
