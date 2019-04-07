@@ -10,7 +10,7 @@ import PromoCard from './PromoCard';
 import Comments from '../comments/Comments';
 import { AddsCard } from '../../styles/Card';
 
-const Single = ({ match: { params } }) => {
+const Single = ({ viewPromoAction, match: { params }, viewing }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		loading: true,
 		error: false
@@ -33,12 +33,8 @@ const Single = ({ match: { params } }) => {
 				});
 			}
 
-			updateState({
-				promo: response.payload.promo,
-				products: response.payload.products,
-				profile: response.payload.profile,
-				loading: false
-			});
+			updateState({ loading: false });
+			viewPromoAction(response.payload);
 		}
 		loadPromo();
 	}, []);
@@ -54,8 +50,8 @@ const Single = ({ match: { params } }) => {
 
 		return (
 			<StyledPromoGrid>
-				<PromoCard {...state} />
-				<Comments promoOwner={state.profile.handle} />
+				<PromoCard {...viewing} />
+				<Comments promoOwner={viewing.profile.handle} />
 				<AddsCard />
 			</StyledPromoGrid>
 		);
@@ -64,15 +60,15 @@ const Single = ({ match: { params } }) => {
 	return <Container max={85}>{renderPromo()}</Container>;
 };
 
-const mapStateToProps = (state) => {
-	return { viewing: state.promos.viewing };
+const mapStateToProps = ({ promos: { viewing } }) => {
+	return { viewing };
 };
 
 const mapDispatchToProps = (dispatch) => {
-	return bindActionCreators({ viewPromoAction }), dispatch;
+	return bindActionCreators({ viewPromoAction }, dispatch);
 };
 
-export default connect(mapStateToProps, null)(Single);
+export default connect(mapStateToProps, mapDispatchToProps)(Single);
 
 const StyledPromoGrid = styled.div`
 	display: grid;
