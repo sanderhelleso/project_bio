@@ -1,4 +1,4 @@
-import React, { Fragment, useReducer, useEffect } from 'react';
+import React, { Fragment, useReducer, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { CommentsCard } from '../../styles/Card';
 import CommentsInfo from './CommentsInfo';
@@ -7,10 +7,12 @@ import LoadMoreComments from './LoadMoreComments';
 import CommentSeperator from './CommentSeperator';
 import ScrollTopOfComments from './ScrollTopOfComments';
 import PostComment from './PostComment';
+import updatePromoCommentsAction from '../../../actions/promoActions/updatePromoCommentsAction';
 
 import { connect } from 'react-redux';
+import { bindActionCreators } from '../../../../../../../../Users/sande/AppData/Local/Microsoft/TypeScript/3.3/node_modules/redux';
 
-const Comments = ({ profile, promoOwner }) => {
+const Comments = ({ updatePromoCommentsAction, profile, promoOwner, comments }) => {
 	const data = [
 		{
 			id: 1,
@@ -55,13 +57,12 @@ const Comments = ({ profile, promoOwner }) => {
 		}
 	];
 
-	const [ state, updateComments ] = useReducer((state, newState) => ({ ...state, ...newState }), {
-		comments: data
-	});
+	const [ loading, isLoading ] = useState(true);
 
-	const { comments } = state;
-
-	const byPostedAt = (a, b) => b.profile.postedAt - a.profile.postedAt;
+	useEffect(() => {
+		updatePromoCommentsAction(data);
+		isLoading(false);
+	}, []);
 
 	const isOwner = ({ handle }) => {
 		return promoOwner === handle;
@@ -83,12 +84,7 @@ const Comments = ({ profile, promoOwner }) => {
 			return (
 				<Fragment>
 					{loadedComments}
-					<LoadMoreComments
-						limit={16}
-						updateComments={updateComments}
-						fetchFromIndex={comments.length}
-						comments={comments}
-					/>
+					<LoadMoreComments limit={16} fetchFromIndex={comments.length} comments={comments} />
 					<ScrollTopOfComments currAmount={comments.length} />
 				</Fragment>
 			);
@@ -99,15 +95,19 @@ const Comments = ({ profile, promoOwner }) => {
 
 	return (
 		<CommentsCard id="comments-cont">
-			<CommentsInfo comments={comments} />
-			<PostComment updateComments={updateComments} profile={profile} comments={comments} />
-			{renderComments()}
+			{!loading && <CommentsInfo comments={comments} />}
+			<PostComment profile={profile} />
+			{!loading && renderComments()}
 		</CommentsCard>
 	);
 };
 
-const mapStateToProps = ({ profile: { handle, avatar } }) => {
-	return { profile: { handle, avatar } };
+const mapStateToProps = ({ profile: { handle, avatar }, promos: { viewing: { comments } } }) => {
+	return { profile: { handle, avatar }, comments };
 };
 
-export default connect(mapStateToProps, null)(Comments);
+const mapDispatchToProps = (dispatch) => {
+	return bindActionCreators({ updatePromoCommentsAction }, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Comments);
