@@ -1,4 +1,4 @@
-import React, { Fragment, useReducer } from 'react';
+import React, { Fragment, useReducer, useEffect } from 'react';
 import styled from 'styled-components';
 import { CommentsCard } from '../../styles/Card';
 import CommentsInfo from './CommentsInfo';

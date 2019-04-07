@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import { getPromo } from '../../../api/promo/promo';
 
@@ -10,63 +10,66 @@ import PromoCard from './PromoCard';
 import Comments from '../comments/Comments';
 import { AddsCard } from '../../styles/Card';
 
-class Single extends Component {
-	state = {
+const Single = ({ match: { params } }) => {
+	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		loading: true,
 		error: false
-	};
+	});
 
-	async componentDidMount() {
-		// TODO: check if same promo is already loaded
+	const { loading, error } = state;
 
-		// attempt to load promo by the given handler and param ID
-		const { handle, id } = this.props.match.params;
-		const response = await getPromo(handle, id);
-		console.log(response);
-		if (response.status > 400) {
-			return this.setState({
-				error: response.message,
+	useEffect(() => {
+		async function loadPromo() {
+			// TODO: check if same promo is already loaded
+
+			// attempt to load promo by the given handler and param ID
+			const { handle, id } = params;
+			const response = await getPromo(handle, id);
+			console.log(response);
+			if (response.status > 400) {
+				return updateState({
+					error: response.message,
+					loading: false
+				});
+			}
+
+			updateState({
+				promo: response.payload.promo,
+				products: response.payload.products,
+				profile: response.payload.profile,
 				loading: false
 			});
 		}
+		loadPromo();
+	}, []);
 
-		this.setState({
-			promo: response.payload.promo,
-			products: response.payload.products,
-			profile: response.payload.profile,
-			loading: false
-		});
-	}
-
-	renderPromo() {
-		if (!this.state.loading && this.state.error) {
-			return <p>{this.state.error}</p>;
+	const renderPromo = () => {
+		if (!loading && error) {
+			return <p>{error}</p>;
 		}
 
-		if (this.state.loading) {
+		if (loading) {
 			return <p>Loading...</p>;
 		}
 
 		return (
 			<StyledPromoGrid>
-				<PromoCard {...this.state} />
-				<Comments promoOwner={this.state.profile.handle} />
+				<PromoCard {...state} />
+				<Comments promoOwner={state.profile.handle} />
 				<AddsCard />
 			</StyledPromoGrid>
 		);
-	}
+	};
 
-	render() {
-		return <Container max={85}>{this.renderPromo()}</Container>;
-	}
-}
+	return <Container max={85}>{renderPromo()}</Container>;
+};
 
 const mapStateToProps = (state) => {
 	return { viewing: state.promos.viewing };
 };
 
 const mapDispatchToProps = (dispatch) => {
-	return { viewPromoAction }, dispatch;
+	return bindActionCreators({ viewPromoAction }), dispatch;
 };
 
 export default connect(mapStateToProps, null)(Single);
