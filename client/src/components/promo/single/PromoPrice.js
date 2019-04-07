@@ -9,13 +9,17 @@ const PromoPrice = ({ price, currency, discount_amount }) => {
 	};
 
 	const renderPriceAfter = () => {
-		if (discount_amount > 0) {
+		/*if (discount_amount) {
 			const amountDiscounted = 20 / 100 * price;
 			const discountedPrice = (price - amountDiscounted).toFixed(2);
 			return discountedPrice;
 		}
 
-		return price.toFixed(2);
+		return price.toFixed(2);*/
+
+		const amountDiscounted = 20 / 100 * price;
+		const discountedPrice = (price - amountDiscounted).toFixed(2);
+		return discountedPrice;
 	};
 
 	return (
