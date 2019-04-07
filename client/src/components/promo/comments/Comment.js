@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import CommentProfile from './CommentProfile';
-import ReplyComment from './ReplyComment';
+import ReplyCommentField from './ReplyCommentField';
 
 const Comment = ({ profile, comment }) => (
 	<StyledComment>
 		<CommentProfile {...profile} />
 		<p>{comment}</p>
-		<ReplyComment handle={profile.handle} />
+		<ReplyCommentField handle={profile.handle} />
 	</StyledComment>
 );
 

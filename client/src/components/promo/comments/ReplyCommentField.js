@@ -1,10 +1,10 @@
 import React, { Fragment, useReducer } from 'react';
 import styled from 'styled-components';
 import { TextArea } from '../../styles/Input';
-import { Button, Buttons, FlatButton } from '../../styles/Button';
-import FeatherIcons from 'feather-icons-react';
+import { Button } from '../../styles/Button';
+import ReplyCommentPublish from './ReplyCommentPublish';
 
-const ReplyComment = ({ handle }) => {
+const ReplyCommentField = ({ handle }) => {
 	const replyTo = `Reply to ${handle}`;
 
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
@@ -25,15 +25,7 @@ const ReplyComment = ({ handle }) => {
 						onChange={(e) => updateState({ [e.target.name]: e.target.value })}
 						value={comment}
 					/>
-					<Buttons id="buttons">
-						<Button size="small">
-							Publish
-							<FeatherIcons icon="check" />
-						</Button>
-						<FlatButton size="small" onClick={() => updateState({ isOpen: !isOpen })}>
-							Cancel
-						</FlatButton>
-					</Buttons>
+					<ReplyCommentPublish updateState={updateState} />
 				</Fragment>
 			);
 		}
@@ -48,7 +40,7 @@ const ReplyComment = ({ handle }) => {
 	return <StyledCont>{renderField()}</StyledCont>;
 };
 
-export default ReplyComment;
+export default ReplyCommentField;
 
 const StyledCont = styled.div`
 	margin-top: 2rem;
@@ -59,13 +51,5 @@ const StyledCont = styled.div`
 		min-width: 100%;
 		min-height: 100px;
 		resize: none;
-	}
-
-	#buttons {
-		margin-top: 1rem;
-		button {
-			float: right;
-			margin-left: 1rem;
-		}
 	}
 `;
