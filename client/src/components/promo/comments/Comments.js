@@ -18,6 +18,7 @@ const Comments = ({ profile, promoOwner }) => {
 				avatar: '',
 				postedAt: new Date()
 			},
+			reply: false,
 			comment:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
 		},
@@ -26,6 +27,15 @@ const Comments = ({ profile, promoOwner }) => {
 				handle: 'janteigen',
 				avatar: '',
 				postedAt: new Date()
+			},
+			reply: {
+				profile: {
+					handle: 'sanderhelleso',
+					avatar: '',
+					postedAt: new Date()
+				},
+				comment:
+					'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
 			},
 			comment:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
@@ -36,13 +46,14 @@ const Comments = ({ profile, promoOwner }) => {
 				avatar: '',
 				postedAt: new Date()
 			},
+			reply: false,
 			comment:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
 		}
 	];
 
 	const [ state, updateComments ] = useReducer((state, newState) => ({ ...state, ...newState }), {
-		comments: []
+		comments: data
 	});
 
 	const { comments } = state;

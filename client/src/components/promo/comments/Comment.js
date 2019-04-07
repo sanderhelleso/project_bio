@@ -2,12 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import CommentProfile from './CommentProfile';
 import ReplyCommentField from './ReplyCommentField';
+import CommentReply from './CommentReply';
 
-const Comment = ({ profile, comment, isOwner, isAuthor }) => (
+const Comment = ({ profile, comment, isOwner, isAuthor, reply }) => (
 	<StyledComment>
 		<CommentProfile {...profile} isOwner={isOwner && isAuthor} />
 		<p>{comment}</p>
-		{isOwner && !isAuthor && <ReplyCommentField handle={profile.handle} />}
+		{isOwner && !isAuthor && !reply && <ReplyCommentField handle={profile.handle} />}
+		{reply && <CommentReply reply={reply} />}
 	</StyledComment>
 );
 
