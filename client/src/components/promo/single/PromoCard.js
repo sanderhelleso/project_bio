@@ -6,10 +6,14 @@ import SelectProductList from './SelectProductList';
 
 const PromoCard = ({ promo, products, profile: { handle, avatar } }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
-		active: products[0]
+		active: {
+			id: 0,
+			...products[0]
+		}
 	});
 
 	const { active } = state;
+	console.log(active);
 
 	return (
 		<PromoCardSingle>
