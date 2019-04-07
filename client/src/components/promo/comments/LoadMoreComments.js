@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import FeaterIcons from 'feather-icons-react';
 import { Button } from '../../styles/Button';
 
-const LoadMore = ({ updateComments, fetchFromIndex, comments }) => {
+const LoadMore = ({ updateComments, fetchFromIndex, comments, limit }) => {
 	const [ loading, isLoading ] = useState(false);
 
 	const fetchNewComments = () => {
@@ -44,12 +44,14 @@ const LoadMore = ({ updateComments, fetchFromIndex, comments }) => {
 	};
 
 	return (
-		<StyledCont>
-			<Button onClick={() => fetchNewComments()} disabled={loading}>
-				Show More
-				<FeaterIcons icon="more-horizontal" />
-			</Button>
-		</StyledCont>
+		comments.length < limit && (
+			<StyledCont>
+				<Button onClick={() => fetchNewComments()} disabled={loading}>
+					Show More
+					<FeaterIcons icon="more-horizontal" />
+				</Button>
+			</StyledCont>
+		)
 	);
 };
 

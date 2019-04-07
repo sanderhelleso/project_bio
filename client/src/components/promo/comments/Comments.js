@@ -66,6 +66,7 @@ const Comments = ({ profile }) => {
 				<Fragment>
 					{loadedComments}
 					<LoadMoreComments
+						limit={16}
 						updateComments={updateComments}
 						fetchFromIndex={comments.length}
 						comments={comments}
