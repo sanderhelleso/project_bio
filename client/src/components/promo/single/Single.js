@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import viewPromoAction from '../../../actions/promoActions/viewPromoAction';
 import Container from '../../styles/Container';
 import PromoCard from './PromoCard';
+import Comments from '../comments/Comments';
 
 class Single extends Component {
 	state = {
@@ -48,7 +49,12 @@ class Single extends Component {
 	}
 
 	render() {
-		return <Container max={85}>{this.renderPromo()}</Container>;
+		return (
+			<Container max={85}>
+				{this.renderPromo()}
+				<Comments />
+			</Container>
+		);
 	}
 }
 

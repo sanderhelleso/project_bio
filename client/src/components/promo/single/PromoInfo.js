@@ -86,7 +86,7 @@ const StyledActionCont = styled.div`
 	min-width: 100%;
 
 	p {
-		margin-bottom: 1.5rem;
+		margin-bottom: 0.5rem;
 		margin-top: 0;
 		font-size: 0.9rem;
 	}
