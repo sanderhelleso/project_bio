@@ -5,6 +5,7 @@ import CommentsInfo from './CommentsInfo';
 import Comment from './Comment';
 import { Button } from '../../styles/Button';
 import LoadMore from './LoadMore';
+import CommentSeperator from './CommentSeperator';
 
 const Comments = () => {
 	const comments = [
@@ -39,7 +40,7 @@ const Comments = () => {
 
 	const renderComments = () => {
 		const loadedComments = comments.map((comment) => {
-			return <Comment key={comment} {...comment} />;
+			return [ <Comment key={comment} {...comment} />, <CommentSeperator /> ];
 		});
 
 		if (loadedComments.length) {
