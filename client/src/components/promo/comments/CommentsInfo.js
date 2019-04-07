@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
-import FeaterIcons from 'feather-icons-react';
 
 const CommentsInfo = ({ comments }) => {
 	const renderComments = () => {
@@ -16,12 +15,7 @@ const CommentsInfo = ({ comments }) => {
 		return <StyledHeading>Showing {comments.length} comments</StyledHeading>;
 	};
 
-	return (
-		<StyledInfo>
-			{renderComments()}
-			<FeaterIcons icon="volume-2" />
-		</StyledInfo>
-	);
+	return <StyledInfo>{renderComments()}</StyledInfo>;
 };
 
 export default CommentsInfo;

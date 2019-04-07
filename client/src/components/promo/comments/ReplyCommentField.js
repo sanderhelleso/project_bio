@@ -31,7 +31,12 @@ const ReplyCommentField = ({ handle }) => {
 						value={comment}
 					/>
 					<CharactersRemaining curr={comment.length} max={maxLength} />
-					<ReplyCommentPublish updateState={updateState} />
+					<ReplyCommentPublish
+						updateState={updateState}
+						minLength={minLength}
+						maxLength={maxLength}
+						curr={comment.length}
+					/>
 				</Fragment>
 			);
 		}
@@ -48,14 +53,4 @@ const ReplyCommentField = ({ handle }) => {
 
 export default ReplyCommentField;
 
-const StyledCont = styled.div`
-	margin-top: 2rem;
-
-	textarea {
-		font-size: 0.9rem;
-		padding: 8px;
-		min-width: 100%;
-		min-height: 100px;
-		resize: none;
-	}
-`;
+const StyledCont = styled.div`margin-top: 2rem;`;

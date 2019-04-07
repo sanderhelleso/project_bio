@@ -52,6 +52,14 @@ export const CommentsCard = styled.div`
 	grid-area: comments;
 	margin-bottom: 5rem;
 	padding: 4rem;
+
+	textarea {
+		font-size: 0.9rem;
+		padding: 8px;
+		min-width: 100%;
+		min-height: 100px;
+		resize: none;
+	}
 `;
 
 export const AddsCard = styled.div`

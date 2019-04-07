@@ -3,12 +3,15 @@ import styled from 'styled-components';
 import CommentAvatar from './CommentAvatar';
 import CommentInfo from './CommentInfo';
 
-const CommentProfile = ({ avatar, handle, postedAt }) => (
-	<StyledProfile>
-		<CommentAvatar {...{ handle, avatar }} />
-		<CommentInfo {...{ handle, postedAt }} />
-	</StyledProfile>
-);
+const CommentProfile = ({ avatar, handle, postedAt }) => {
+	console.log(postedAt);
+	return (
+		<StyledProfile>
+			<CommentAvatar {...{ handle, avatar }} />
+			<CommentInfo {...{ handle, postedAt }} />
+		</StyledProfile>
+	);
+};
 
 export default CommentProfile;
 
