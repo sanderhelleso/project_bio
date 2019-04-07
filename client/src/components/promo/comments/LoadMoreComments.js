@@ -13,7 +13,7 @@ const LoadMore = ({ updateComments, fetchFromIndex, comments }) => {
 				profile: {
 					handle: Math.random(),
 					avatar: '',
-					postedAt: new Date().toDateString()
+					postedAt: new Date()
 				},
 				comment:
 					'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
@@ -22,7 +22,7 @@ const LoadMore = ({ updateComments, fetchFromIndex, comments }) => {
 				profile: {
 					handle: Math.random(),
 					avatar: '',
-					postedAt: new Date().toDateString()
+					postedAt: new Date()
 				},
 				comment:
 					'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
@@ -31,7 +31,7 @@ const LoadMore = ({ updateComments, fetchFromIndex, comments }) => {
 				profile: {
 					handle: Math.random(),
 					avatar: '',
-					postedAt: new Date().toDateString()
+					postedAt: new Date()
 				},
 				comment:
 					'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { withRouter } from 'react-router-dom';
+import { tsToDate } from '../../../lib/format';
 
 const PromoOwner = ({ avatar, handle, postedAt, history }) => (
 	<StyledOwnerCont>
@@ -10,7 +11,7 @@ const PromoOwner = ({ avatar, handle, postedAt, history }) => (
 			onClick={() => history.push(`/${handle}`)}
 		/>
 		<span>
-			<span>{new Date(postedAt).toDateString()}</span>
+			<span>{tsToDate(postedAt)}</span>
 			{handle}
 		</span>
 	</StyledOwnerCont>
