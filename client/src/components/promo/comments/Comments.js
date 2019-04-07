@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import { CommentsCard } from '../../styles/Card';
 import CommentsInfo from './CommentsInfo';
 import Comment from './Comment';
+import { Button } from '../../styles/Button';
+import LoadMore from './LoadMore';
 
 const Comments = () => {
 	const comments = [
@@ -36,9 +38,20 @@ const Comments = () => {
 	];
 
 	const renderComments = () => {
-		return comments.map((comment) => {
+		const loadedComments = comments.map((comment) => {
 			return <Comment key={comment} {...comment} />;
 		});
+
+		if (loadedComments.length) {
+			return (
+				<Fragment>
+					{loadedComments}
+					<LoadMore />
+				</Fragment>
+			);
+		}
+
+		return null;
 	};
 
 	return (
