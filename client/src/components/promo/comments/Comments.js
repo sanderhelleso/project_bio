@@ -10,7 +10,7 @@ import PostComment from './PostComment';
 
 import { connect } from 'react-redux';
 
-const Comments = ({ profile }) => {
+const Comments = ({ profile, promoOwner }) => {
 	const data = [
 		{
 			profile: {
@@ -49,14 +49,18 @@ const Comments = ({ profile }) => {
 
 	const byPostedAt = (a, b) => b.profile.postedAt - a.profile.postedAt;
 
-	const isOwner = ({ profile: { handle } }) => {
+	const isOwner = ({ handle }) => {
+		return promoOwner === handle;
+	};
+
+	const isAuthor = ({ profile: { handle } }) => {
 		return profile.handle === handle;
 	};
 
 	const renderComments = () => {
 		const loadedComments = comments.map((comment, i) => {
 			return [
-				<Comment key={`${i}a`} {...comment} isOwner={isOwner(comment)} />,
+				<Comment key={`${i}a`} {...comment} isAuthor={isAuthor(comment)} isOwner={isOwner(profile)} />,
 				<CommentSeperator key={`${i}b`} />
 			];
 		});

@@ -50,7 +50,7 @@ class Single extends Component {
 		return (
 			<StyledPromoGrid>
 				<PromoCard {...this.state} />
-				<Comments />
+				<Comments promoOwner={this.state.profile.handle} />
 				<AddsCard />
 			</StyledPromoGrid>
 		);

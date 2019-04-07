@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import CommentProfile from './CommentProfile';
 import ReplyCommentField from './ReplyCommentField';
 
-const Comment = ({ profile, comment, isOwner }) => (
+const Comment = ({ profile, comment, isOwner, isAuthor }) => (
 	<StyledComment>
-		<CommentProfile {...profile} isOwner={isOwner} />
+		<CommentProfile {...profile} isOwner={isOwner && isAuthor} />
 		<p>{comment}</p>
-		{!isOwner && <ReplyCommentField handle={profile.handle} />}
+		{isOwner && !isAuthor && <ReplyCommentField handle={profile.handle} />}
 	</StyledComment>
 );
 

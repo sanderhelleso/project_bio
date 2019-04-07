@@ -5,7 +5,7 @@ import FeatherIcons from 'feather-icons-react';
 import ReactTooltip from 'react-tooltip';
 
 const CommentAvatar = ({ image, handle, history, isOwner }) => {
-	const id = `owner-tooltio-${Math.random()}`;
+	const id = `owner-tooltip-${Math.random()}`;
 
 	return (
 		<StyledAvatar onClick={() => history.push(`/${handle}`)}>
