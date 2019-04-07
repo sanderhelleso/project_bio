@@ -52,6 +52,7 @@ export const CommentsCard = styled.div`
 	grid-area: comments;
 	margin-bottom: 5rem;
 	padding: 4rem;
+	word-break: break-all;
 
 	textarea {
 		font-size: 0.9rem;

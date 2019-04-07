@@ -10,9 +10,10 @@ const CharactersRemaining = ({ curr, max }) => (
 export default CharactersRemaining;
 
 const StyledHelper = styled.span`
-	float: left;
+	float: right;
 	font-size: 0.8rem;
-	margin-top: 1rem;
+	margin-right: 0.5rem;
+	margin-top: 0.5rem;
 	font-weight: 800;
 	color: ${(props) => props.theme.weakerColor};
 

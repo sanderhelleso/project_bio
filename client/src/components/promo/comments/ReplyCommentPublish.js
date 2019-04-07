@@ -6,7 +6,7 @@ import FeatherIcons from 'feather-icons-react';
 const ReplyCommentPublish = ({ updateState, curr, minLength, maxLength }) => (
 	<StyledCont>
 		<Buttons>
-			<Button size="small" disabled={curr < minLength || curr > maxLength}>
+			<Button size="small" disabled={curr.trim().length < minLength || curr.length > maxLength}>
 				Publish
 				<FeatherIcons icon="check" />
 			</Button>
@@ -21,9 +21,12 @@ export default ReplyCommentPublish;
 
 const StyledCont = styled.div`
 	margin-top: 1rem;
-	clear: both;
 	button {
 		float: right;
 		margin-left: 1rem;
+		margin-bottom: 1rem;
+		@media screen and (max-width: 1060px) {
+			min-width: 100%;
+		}
 	}
 `;

@@ -29,6 +29,11 @@ const PostComment = ({ updateComments, profile, comments }) => {
 		updateState({ comment: '' });
 	};
 
+	const updateComment = (e) => {
+		if (!e.target.value.trim() && !comment.length) return;
+		updateState({ [e.target.name]: e.target.value });
+	};
+
 	return (
 		<StyledComment>
 			<TextArea
@@ -36,20 +41,20 @@ const PostComment = ({ updateComments, profile, comments }) => {
 				maxLength={maxLength}
 				placeholder="Post a new comment..."
 				name="comment"
-				onChange={(e) => updateState({ [e.target.name]: e.target.value })}
+				onChange={(e) => updateComment(e)}
 				value={comment}
 			/>
-			<CharactersRemaining curr={comment.length} max={maxLength} />
 			<StyledBtnCont>
 				<Button
 					size="small"
 					onClick={() => buildAndPostComment()}
-					disabled={comment.length < minLength || comment.length > maxLength}
+					disabled={comment.trim().length < minLength || comment.length > maxLength}
 				>
 					Publish
 					<FeatherIcons icon="check" />
 				</Button>
 			</StyledBtnCont>
+			<CharactersRemaining curr={comment.length} max={maxLength} />
 		</StyledComment>
 	);
 };
