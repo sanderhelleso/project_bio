@@ -6,7 +6,8 @@ import {
 	UNLIKE_PROMO,
 	COMMENT_PROMO,
 	UNCOMMENT_PROMO,
-	VIEW_PROMO
+	VIEW_PROMO,
+	UPDATE_PROMO_COMMENTS
 } from '../actions/actionTypes';
 
 const initialState = { amount: 0, list: {}, viewing: null };
@@ -57,6 +58,15 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				viewing: action.payload
+			};
+
+		case UPDATE_PROMO_COMMENTS:
+			return {
+				...state,
+				viewing: {
+					...state.viewing,
+					comments: action.payload
+				}
 			};
 
 		default:

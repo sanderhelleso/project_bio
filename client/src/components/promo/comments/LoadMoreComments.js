@@ -10,6 +10,7 @@ const LoadMore = ({ updateComments, fetchFromIndex, comments, limit }) => {
 		isLoading(true);
 		const testData = [
 			{
+				id: comments.length + 1,
 				profile: {
 					handle: Math.random(),
 					avatar: '',
@@ -19,6 +20,7 @@ const LoadMore = ({ updateComments, fetchFromIndex, comments, limit }) => {
 					'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
 			},
 			{
+				id: comments.length + 2,
 				profile: {
 					handle: Math.random(),
 					avatar: '',
@@ -28,6 +30,7 @@ const LoadMore = ({ updateComments, fetchFromIndex, comments, limit }) => {
 					'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
 			},
 			{
+				id: comments.length + 3,
 				profile: {
 					handle: Math.random(),
 					avatar: '',

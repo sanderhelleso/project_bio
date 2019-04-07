@@ -4,12 +4,12 @@ import CommentProfile from './CommentProfile';
 import ReplyCommentField from './ReplyCommentField';
 import CommentReply from './CommentReply';
 
-const Comment = ({ profile, comment, isOwner, isAuthor, reply }) => (
+const Comment = ({ profile, comment, isOwner, isAuthor, reply, id }) => (
 	<StyledComment>
 		<CommentProfile {...profile} isOwner={isOwner && isAuthor} />
 		<p>{comment}</p>
 		{isOwner && !isAuthor && !reply && <ReplyCommentField handle={profile.handle} />}
-		{reply && <CommentReply reply={reply} />}
+		{reply && <CommentReply reply={reply} id={id} />}
 	</StyledComment>
 );
 

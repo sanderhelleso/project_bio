@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 const Comments = ({ profile, promoOwner }) => {
 	const data = [
 		{
+			id: 1,
 			profile: {
 				handle: 'sanderhelleso',
 				avatar: '',
@@ -23,6 +24,7 @@ const Comments = ({ profile, promoOwner }) => {
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
 		},
 		{
+			id: 2,
 			profile: {
 				handle: 'janteigen',
 				avatar: '',
@@ -41,6 +43,7 @@ const Comments = ({ profile, promoOwner }) => {
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
 		},
 		{
+			id: 3,
 			profile: {
 				handle: 'rudycruz',
 				avatar: '',
