@@ -1,14 +1,14 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useReducer } from 'react';
 import styled from 'styled-components';
 import { CommentsCard } from '../../styles/Card';
 import CommentsInfo from './CommentsInfo';
 import Comment from './Comment';
 import { Button } from '../../styles/Button';
-import LoadMore from './LoadMore';
+import LoadMoreComments from './LoadMoreComments';
 import CommentSeperator from './CommentSeperator';
 
 const Comments = () => {
-	const comments = [
+	const data = [
 		{
 			profile: {
 				handle: 'sanderhelleso',
@@ -38,16 +38,26 @@ const Comments = () => {
 		}
 	];
 
+	const [ state, updateComments ] = useReducer((state, newState) => ({ ...state, ...newState }), {
+		comments: data
+	});
+
+	const { comments } = state;
+
 	const renderComments = () => {
-		const loadedComments = comments.map((comment) => {
-			return [ <Comment key={comment} {...comment} />, <CommentSeperator /> ];
+		const loadedComments = comments.map((comment, i) => {
+			return [ <Comment key={`${i}a`} {...comment} />, <CommentSeperator key={`${i}b`} /> ];
 		});
 
 		if (loadedComments.length) {
 			return (
 				<Fragment>
 					{loadedComments}
-					<LoadMore />
+					<LoadMoreComments
+						updateComments={updateComments}
+						fetchFromIndex={comments.length}
+						comments={comments}
+					/>
 				</Fragment>
 			);
 		}
