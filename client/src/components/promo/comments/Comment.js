@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import CommentProfile from './CommentProfile';
+import ReplyCommentField from './ReplyCommentField';
 
 const Comment = ({ profile, comment }) => (
 	<StyledComment>
 		<CommentProfile {...profile} />
 		<p>{comment}</p>
+		<ReplyCommentField handle={profile.handle} />
 	</StyledComment>
 );
 
@@ -15,7 +17,7 @@ const StyledComment = styled.div`
 	margin: 2rem 0;
 
 	background-color: #f3f8ff;
-	padding: 2rem;
+	padding: 3rem;
 	border-radius: 12px;
 
 	p {

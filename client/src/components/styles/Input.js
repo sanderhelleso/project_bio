@@ -49,6 +49,35 @@ export const Input = styled.input`
 	}
 `;
 
+export const TextArea = styled.textarea`
+	${inputStyles} border: 1.5px solid ${(props) => props.theme.disabledBg};
+	&::-webkit-scrollbar {
+		width: 0;
+	}
+
+	&::placeholder {
+		opacity: 0.7;
+	}
+
+	&:focus,
+	&:active {
+		border: 1.5px solid ${(props) => props.theme.primaryColor};
+		box-shadow: 0 0 0 2px ${(props) => props.theme.secondaryColor};
+	}
+
+	&:disabled {
+		background-color: ${(props) => props.theme.disabledBg};
+		cursor: not-allowed;
+		opacity: 0.7;
+
+		&:focus,
+		&:active {
+			border: 1.5px solid ${(props) => props.theme.disabledBg};
+			box-shadow: none;
+		}
+	}
+`;
+
 export const Label = ({ htmlFor, text }) => <StyledLabel htmlFor={htmlFor}>{text}</StyledLabel>;
 
 const StyledLabel = styled.label`

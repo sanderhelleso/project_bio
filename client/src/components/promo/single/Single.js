@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import { getPromo } from '../../../api/promo/promo';
 
 import { bindActionCreators } from 'redux';
@@ -7,6 +8,7 @@ import viewPromoAction from '../../../actions/promoActions/viewPromoAction';
 import Container from '../../styles/Container';
 import PromoCard from './PromoCard';
 import Comments from '../comments/Comments';
+import { AddsCard } from '../../styles/Card';
 
 class Single extends Component {
 	state = {
@@ -45,16 +47,17 @@ class Single extends Component {
 			return <p>Loading...</p>;
 		}
 
-		return <PromoCard {...this.state} />;
+		return (
+			<StyledPromoGrid>
+				<PromoCard {...this.state} />
+				<Comments />
+				<AddsCard />
+			</StyledPromoGrid>
+		);
 	}
 
 	render() {
-		return (
-			<Container max={85}>
-				{this.renderPromo()}
-				<Comments />
-			</Container>
-		);
+		return <Container max={85}>{this.renderPromo()}</Container>;
 	}
 }
 
@@ -67,3 +70,15 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, null)(Single);
+
+const StyledPromoGrid = styled.div`
+	display: grid;
+	grid-template-columns: 1.5fr 1fr;
+	grid-column-gap: 3rem;
+
+	/* prettier-ignore */
+	grid-template-areas:
+		"promo promo"
+		"comments adds"
+	;
+`;

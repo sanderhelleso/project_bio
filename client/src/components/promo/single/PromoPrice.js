@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { getPercentageOfTotal } from '../../../lib/format';
 
 const PromoPrice = ({ price, currency, discount_amount }) => {
 	const renderPriceBefore = () => {
@@ -10,14 +11,14 @@ const PromoPrice = ({ price, currency, discount_amount }) => {
 
 	const renderPriceAfter = () => {
 		/*if (discount_amount) {
-			const amountDiscounted = 20 / 100 * price;
+			const amountDiscounted =  getPercentageOfTotal(20, price);
 			const discountedPrice = (price - amountDiscounted).toFixed(2);
 			return discountedPrice;
 		}
 
 		return price.toFixed(2);*/
 
-		const amountDiscounted = 20 / 100 * price;
+		const amountDiscounted = getPercentageOfTotal(20, price);
 		const discountedPrice = (price - amountDiscounted).toFixed(2);
 		return discountedPrice;
 	};
