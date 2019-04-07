@@ -19,13 +19,13 @@ const Single = ({ viewPromoAction, match: { params }, viewing }) => {
 	const { loading, error } = state;
 
 	useEffect(() => {
-		const { handle, id } = params;
-		if (viewing.promo.ID === id) {
-			return updateState({ loading: false });
-		}
-
 		async function loadPromo() {
+			// TODO: check if same promo is already loaded
+
+			// attempt to load promo by the given handler and param ID
+			const { handle, id } = params;
 			const response = await getPromo(handle, id);
+			console.log(response);
 			if (response.status > 400) {
 				return updateState({
 					error: response.message,
@@ -34,10 +34,7 @@ const Single = ({ viewPromoAction, match: { params }, viewing }) => {
 			}
 
 			updateState({ loading: false });
-			viewPromoAction({
-				...response.payload,
-				comments: []
-			});
+			viewPromoAction(response.payload);
 		}
 		loadPromo();
 	}, []);
