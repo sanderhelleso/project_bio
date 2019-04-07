@@ -7,7 +7,6 @@ const cardStyles = `
 `;
 
 const promoCardStyles = `
-	min-width: 100%;
 	min-height: 400px;
 	display: grid;
 	padding: 2rem 0;
