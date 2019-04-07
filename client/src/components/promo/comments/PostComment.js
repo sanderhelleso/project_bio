@@ -61,7 +61,12 @@ const PostComment = ({ updateComments, profile, comments }) => {
 
 export default PostComment;
 
-const StyledComment = styled.div`margin: 2rem 0;`;
+const StyledComment = styled.div`
+	margin: 2rem 0;
+	textarea {
+		min-height: 150px;
+	}
+`;
 
 const StyledBtnCont = styled.div`
 	margin-top: 1rem;

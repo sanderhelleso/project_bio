@@ -47,9 +47,18 @@ const Comments = ({ profile }) => {
 
 	const { comments } = state;
 
+	const byPostedAt = (a, b) => b.profile.postedAt - a.profile.postedAt;
+
+	const isOwner = ({ profile: { handle } }) => {
+		return profile.handle === handle;
+	};
+
 	const renderComments = () => {
 		const loadedComments = comments.map((comment, i) => {
-			return [ <Comment key={`${i}a`} {...comment} />, <CommentSeperator key={`${i}b`} /> ];
+			return [
+				<Comment key={`${i}a`} {...comment} isOwner={isOwner(comment)} />,
+				<CommentSeperator key={`${i}b`} />
+			];
 		});
 
 		if (loadedComments.length) {
