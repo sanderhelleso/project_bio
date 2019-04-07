@@ -6,28 +6,38 @@ import PromoOwner from './PromoOwner';
 import PromoPrice from './PromoPrice';
 import ProductNameBrand from './ProductNameBrand';
 
-const PromoInfo = ({ title, description, promotion_code, CreatedAt, profile, active }) => {
+import { bindActionCreators } from 'react';
+import { connect } from 'react-redux';
+
+const PromoInfo = ({
+	promo: { title, description, promotion_code, CreatedAt },
+	active: { name, brand, price, currency, link }
+}) => {
 	return (
 		<StyledInfoCont>
 			<StyledInfoHeader>
 				<h2>{title}</h2>
-				<PromoOwner {...profile} postedAt={CreatedAt} />
+				<PromoOwner postedAt={CreatedAt} />
 				<p>{description}</p>
 			</StyledInfoHeader>
 			<StyledInfoBody>
-				<ProductNameBrand name={active.name} brand={active.brand} />
-				<PromoPrice price={active.price} currency={active.currency} />
+				<ProductNameBrand name={name} brand={brand} />
+				<PromoPrice price={price} currency={currency} />
 			</StyledInfoBody>
 			<StyledActionCont>
 				<p>Use the code below to get {20}% of this product</p>
 				<PromoCode code={promotion_code} />
-				<PromoLink link={active.link} />
+				<PromoLink link={link} />
 			</StyledActionCont>
 		</StyledInfoCont>
 	);
 };
 
-export default PromoInfo;
+const mapStateToProps = ({ promos: { viewing: { promo } } }) => {
+	return { promo };
+};
+
+export default connect(mapStateToProps, null)(PromoInfo);
 
 const StyledInfoCont = styled.div`
 	overflow: hidden;

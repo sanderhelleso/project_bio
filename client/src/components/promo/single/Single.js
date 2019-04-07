@@ -10,6 +10,50 @@ import PromoCard from './PromoCard';
 import Comments from '../comments/Comments';
 import { AddsCard } from '../../styles/Card';
 
+const data = [
+	{
+		id: 1,
+		profile: {
+			handle: 'sanderhelleso',
+			avatar: '',
+			postedAt: new Date()
+		},
+		reply: false,
+		comment:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
+	},
+	{
+		id: 2,
+		profile: {
+			handle: 'janteigen',
+			avatar: '',
+			postedAt: new Date()
+		},
+		reply: {
+			profile: {
+				handle: 'sanderhelleso',
+				avatar: '',
+				postedAt: new Date()
+			},
+			comment:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
+		},
+		comment:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
+	},
+	{
+		id: 3,
+		profile: {
+			handle: 'rudycruz',
+			avatar: '',
+			postedAt: new Date()
+		},
+		reply: false,
+		comment:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
+	}
+];
+
 const Single = ({ viewPromoAction, match: { params }, viewing }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		loading: true,
@@ -34,7 +78,10 @@ const Single = ({ viewPromoAction, match: { params }, viewing }) => {
 			}
 
 			updateState({ loading: false });
-			viewPromoAction(response.payload);
+			viewPromoAction({
+				...response.payload,
+				comments: data
+			});
 		}
 		loadPromo();
 	}, []);
@@ -50,8 +97,8 @@ const Single = ({ viewPromoAction, match: { params }, viewing }) => {
 
 		return (
 			<StyledPromoGrid>
-				<PromoCard {...viewing} />
-				<Comments promoOwner={viewing.profile.handle} />
+				<PromoCard />
+				<Comments promoOwner={viewing.profile.handle} comments={viewing.comments} profile={viewing.profile} />
 				<AddsCard />
 			</StyledPromoGrid>
 		);

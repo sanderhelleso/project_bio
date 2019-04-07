@@ -1,5 +1,4 @@
 import React, { Fragment, useReducer, useEffect } from 'react';
-import styled from 'styled-components';
 import { CommentsCard } from '../../styles/Card';
 import CommentsInfo from './CommentsInfo';
 import Comment from './Comment';
@@ -8,61 +7,7 @@ import CommentSeperator from './CommentSeperator';
 import ScrollTopOfComments from './ScrollTopOfComments';
 import PostComment from './PostComment';
 
-import { connect } from 'react-redux';
-
-const Comments = ({ profile, promoOwner }) => {
-	const data = [
-		{
-			id: 1,
-			profile: {
-				handle: 'sanderhelleso',
-				avatar: '',
-				postedAt: new Date()
-			},
-			reply: false,
-			comment:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
-		},
-		{
-			id: 2,
-			profile: {
-				handle: 'janteigen',
-				avatar: '',
-				postedAt: new Date()
-			},
-			reply: {
-				profile: {
-					handle: 'sanderhelleso',
-					avatar: '',
-					postedAt: new Date()
-				},
-				comment:
-					'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
-			},
-			comment:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
-		},
-		{
-			id: 3,
-			profile: {
-				handle: 'rudycruz',
-				avatar: '',
-				postedAt: new Date()
-			},
-			reply: false,
-			comment:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
-		}
-	];
-
-	const [ state, updateComments ] = useReducer((state, newState) => ({ ...state, ...newState }), {
-		comments: data
-	});
-
-	const { comments } = state;
-
-	const byPostedAt = (a, b) => b.profile.postedAt - a.profile.postedAt;
-
+const Comments = ({ profile, promoOwner, comments }) => {
 	const isOwner = ({ handle }) => {
 		return promoOwner === handle;
 	};
@@ -83,12 +28,7 @@ const Comments = ({ profile, promoOwner }) => {
 			return (
 				<Fragment>
 					{loadedComments}
-					<LoadMoreComments
-						limit={16}
-						updateComments={updateComments}
-						fetchFromIndex={comments.length}
-						comments={comments}
-					/>
+					<LoadMoreComments limit={16} listLength={loadedComments.length} />
 					<ScrollTopOfComments currAmount={comments.length} />
 				</Fragment>
 			);
@@ -100,14 +40,10 @@ const Comments = ({ profile, promoOwner }) => {
 	return (
 		<CommentsCard id="comments-cont">
 			<CommentsInfo comments={comments} />
-			<PostComment updateComments={updateComments} profile={profile} comments={comments} />
+			<PostComment profile={profile} comments={comments} />
 			{renderComments()}
 		</CommentsCard>
 	);
 };
 
-const mapStateToProps = ({ profile: { handle, avatar } }) => {
-	return { profile: { handle, avatar } };
-};
-
-export default connect(mapStateToProps, null)(Comments);
+export default Comments;

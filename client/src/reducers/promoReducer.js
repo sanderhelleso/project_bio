@@ -7,6 +7,7 @@ import {
 	COMMENT_PROMO,
 	UNCOMMENT_PROMO,
 	VIEW_PROMO,
+	SET_PROMO_COMMENTS,
 	UPDATE_PROMO_COMMENTS
 } from '../actions/actionTypes';
 
@@ -60,12 +61,21 @@ export default (state = initialState, action) => {
 				viewing: action.payload
 			};
 
-		case UPDATE_PROMO_COMMENTS:
+		case SET_PROMO_COMMENTS:
 			return {
 				...state,
 				viewing: {
 					...state.viewing,
 					comments: action.payload
+				}
+			};
+
+		case UPDATE_PROMO_COMMENTS:
+			return {
+				...state,
+				viewing: {
+					...state.viewing,
+					comments: [ ...state.viewing.comments, ...action.payload ]
 				}
 			};
 
