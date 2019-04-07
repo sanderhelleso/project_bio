@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { TextArea } from '../../styles/Input';
 import { Button } from '../../styles/Button';
 import ReplyCommentPublish from './ReplyCommentPublish';
+import CharactersRemaining from './CharactersRemaining';
 
 const ReplyCommentField = ({ handle }) => {
 	const replyTo = `Reply to ${handle}`;
@@ -29,9 +30,7 @@ const ReplyCommentField = ({ handle }) => {
 						onChange={(e) => updateState({ [e.target.name]: e.target.value })}
 						value={comment}
 					/>
-					<StyledHelper>
-						{comment.length}/{maxLength} <span>remaining</span>
-					</StyledHelper>
+					<CharactersRemaining curr={comment.length} max={maxLength} />
 					<ReplyCommentPublish updateState={updateState} />
 				</Fragment>
 			);
@@ -58,18 +57,5 @@ const StyledCont = styled.div`
 		min-width: 100%;
 		min-height: 100px;
 		resize: none;
-	}
-`;
-
-const StyledHelper = styled.span`
-	float: left;
-	font-size: 0.8rem;
-	margin-top: 1rem;
-	font-weight: 800;
-	color: ${(props) => props.theme.weakerColor};
-
-	span {
-		font-weight: 400;
-		margin-left: 3px;
 	}
 `;
