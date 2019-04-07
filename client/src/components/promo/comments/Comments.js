@@ -39,7 +39,7 @@ const Comments = () => {
 	];
 
 	const [ state, updateComments ] = useReducer((state, newState) => ({ ...state, ...newState }), {
-		comments: data
+		comments: []
 	});
 
 	const { comments } = state;
