@@ -3,6 +3,7 @@ Project Bio is a platform currently in development, serving as a "middleman" for
 <br>
 <br>
 <img src="https://github.com/sanderhelleso/project_bio/blob/master/screenshots/newPromo.png" />
+<img src="https://github.com/sanderhelleso/project_bio/blob/master/screenshots/promo.jpg" />
 <img src="https://github.com/sanderhelleso/project_bio/blob/master/screenshots/getStarted.jpg" />
 <img src="https://github.com/sanderhelleso/project_bio/blob/master/screenshots/newProfile.jpg" />
 
