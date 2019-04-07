@@ -6,8 +6,11 @@ import Comment from './Comment';
 import LoadMoreComments from './LoadMoreComments';
 import CommentSeperator from './CommentSeperator';
 import ScrollTopOfComments from './ScrollTopOfComments';
+import PostComment from './PostComment';
 
-const Comments = () => {
+import { connect } from 'react-redux';
+
+const Comments = ({ profile }) => {
 	const data = [
 		{
 			profile: {
@@ -44,9 +47,18 @@ const Comments = () => {
 
 	const { comments } = state;
 
+	const byPostedAt = (a, b) => b.profile.postedAt - a.profile.postedAt;
+
+	const isOwner = ({ profile: { handle } }) => {
+		return profile.handle === handle;
+	};
+
 	const renderComments = () => {
 		const loadedComments = comments.map((comment, i) => {
-			return [ <Comment key={`${i}a`} {...comment} />, <CommentSeperator key={`${i}b`} /> ];
+			return [
+				<Comment key={`${i}a`} {...comment} isOwner={isOwner(comment)} />,
+				<CommentSeperator key={`${i}b`} />
+			];
 		});
 
 		if (loadedComments.length) {
@@ -69,9 +81,14 @@ const Comments = () => {
 	return (
 		<CommentsCard id="comments-cont">
 			<CommentsInfo comments={comments} />
+			<PostComment updateComments={updateComments} profile={profile} comments={comments} />
 			{renderComments()}
 		</CommentsCard>
 	);
 };
 
-export default Comments;
+const mapStateToProps = ({ profile: { handle, avatar } }) => {
+	return { profile: { handle, avatar } };
+};
+
+export default connect(mapStateToProps, null)(Comments);

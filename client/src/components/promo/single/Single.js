@@ -81,4 +81,8 @@ const StyledPromoGrid = styled.div`
 		"promo promo"
 		"comments adds"
 	;
+
+	@media screen and (max-width: 800px) {
+		display: block;
+	}
 `;

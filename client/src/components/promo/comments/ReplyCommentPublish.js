@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { Button, Buttons, FlatButton } from '../../styles/Button';
 import FeatherIcons from 'feather-icons-react';
 
-const ReplyCommentPublish = ({ updateState }) => (
+const ReplyCommentPublish = ({ updateState, curr, minLength, maxLength }) => (
 	<StyledCont>
 		<Buttons>
-			<Button size="small">
+			<Button size="small" disabled={curr.trim().length < minLength || curr.length > maxLength}>
 				Publish
 				<FeatherIcons icon="check" />
 			</Button>
@@ -24,5 +24,9 @@ const StyledCont = styled.div`
 	button {
 		float: right;
 		margin-left: 1rem;
+		margin-bottom: 1rem;
+		@media screen and (max-width: 1060px) {
+			min-width: 100%;
+		}
 	}
 `;

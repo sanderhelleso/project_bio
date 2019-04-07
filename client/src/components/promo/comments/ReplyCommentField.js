@@ -17,6 +17,11 @@ const ReplyCommentField = ({ handle }) => {
 
 	const { isOpen, comment } = state;
 
+	const updateComment = (e) => {
+		if (!e.target.value.trim() && !comment.length) return;
+		updateState({ [e.target.name]: e.target.value });
+	};
+
 	const renderField = () => {
 		if (isOpen) {
 			return (
@@ -27,11 +32,16 @@ const ReplyCommentField = ({ handle }) => {
 						autoFocus
 						placeholder={`${replyTo}...`}
 						name="comment"
-						onChange={(e) => updateState({ [e.target.name]: e.target.value })}
+						onChange={(e) => updateComment(e)}
 						value={comment}
 					/>
+					<ReplyCommentPublish
+						updateState={updateState}
+						minLength={minLength}
+						maxLength={maxLength}
+						curr={comment}
+					/>
 					<CharactersRemaining curr={comment.length} max={maxLength} />
-					<ReplyCommentPublish updateState={updateState} />
 				</Fragment>
 			);
 		}
@@ -50,12 +60,5 @@ export default ReplyCommentField;
 
 const StyledCont = styled.div`
 	margin-top: 2rem;
-
-	textarea {
-		font-size: 0.9rem;
-		padding: 8px;
-		min-width: 100%;
-		min-height: 100px;
-		resize: none;
-	}
+	clear: both;
 `;

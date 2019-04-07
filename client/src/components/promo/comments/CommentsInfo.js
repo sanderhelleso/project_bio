@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
-import FeaterIcons from 'feather-icons-react';
 
 const CommentsInfo = ({ comments }) => {
 	const renderComments = () => {
@@ -13,15 +12,14 @@ const CommentsInfo = ({ comments }) => {
 			);
 		}
 
-		return <StyledHeading>Showing {comments.length} comments</StyledHeading>;
+		return (
+			<StyledHeading>
+				Showing {comments.length} comment{comments.length === 1 ? '' : 's'}
+			</StyledHeading>
+		);
 	};
 
-	return (
-		<StyledInfo>
-			{renderComments()}
-			<FeaterIcons icon="volume-2" />
-		</StyledInfo>
-	);
+	return <StyledInfo>{renderComments()}</StyledInfo>;
 };
 
 export default CommentsInfo;
@@ -34,17 +32,14 @@ const StyledInfo = styled.div`
 		font-weight: 100;
 	}
 
-	svg {
-		height: 3.5rem;
-		width: 3.5rem;
-		stroke: ${(props) => props.theme.secondaryColor};
-		margin: 2rem auto;
-	}
+	margin-bottom: 1.25rem;
 `;
 
 const StyledHeading = styled.h5`
 	font-size: 1.5rem;
-	margin-bottom: 0;
+	margin-top: 1rem;
+	margin-bottom: 0.5rem;
 	color: ${(props) => (props.empty ? '' : '#9e9e9e')};
 	font-weight: ${(props) => (props.empty ? '' : 100)};
+	text-align: ${(props) => (props.empty ? '' : 'left')};
 `;

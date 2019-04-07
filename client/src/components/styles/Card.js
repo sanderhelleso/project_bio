@@ -30,8 +30,6 @@ export const PromoCardSingle = styled.div`
 			"info info"
 			"options image"
 		;
-
-		padding-bottom: 2rem;
 	}
 
 	@media screen and (max-width: 600px) {
@@ -50,8 +48,21 @@ export const CommentsCard = styled.div`
 	${cardStyles};
 	${promoCardStyles};
 	grid-area: comments;
-	margin-bottom: 5rem;
+	margin-bottom: 3rem;
 	padding: 4rem;
+	word-break: break-all;
+
+	textarea {
+		font-size: 0.9rem;
+		padding: 8px;
+		min-width: 100%;
+		min-height: 100px;
+		resize: none;
+	}
+
+	@media screen and (max-width: 600px) {
+		padding: 2rem;
+	}
 `;
 
 export const AddsCard = styled.div`

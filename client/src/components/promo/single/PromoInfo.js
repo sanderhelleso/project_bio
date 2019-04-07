@@ -53,7 +53,7 @@ const StyledInfoCont = styled.div`
 
 	@media screen and (max-width: 600px) {
 		border-right: none;
-		padding: 2rem;
+		padding: 1rem;
 	}
 `;
 
