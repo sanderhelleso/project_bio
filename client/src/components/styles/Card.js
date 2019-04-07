@@ -50,5 +50,5 @@ export const CommentsCard = styled.div`
 	${cardStyles};
 	${promoCardStyles};
 	margin-bottom: 5rem;
-	padding: 2rem;
+	padding: 4rem;
 `;

@@ -15,4 +15,10 @@ const CommentsInfo = ({ comments }) => {
 
 export default CommentsInfo;
 
-const StyledInfo = styled.div``;
+const StyledInfo = styled.div`
+	h5 {
+		font-size: 1.5rem;
+		font-weight: 100;
+		color: #9e9e9e;
+	}
+`;
