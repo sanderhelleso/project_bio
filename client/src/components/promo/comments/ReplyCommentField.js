@@ -6,6 +6,8 @@ import ReplyCommentPublish from './ReplyCommentPublish';
 
 const ReplyCommentField = ({ handle }) => {
 	const replyTo = `Reply to ${handle}`;
+	const minLength = 2;
+	const maxLength = 255;
 
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		isOpen: false,
@@ -19,12 +21,17 @@ const ReplyCommentField = ({ handle }) => {
 			return (
 				<Fragment>
 					<TextArea
+						minLength={minLength}
+						maxLength={maxLength}
 						autoFocus
 						placeholder={`${replyTo}...`}
 						name="comment"
 						onChange={(e) => updateState({ [e.target.name]: e.target.value })}
 						value={comment}
 					/>
+					<StyledHelper>
+						{comment.length}/{maxLength} <span>remaining</span>
+					</StyledHelper>
 					<ReplyCommentPublish updateState={updateState} />
 				</Fragment>
 			);
@@ -51,5 +58,18 @@ const StyledCont = styled.div`
 		min-width: 100%;
 		min-height: 100px;
 		resize: none;
+	}
+`;
+
+const StyledHelper = styled.span`
+	float: left;
+	font-size: 0.8rem;
+	margin-top: 1rem;
+	font-weight: 800;
+	color: ${(props) => props.theme.weakerColor};
+
+	span {
+		font-weight: 400;
+		margin-left: 3px;
 	}
 `;
