@@ -79,6 +79,10 @@ const StyledComment = styled.div`
 	textarea {
 		min-height: 150px;
 	}
+
+	@media screen and (max-width: 600px) {
+		margin-bottom: 10rem;
+	}
 `;
 
 const StyledBtnCont = styled.div`

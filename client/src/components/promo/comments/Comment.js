@@ -37,4 +37,8 @@ const StyledComment = styled.div`
 		font-size: 0.8rem;
 		margin: 0;
 	}
+
+	@media screen and (max-width: 400px) {
+		padding: 1.5rem;
+	}
 `;
