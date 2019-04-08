@@ -78,13 +78,14 @@ export const PreviewsCardSingle = styled.div`
 	grid-area: adds;
 	padding: 4rem;
 	word-break: break-all;
+	margin-bottom: 3rem;
 
 	@media screen and (max-width: 1050px) {
 		padding: 2rem;
 	}
 
-	@media screen and (max-width: 1000px) {
-		padding: 4rem;
+	@media screen and (max-width: 600px) {
+		padding: 3rem;
 	}
 `;
 
@@ -103,6 +104,11 @@ export const PreviewCard = styled.div`
 			min-width: 100%;
 			margin: 7rem auto 3.5rem auto;
 		}
+	}
+
+	@media screen and (max-width: 1000px) {
+		margin: 1rem 0;
+		padding-bottom: 1.75rem;
 	}
 
 	border-bottom: 1px solid #eeeeee;

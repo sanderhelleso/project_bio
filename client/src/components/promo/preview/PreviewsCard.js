@@ -31,4 +31,14 @@ const StyledHeader = styled.div`
 const StyledCont = styled.div`
 	min-height: 100%;
 	position: relative;
+
+	@media screen and (max-width: 1000px) {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-gap: 3rem;
+	}
+
+	@media screen and (max-width: 600px) {
+		grid-template-columns: 1fr;
+	}
 `;

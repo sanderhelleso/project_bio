@@ -121,6 +121,7 @@ const StyledPromoGrid = styled.div`
 	display: grid;
 	grid-template-columns: 1.5fr 1fr;
 	grid-column-gap: 3rem;
+	margin-bottom: 3rem;
 
 	/* prettier-ignore */
 	grid-template-areas:
