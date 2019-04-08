@@ -81,18 +81,13 @@ export default (state = initialState, action) => {
 			};
 
 		case NEW_COMMENT_REPLY: {
+			const { id, reply } = action.payload;
 			return {
 				...state,
 				viewing: {
 					...state.viewing,
 					comments: state.viewing.comments.map(
-						(comment, id) =>
-							id === action.payload.id
-								? {
-										...comment,
-										reply: action.payload
-									}
-								: comment
+						(comment) => (comment.id === id ? { ...comment, reply } : comment)
 					)
 				}
 			};

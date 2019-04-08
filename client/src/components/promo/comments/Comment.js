@@ -14,8 +14,8 @@ const Comment = ({ profile, comment, ownerHandle, myHandle, reply, id }) => {
 		<StyledComment>
 			<CommentProfile {...profile} isOwner={isOwner && isAuthor} />
 			<p>{comment}</p>
-			{isOwner && !isAuthor && !reply && <ReplyCommentField handle={profile.handle} />}
-			{reply && <CommentReply reply={reply} id={id} />}
+			{isOwner && !isAuthor && !reply && <ReplyCommentField handle={profile.handle} id={id} />}
+			{reply && <CommentReply reply={reply} />}
 		</StyledComment>
 	);
 };

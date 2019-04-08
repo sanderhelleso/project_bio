@@ -3,12 +3,23 @@ import styled from 'styled-components';
 import { Button, Buttons, FlatButton } from '../../styles/Button';
 import FeatherIcons from 'feather-icons-react';
 
+import newCommentReplyAction from '../../../actions/promoActions/newCommentReplyAction';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-const ReplyCommentPublish = ({ updateState, comment, minLength, maxLength, handle, avatar }) => {
+const ReplyCommentPublish = ({
+	newCommentReplyAction,
+	updateState,
+	comment,
+	minLength,
+	maxLength,
+	id,
+	handle,
+	avatar
+}) => {
 	const publishReply = async () => {
 		const reply = {
+			id: Math.round(),
 			comment,
 			profile: {
 				handle,
@@ -17,6 +28,10 @@ const ReplyCommentPublish = ({ updateState, comment, minLength, maxLength, handl
 			}
 		};
 
+		newCommentReplyAction({
+			id,
+			reply
+		});
 		updateState({ comment: '' });
 	};
 
@@ -44,7 +59,7 @@ const mapStateToProps = ({ profile: { handle, avatar } }) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-	return bindActionCreators({}, dispatch);
+	return bindActionCreators({ newCommentReplyAction }, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReplyCommentPublish);

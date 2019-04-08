@@ -5,7 +5,7 @@ import { Button } from '../../styles/Button';
 import ReplyCommentPublish from './ReplyCommentPublish';
 import CharactersRemaining from './CharactersRemaining';
 
-const ReplyCommentField = ({ handle }) => {
+const ReplyCommentField = ({ handle, id }) => {
 	const replyTo = `Reply to ${handle}`;
 	const minLength = 2;
 	const maxLength = 255;
@@ -40,6 +40,7 @@ const ReplyCommentField = ({ handle }) => {
 						minLength={minLength}
 						maxLength={maxLength}
 						comment={comment}
+						id={id}
 					/>
 					<CharactersRemaining curr={comment.length} max={maxLength} />
 				</Fragment>
