@@ -7,21 +7,12 @@ import CommentSeperator from './CommentSeperator';
 import ScrollTopOfComments from './ScrollTopOfComments';
 import PostComment from './PostComment';
 
-const Comments = ({ profile, promoOwner, comments }) => {
-	const isOwner = ({ handle }) => {
-		return promoOwner === handle;
-	};
+import { connect } from 'react-redux';
 
-	const isAuthor = ({ profile: { handle } }) => {
-		return profile.handle === handle;
-	};
-
+const Comments = ({ comments }) => {
 	const renderComments = () => {
 		const loadedComments = comments.map((comment, i) => {
-			return [
-				<Comment key={`${i}a`} {...comment} isAuthor={isAuthor(comment)} isOwner={isOwner(profile)} />,
-				<CommentSeperator key={`${i}b`} />
-			];
+			return [ <Comment key={`${i}a`} {...comment} />, <CommentSeperator key={`${i}b`} /> ];
 		});
 
 		if (loadedComments.length) {
@@ -29,7 +20,7 @@ const Comments = ({ profile, promoOwner, comments }) => {
 				<Fragment>
 					{loadedComments}
 					<LoadMoreComments limit={16} listLength={loadedComments.length} />
-					<ScrollTopOfComments currAmount={comments.length} />
+					<ScrollTopOfComments currAmount={loadedComments.length} />
 				</Fragment>
 			);
 		}
@@ -39,11 +30,15 @@ const Comments = ({ profile, promoOwner, comments }) => {
 
 	return (
 		<CommentsCard id="comments-cont">
-			<CommentsInfo comments={comments} />
-			<PostComment profile={profile} comments={comments} />
+			<CommentsInfo amountOfComments={comments.length} />
+			<PostComment />
 			{renderComments()}
 		</CommentsCard>
 	);
 };
 
-export default Comments;
+const mapStateToProps = ({ promos: { viewing: { comments } } }) => {
+	return { comments };
+};
+
+export default connect(mapStateToProps, null)(Comments);

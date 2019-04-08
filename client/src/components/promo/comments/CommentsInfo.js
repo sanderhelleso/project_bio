@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
 
-const CommentsInfo = ({ comments }) => {
+const CommentsInfo = ({ amountOfComments }) => {
 	const renderComments = () => {
-		if (!comments.length) {
+		if (!amountOfComments) {
 			return (
 				<Fragment>
 					<StyledHeading empty={true}>No comments has been posted yet</StyledHeading>
@@ -14,7 +14,7 @@ const CommentsInfo = ({ comments }) => {
 
 		return (
 			<StyledHeading>
-				Showing {comments.length} comment{comments.length === 1 ? '' : 's'}
+				Showing {amountOfComments} comment{amountOfComments === 1 ? '' : 's'}
 			</StyledHeading>
 		);
 	};
