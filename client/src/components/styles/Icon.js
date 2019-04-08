@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import FeatherIcons from 'feather-icons-react';
+import ReactTooltip from 'react-tooltip';
 
 const themes = {
 	green: {
@@ -48,8 +49,9 @@ const StyledFavorite = styled.div`
 `;
 
 export const Favorite = () => (
-	<StyledFavorite>
+	<StyledFavorite data-tip="Favorite" data-for="favorite-tooltip">
 		<FeatherIcons icon="heart" />
+		<ReactTooltip id="favorite-tooltip" place="top" type="dark" effect="solid" />
 	</StyledFavorite>
 );
 
@@ -65,7 +67,8 @@ const StyledShare = styled.div`
 `;
 
 export const Share = () => (
-	<StyledShare>
+	<StyledShare data-tip="Share" data-for="share-tooltip">
 		<FeatherIcons icon="share-2" />
+		<ReactTooltip id="share-tooltip" place="top" type="dark" effect="solid" />
 	</StyledShare>
 );
