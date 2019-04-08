@@ -2,16 +2,29 @@ import React from 'react';
 import styled from 'styled-components';
 import CommentProfile from './CommentProfile';
 import ReplyCommentField from './ReplyCommentField';
+import CommentReply from './CommentReply';
 
-const Comment = ({ profile, comment, isOwner }) => (
-	<StyledComment>
-		<CommentProfile {...profile} isOwner={isOwner} />
-		<p>{comment}</p>
-		{!isOwner && <ReplyCommentField handle={profile.handle} />}
-	</StyledComment>
-);
+import { connect } from 'react-redux';
 
-export default Comment;
+const Comment = ({ profile, comment, ownerHandle, myHandle, reply, id }) => {
+	const isOwner = ownerHandle === myHandle;
+	const isAuthor = myHandle === profile.handle;
+
+	return (
+		<StyledComment>
+			<CommentProfile {...profile} isOwner={isOwner && isAuthor} />
+			<p>{comment}</p>
+			{isOwner && !isAuthor && !reply && <ReplyCommentField handle={profile.handle} id={id} />}
+			{reply && <CommentReply reply={reply} />}
+		</StyledComment>
+	);
+};
+
+const mapStateToProps = ({ profile, promos: { viewing: { profile: { handle } } } }) => {
+	return { ownerHandle: handle, myHandle: profile.handle };
+};
+
+export default connect(mapStateToProps, null)(Comment);
 
 const StyledComment = styled.div`
 	margin: 2rem 0;

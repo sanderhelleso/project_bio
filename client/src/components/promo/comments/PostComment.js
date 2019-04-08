@@ -4,8 +4,12 @@ import { TextArea } from '../../styles/Input';
 import CharactersRemaining from './CharactersRemaining';
 import { Button, Buttons } from '../../styles/Button';
 import FeatherIcons from 'feather-icons-react';
+import updatePromoCommentsAction from '../../../actions/promoActions/updatePromoCommentsAction';
 
-const PostComment = ({ updateComments, profile, comments }) => {
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+const PostComment = ({ updatePromoCommentsAction, handle, avatar }) => {
 	const minLength = 2;
 	const maxLength = 255;
 
@@ -20,12 +24,13 @@ const PostComment = ({ updateComments, profile, comments }) => {
 		const newComment = {
 			comment,
 			profile: {
-				...profile,
+				handle,
+				avatar,
 				postedAt: new Date()
 			}
 		};
 
-		updateComments({ comments: [ ...comments, newComment ] });
+		updatePromoCommentsAction([ newComment ]);
 		updateState({ comment: '' });
 	};
 
@@ -59,7 +64,15 @@ const PostComment = ({ updateComments, profile, comments }) => {
 	);
 };
 
-export default PostComment;
+const mapStateToProps = ({ profile: { handle, avatar } }) => {
+	return { handle, avatar };
+};
+
+const mapDispatchToProps = (dispatch) => {
+	return bindActionCreators({ updatePromoCommentsAction }, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostComment);
 
 const StyledComment = styled.div`
 	margin: 2rem 0;

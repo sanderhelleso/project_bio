@@ -4,9 +4,14 @@ import PromoImg from './PromoImg';
 import PromoInfo from './PromoInfo';
 import SelectProductList from './SelectProductList';
 
-const PromoCard = ({ promo, products, profile: { handle, avatar } }) => {
+import { connect } from 'react-redux';
+
+const PromoCard = ({ products }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
-		active: products[0]
+		active: {
+			id: 0,
+			...products[0]
+		}
 	});
 
 	const { active } = state;
@@ -14,10 +19,14 @@ const PromoCard = ({ promo, products, profile: { handle, avatar } }) => {
 	return (
 		<PromoCardSingle>
 			<PromoImg image={active.image} />
-			<PromoInfo {...promo} profile={{ handle, avatar }} active={active} />
+			<PromoInfo active={active} />
 			<SelectProductList products={products} active={active} updateState={updateState} />
 		</PromoCardSingle>
 	);
 };
 
-export default PromoCard;
+const mapStateToProps = ({ promos: { viewing: { products } } }) => {
+	return { products };
+};
+
+export default connect(mapStateToProps, null)(PromoCard);

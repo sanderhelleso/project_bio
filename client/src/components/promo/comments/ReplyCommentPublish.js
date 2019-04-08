@@ -3,21 +3,66 @@ import styled from 'styled-components';
 import { Button, Buttons, FlatButton } from '../../styles/Button';
 import FeatherIcons from 'feather-icons-react';
 
-const ReplyCommentPublish = ({ updateState, curr, minLength, maxLength }) => (
-	<StyledCont>
-		<Buttons>
-			<Button size="small" disabled={curr.trim().length < minLength || curr.length > maxLength}>
-				Publish
-				<FeatherIcons icon="check" />
-			</Button>
-			<FlatButton size="small" onClick={() => updateState({ isOpen: false })}>
-				Cancel
-			</FlatButton>
-		</Buttons>
-	</StyledCont>
-);
+import newCommentReplyAction from '../../../actions/promoActions/newCommentReplyAction';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-export default ReplyCommentPublish;
+const ReplyCommentPublish = ({
+	newCommentReplyAction,
+	updateState,
+	comment,
+	minLength,
+	maxLength,
+	id,
+	handle,
+	avatar
+}) => {
+	const publishReply = async () => {
+		const reply = {
+			id: Math.round(),
+			comment,
+			profile: {
+				handle,
+				avatar,
+				postedAt: new Date()
+			}
+		};
+
+		newCommentReplyAction({
+			id,
+			reply
+		});
+		updateState({ comment: '' });
+	};
+
+	return (
+		<StyledCont>
+			<Buttons>
+				<Button
+					size="small"
+					disabled={comment.trim().length < minLength || comment.length > maxLength}
+					onClick={() => publishReply()}
+				>
+					Publish
+					<FeatherIcons icon="check" />
+				</Button>
+				<FlatButton size="small" onClick={() => updateState({ isOpen: false })}>
+					Cancel
+				</FlatButton>
+			</Buttons>
+		</StyledCont>
+	);
+};
+
+const mapStateToProps = ({ profile: { handle, avatar } }) => {
+	return { handle, avatar };
+};
+
+const mapDispatchToProps = (dispatch) => {
+	return bindActionCreators({ newCommentReplyAction }, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReplyCommentPublish);
 
 const StyledCont = styled.div`
 	margin-top: 1rem;

@@ -2,14 +2,19 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import FeaterIcons from 'feather-icons-react';
 import { Button } from '../../styles/Button';
+import updatePromoCommentsAction from '../../../actions/promoActions/updatePromoCommentsAction';
 
-const LoadMore = ({ updateComments, fetchFromIndex, comments }) => {
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+const LoadMore = ({ limit, updatePromoCommentsAction, listLength }) => {
 	const [ loading, isLoading ] = useState(false);
 
 	const fetchNewComments = () => {
 		isLoading(true);
 		const testData = [
 			{
+				id: listLength + 1,
 				profile: {
 					handle: Math.random(),
 					avatar: '',
@@ -19,6 +24,7 @@ const LoadMore = ({ updateComments, fetchFromIndex, comments }) => {
 					'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
 			},
 			{
+				id: listLength + 2,
 				profile: {
 					handle: Math.random(),
 					avatar: '',
@@ -28,6 +34,7 @@ const LoadMore = ({ updateComments, fetchFromIndex, comments }) => {
 					'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
 			},
 			{
+				id: listLength + 3,
 				profile: {
 					handle: Math.random(),
 					avatar: '',
@@ -38,22 +45,27 @@ const LoadMore = ({ updateComments, fetchFromIndex, comments }) => {
 			}
 		];
 
-		updateComments({ comments: [ ...comments, ...testData ] });
-
+		updatePromoCommentsAction(testData);
 		isLoading(false);
 	};
 
 	return (
-		<StyledCont>
-			<Button onClick={() => fetchNewComments()} disabled={loading}>
-				Show More
-				<FeaterIcons icon="more-horizontal" />
-			</Button>
-		</StyledCont>
+		listLength < limit && (
+			<StyledCont>
+				<Button onClick={() => fetchNewComments()} disabled={loading}>
+					Show More
+					<FeaterIcons icon="more-horizontal" />
+				</Button>
+			</StyledCont>
+		)
 	);
 };
 
-export default LoadMore;
+const mapDispatchToProps = (dispatch) => {
+	return bindActionCreators({ updatePromoCommentsAction }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(LoadMore);
 
 const StyledCont = styled.div`
 	min-width: 300px;

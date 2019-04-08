@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { tsToDate } from '../../../lib/format';
 
+import { connect } from 'react-redux';
+
 const PromoOwner = ({ avatar, handle, postedAt, history }) => (
 	<StyledOwnerCont>
 		<img
@@ -17,7 +19,11 @@ const PromoOwner = ({ avatar, handle, postedAt, history }) => (
 	</StyledOwnerCont>
 );
 
-export default withRouter(PromoOwner);
+const mapStateToProps = ({ promos: { viewing: { profile: { avatar, handle } } } }) => {
+	return { avatar, handle };
+};
+
+export default connect(mapStateToProps, null)(withRouter(PromoOwner));
 
 const StyledOwnerCont = styled.div`
 	display: grid;

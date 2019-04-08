@@ -6,7 +6,10 @@ import {
 	UNLIKE_PROMO,
 	COMMENT_PROMO,
 	UNCOMMENT_PROMO,
-	VIEW_PROMO
+	VIEW_PROMO,
+	SET_PROMO_COMMENTS,
+	UPDATE_PROMO_COMMENTS,
+	NEW_COMMENT_REPLY
 } from '../actions/actionTypes';
 
 const initialState = { amount: 0, list: {}, viewing: null };
@@ -58,6 +61,37 @@ export default (state = initialState, action) => {
 				...state,
 				viewing: action.payload
 			};
+
+		case SET_PROMO_COMMENTS:
+			return {
+				...state,
+				viewing: {
+					...state.viewing,
+					comments: action.payload
+				}
+			};
+
+		case UPDATE_PROMO_COMMENTS:
+			return {
+				...state,
+				viewing: {
+					...state.viewing,
+					comments: [ ...state.viewing.comments, ...action.payload ]
+				}
+			};
+
+		case NEW_COMMENT_REPLY: {
+			const { id, reply } = action.payload;
+			return {
+				...state,
+				viewing: {
+					...state.viewing,
+					comments: state.viewing.comments.map(
+						(comment) => (comment.id === id ? { ...comment, reply } : comment)
+					)
+				}
+			};
+		}
 
 		default:
 			return state;
