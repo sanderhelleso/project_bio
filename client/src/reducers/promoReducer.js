@@ -8,7 +8,8 @@ import {
 	UNCOMMENT_PROMO,
 	VIEW_PROMO,
 	SET_PROMO_COMMENTS,
-	UPDATE_PROMO_COMMENTS
+	UPDATE_PROMO_COMMENTS,
+	NEW_COMMENT_REPLY
 } from '../actions/actionTypes';
 
 const initialState = { amount: 0, list: {}, viewing: null };
@@ -78,6 +79,24 @@ export default (state = initialState, action) => {
 					comments: [ ...state.viewing.comments, ...action.payload ]
 				}
 			};
+
+		case NEW_COMMENT_REPLY: {
+			return {
+				...state,
+				viewing: {
+					...state.viewing,
+					comments: state.viewing.comments.map(
+						(comment, id) =>
+							id === action.payload.id
+								? {
+										...comment,
+										reply: action.payload
+									}
+								: comment
+					)
+				}
+			};
+		}
 
 		default:
 			return state;

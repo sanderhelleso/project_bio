@@ -39,7 +39,7 @@ const ReplyCommentField = ({ handle }) => {
 						updateState={updateState}
 						minLength={minLength}
 						maxLength={maxLength}
-						curr={comment}
+						comment={comment}
 					/>
 					<CharactersRemaining curr={comment.length} max={maxLength} />
 				</Fragment>

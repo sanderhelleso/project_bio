@@ -7,7 +7,7 @@ import CommentReply from './CommentReply';
 import { connect } from 'react-redux';
 
 const Comment = ({ profile, comment, ownerHandle, myHandle, reply, id }) => {
-	const isOwner = ownerHandle === profile.handle;
+	const isOwner = ownerHandle === myHandle;
 	const isAuthor = myHandle === profile.handle;
 
 	return (

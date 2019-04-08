@@ -3,11 +3,31 @@ import styled from 'styled-components';
 import { Button, Buttons, FlatButton } from '../../styles/Button';
 import FeatherIcons from 'feather-icons-react';
 
-const ReplyCommentPublish = ({ updateState, curr, minLength, maxLength }) => {
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+const ReplyCommentPublish = ({ updateState, comment, minLength, maxLength, handle, avatar }) => {
+	const publishReply = async () => {
+		const reply = {
+			comment,
+			profile: {
+				handle,
+				avatar,
+				postedAt: new Date()
+			}
+		};
+
+		updateState({ comment: '' });
+	};
+
 	return (
 		<StyledCont>
 			<Buttons>
-				<Button size="small" disabled={curr.trim().length < minLength || curr.length > maxLength}>
+				<Button
+					size="small"
+					disabled={comment.trim().length < minLength || comment.length > maxLength}
+					onClick={() => publishReply()}
+				>
 					Publish
 					<FeatherIcons icon="check" />
 				</Button>
@@ -19,7 +39,15 @@ const ReplyCommentPublish = ({ updateState, curr, minLength, maxLength }) => {
 	);
 };
 
-export default ReplyCommentPublish;
+const mapStateToProps = ({ profile: { handle, avatar } }) => {
+	return { handle, avatar };
+};
+
+const mapDispatchToProps = (dispatch) => {
+	return bindActionCreators({}, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReplyCommentPublish);
 
 const StyledCont = styled.div`
 	margin-top: 1rem;
