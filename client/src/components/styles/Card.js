@@ -65,10 +65,15 @@ export const CommentsCard = styled.div`
 	}
 `;
 
-export const AddsCard = styled.div`
+export const PreviewsCardSingle = styled.div`
 	${cardStyles};
-	${promoCardStyles};
 	grid-area: adds;
 	margin-bottom: 5rem;
 	padding: 4rem;
+`;
+
+export const PreviewCard = styled.div`
+	margin: 2rem 0;
+	padding-bottom: 2rem;
+	position: relative;
 `;
