@@ -9,6 +9,7 @@ import ProductNameBrand from './ProductNameBrand';
 import { bindActionCreators } from 'react';
 import { connect } from 'react-redux';
 import { fadeIn } from '../../styles/Keyframes';
+import FavoritePromo from './FavoritePromo';
 
 const PromoInfo = ({
 	promo: { title, description, promotion_code, CreatedAt },
@@ -26,7 +27,7 @@ const PromoInfo = ({
 				<PromoPrice price={price} currency={currency} />
 			</StyledInfoBody>
 			<StyledActionCont>
-				<p>Use the code below to get {20}% of this product</p>
+				<p>Use the code below to get {20}% off this product</p>
 				<PromoCode code={promotion_code} />
 				<PromoLink link={link} />
 			</StyledActionCont>
@@ -42,6 +43,7 @@ export default connect(mapStateToProps, null)(PromoInfo);
 
 const StyledInfoCont = styled.div`
 	animation: ${fadeIn} 0.5s ease-in-out;
+	position: relative;
 	overflow: hidden;
 	grid-area: info;
 	padding: 2rem 2.5rem;
@@ -61,11 +63,13 @@ const StyledInfoCont = styled.div`
 
 	@media screen and (max-width: 1100px) {
 		border-right: none;
+		padding-top: 4rem;
 	}
 
 	@media screen and (max-width: 600px) {
 		border-right: none;
 		padding: 1rem;
+		padding-top: 5rem;
 	}
 `;
 

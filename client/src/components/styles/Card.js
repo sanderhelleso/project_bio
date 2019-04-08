@@ -15,6 +15,7 @@ const promoCardStyles = `
 export const PromoCardSingle = styled.div`
 	${cardStyles};
 	${promoCardStyles};
+	position: relative;
 	margin-top: 5rem;
 	margin-bottom: 3rem;
 	grid-area: promo;

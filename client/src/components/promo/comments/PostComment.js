@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 
 const PostComment = ({ updatePromoCommentsAction, handle, avatar }) => {
 	const minLength = 2;
-	const maxLength = 255;
+	const maxLength = 140;
 
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		comment: ''
