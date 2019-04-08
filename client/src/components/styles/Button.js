@@ -23,7 +23,7 @@ const buttonStyles = `
         right: 10%;
         top: 32.5%;
     }
-`
+`;
 
 const disabledStyles = `
     padding: 0.25rem 1rem;
@@ -31,7 +31,7 @@ const disabledStyles = `
     -moz-box-shadow:    none;
     box-shadow:         none;
 	cursor: not-allowed;
-`
+`;
 
 const shadowStyles = `
     -webkit-box-shadow: 0px 6px 25px 0px rgba(105, 39, 255, 0.5);
@@ -40,76 +40,70 @@ const shadowStyles = `
 `;
 
 export const Buttons = styled.div`
-    
-    button {
-        display: ${props => props.stack ? 'block' : 'inline-block'};
-        min-width: ${props => props.stretch ? '100%' : 'none'};
-    }
-`
+	button {
+		display: ${(props) => (props.stack ? 'block' : 'inline-block')};
+		min-width: ${(props) => (props.stretch ? '100%' : 'none')};
+	}
+`;
 
 export const Button = styled.button`
-    ${buttonStyles}
-    ${shadowStyles};
-    background-color: ${props => props.theme.primaryColor};
-    color: ${props => props.theme.fgColor};
-    font-size: ${props => props.size === 'small' ? 0.7 : 0.9}rem;
-    min-width: ${props => props.size === 'small' ? 125 : 225}px;
-    min-height: ${props => props.size === 'small' ? 35 : 55}px;
+	${buttonStyles};
+	${shadowStyles};
+	background-color: ${(props) => props.theme.primaryColor};
+	color: ${(props) => props.theme.fgColor};
+	font-size: ${(props) => (props.size === 'small' ? 0.7 : 0.9)}rem;
+	min-width: ${(props) => (props.size === 'small' ? 125 : 225)}px;
+	min-height: ${(props) => (props.size === 'small' ? 35 : 55)}px;
 
-    &:hover {
-        opacity: 0.8;
-    }
+	&:hover {
+		opacity: 0.8;
+	}
 
-    &:disabled {
-        ${disabledStyles}
-        background-color: ${props => props.theme.disabledBg};
-        color: ${props => props.theme.disabledColor};
-    }
-`
+	&:disabled {
+		${disabledStyles} background-color: ${(props) => props.theme.disabledBg};
+		color: ${(props) => props.theme.disabledColor};
+	}
+`;
 
 export const FlatButton = styled.button`
-    ${buttonStyles}
-    background-color: #bdbdbd;
-    color: #616161;
-    font-size: ${props => props.size === 'small' ? 0.7 : 0.9}rem;
-    min-width: ${props => props.size === 'small' ? 125 : 225}px;
-    min-height: ${props => props.size === 'small' ? 35 : 55}px;
+	${buttonStyles} background-color: #bdbdbd;
+	color: #616161;
+	font-size: ${(props) => (props.size === 'small' ? 0.7 : 0.9)}rem;
+	min-width: ${(props) => (props.size === 'small' ? 125 : 225)}px;
+	min-height: ${(props) => (props.size === 'small' ? 35 : 55)}px;
 
-    &:disabled {
-        ${disabledStyles}
-    }
-`
+	&:disabled {
+		${disabledStyles};
+	}
+`;
 
 export const Instagram = styled.button`
-    position: relative;
-    ${buttonStyles}
-    color: ${props => props.theme.fgColor};
-    font-size: 0.9rem;
-    min-height: 55px;
-    min-width: 225px;
-    background: #f09433; 
-    background: -moz-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); 
-    background: -webkit-linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
-    background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', endColorstr='#bc1888',GradientType=1 );
-    -webkit-box-shadow: 0px 6px 25px 0px rgba(230, 104, 60, 0.5);
-    -moz-box-shadow:    0px 6px 25px 0px rgba(230, 104, 60, 0.5);
-    box-shadow:         0px 6px 25px 0px rgba(230, 104, 60, 0.5);
+	position: relative;
+	${buttonStyles} color: ${(props) => props.theme.fgColor};
+	font-size: 0.9rem;
+	min-height: 55px;
+	min-width: 225px;
+	background: #f09433;
+	background: -moz-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+	background: -webkit-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+	background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f09433', endColorstr='#bc1888', GradientType=1);
+	-webkit-box-shadow: 0px 6px 25px 0px rgba(230, 104, 60, 0.5);
+	-moz-box-shadow: 0px 6px 25px 0px rgba(230, 104, 60, 0.5);
+	box-shadow: 0px 6px 25px 0px rgba(230, 104, 60, 0.5);
 
-    span {
-        position: absolute;
-        top: 30%;
-        left: 5%;
-    }
+	span {
+		position: absolute;
+		top: 30%;
+		left: 5%;
+	}
 
-    &:hover {
-        opacity: 0.8;
-    }
+	&:hover {
+		opacity: 0.8;
+	}
 
-    &:disabled {
-        ${disabledStyles}
-        background-color: ${props => props.theme.disabledBg};
-        color: ${props => props.theme.disabledColor};
-    }
-`
-
+	&:disabled {
+		${disabledStyles} background-color: ${(props) => props.theme.disabledBg};
+		color: ${(props) => props.theme.disabledColor};
+	}
+`;

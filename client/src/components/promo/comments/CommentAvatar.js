@@ -4,9 +4,8 @@ import { withRouter } from 'react-router-dom';
 import FeatherIcons from 'feather-icons-react';
 import ReactTooltip from 'react-tooltip';
 
-const CommentAvatar = ({ image, handle, history, isOwner }) => {
+const CommentAvatar = ({ avatar, handle, history, isOwner }) => {
 	const id = `owner-tooltip-${Math.random()}`;
-
 	return (
 		<StyledAvatar onClick={() => history.push(`/${handle}`)}>
 			{isOwner && (
@@ -15,7 +14,7 @@ const CommentAvatar = ({ image, handle, history, isOwner }) => {
 					<ReactTooltip id={id} place="right" type="dark" effect="solid" />
 				</StyledIsOwnerBadge>
 			)}
-			<img src={`http://localhost:5000/${image || 'images/avatars/default.jpg'}`} />
+			<img src={`http://localhost:5000/${avatar || 'images/avatars/default.jpg'}`} />
 		</StyledAvatar>
 	);
 };

@@ -8,7 +8,7 @@ import viewPromoAction from '../../../actions/promoActions/viewPromoAction';
 import Container from '../../styles/Container';
 import PromoCard from './PromoCard';
 import Comments from '../comments/Comments';
-import { AddsCard } from '../../styles/Card';
+import PreviewsCard from '../preview/PreviewsCard';
 
 const data = [
 	{
@@ -77,11 +77,12 @@ const Single = ({ viewPromoAction, match: { params }, viewing }) => {
 				});
 			}
 
-			updateState({ loading: false });
 			viewPromoAction({
 				...response.payload,
 				comments: data
 			});
+
+			updateState({ loading: false });
 		}
 		loadPromo();
 	}, []);
@@ -98,8 +99,8 @@ const Single = ({ viewPromoAction, match: { params }, viewing }) => {
 		return (
 			<StyledPromoGrid>
 				<PromoCard />
-				<Comments promoOwner={viewing.profile.handle} comments={viewing.comments} profile={viewing.profile} />
-				<AddsCard />
+				<Comments />
+				<PreviewsCard />
 			</StyledPromoGrid>
 		);
 	};
