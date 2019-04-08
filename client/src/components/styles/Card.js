@@ -70,7 +70,6 @@ export const CommentsCard = styled.div`
 
 	@media screen and (max-width: 600px) {
 		padding: 2rem;
-		display: block;
 	}
 `;
 

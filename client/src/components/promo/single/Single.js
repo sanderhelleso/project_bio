@@ -9,6 +9,7 @@ import Container from '../../styles/Container';
 import PromoCard from './PromoCard';
 import Comments from '../comments/Comments';
 import PreviewsCard from '../preview/PreviewsCard';
+import { fadeIn } from '../../styles/Keyframes';
 
 const data = [
 	{

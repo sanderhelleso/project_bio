@@ -5,6 +5,7 @@ import ReplyCommentField from './ReplyCommentField';
 import CommentReply from './CommentReply';
 
 import { connect } from 'react-redux';
+import { fadeIn } from '../../styles/Keyframes';
 
 const Comment = ({ profile, comment, ownerHandle, myHandle, reply, id }) => {
 	const isOwner = ownerHandle === myHandle;
@@ -27,6 +28,7 @@ const mapStateToProps = ({ profile, promos: { viewing: { profile: { handle } } }
 export default connect(mapStateToProps, null)(Comment);
 
 const StyledComment = styled.div`
+	animation: ${fadeIn} 0.5s ease-in-out;
 	margin: 2rem 0;
 
 	background-color: #f3f8ff;

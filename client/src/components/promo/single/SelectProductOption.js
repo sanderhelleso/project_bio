@@ -28,8 +28,7 @@ const StyledOption = styled.div`
 	max-height: 5rem;
 	overflow: hidden;
 	border: 2px solid ${(props) => (props.active ? props.theme.secondaryColor : '#eeeeee')};
-	${fadeIn};
-
+	animation: ${fadeIn} 0.5s ease-in-out;
 	img {
 		width: 100%;
 		height: 100%;

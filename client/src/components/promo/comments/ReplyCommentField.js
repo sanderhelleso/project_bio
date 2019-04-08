@@ -4,6 +4,7 @@ import { TextArea } from '../../styles/Input';
 import { Button } from '../../styles/Button';
 import ReplyCommentPublish from './ReplyCommentPublish';
 import CharactersRemaining from './CharactersRemaining';
+import { fadeIn } from '../../styles/Keyframes';
 
 const ReplyCommentField = ({ handle, id }) => {
 	const replyTo = `Reply to ${handle}`;

@@ -8,6 +8,7 @@ import ProductNameBrand from './ProductNameBrand';
 
 import { bindActionCreators } from 'react';
 import { connect } from 'react-redux';
+import { fadeIn } from '../../styles/Keyframes';
 
 const PromoInfo = ({
 	promo: { title, description, promotion_code, CreatedAt },
@@ -40,6 +41,7 @@ const mapStateToProps = ({ promos: { viewing: { promo } } }) => {
 export default connect(mapStateToProps, null)(PromoInfo);
 
 const StyledInfoCont = styled.div`
+	animation: ${fadeIn} 0.5s ease-in-out;
 	overflow: hidden;
 	grid-area: info;
 	padding: 2rem 2.5rem;
