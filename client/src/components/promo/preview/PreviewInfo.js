@@ -23,7 +23,6 @@ export default PreviewInfo;
 const StyledInfo = styled.div`
 	position: relative;
 	h3 {
-		margin-top: 0;
 		font-size: 1.5rem;
 	}
 

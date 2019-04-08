@@ -73,7 +73,15 @@ export const PreviewsCardSingle = styled.div`
 `;
 
 export const PreviewCard = styled.div`
-	margin: 2rem 0;
-	padding-bottom: 2rem;
+	margin: 4rem 0;
+	padding-bottom: 4rem 2rem;
 	position: relative;
+	min-height: 325px;
+
+	button {
+		float: right;
+		margin-top: 0.65rem;
+	}
+
+	border-bottom: 1px solid #eeeeee;
 `;

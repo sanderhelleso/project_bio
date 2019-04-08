@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { PreviewCard } from '../../styles/Card';
 import PreviewInfo from './PreviewInfo';
-import { Button } from '../../styles/Button';
+import { Button, FlatButton } from '../../styles/Button';
 import PreviewImage from './PreviewImage';
 import PreviewImages from './PreviewImages';
 
@@ -22,6 +22,7 @@ const Preview = () => {
 		<PreviewCard>
 			<PreviewInfo title={data.title} description={data.description} />
 			<PreviewImages images={data.images} />
+			<Button size="small">See Promo</Button>
 		</PreviewCard>
 	);
 };

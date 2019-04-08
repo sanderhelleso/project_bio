@@ -29,7 +29,6 @@ const StyledHeader = styled.div`
 `;
 
 const StyledCont = styled.div`
-	display: grid;
 	min-height: 100%;
 	position: relative;
 `;
