@@ -60,6 +60,14 @@ export const CommentsCard = styled.div`
 		resize: none;
 	}
 
+	@media screen and (max-width: 1050px) {
+		padding: 2rem;
+	}
+
+	@media screen and (max-width: 1000px) {
+		padding: 4rem;
+	}
+
 	@media screen and (max-width: 600px) {
 		padding: 2rem;
 	}
@@ -68,19 +76,33 @@ export const CommentsCard = styled.div`
 export const PreviewsCardSingle = styled.div`
 	${cardStyles};
 	grid-area: adds;
-	margin-bottom: 5rem;
 	padding: 4rem;
+	word-break: break-all;
+
+	@media screen and (max-width: 1050px) {
+		padding: 2rem;
+	}
+
+	@media screen and (max-width: 1000px) {
+		padding: 4rem;
+	}
 `;
 
 export const PreviewCard = styled.div`
 	margin: 4rem 0;
-	padding-bottom: 4rem 2rem;
 	position: relative;
 	min-height: 325px;
 
 	button {
 		float: right;
-		margin-top: 0.65rem;
+		margin-top: 1.5rem;
+
+		@media screen and (max-width: 1300px) {
+			float: none;
+			clear: both;
+			min-width: 100%;
+			margin: 7rem auto 3.5rem auto;
+		}
 	}
 
 	border-bottom: 1px solid #eeeeee;

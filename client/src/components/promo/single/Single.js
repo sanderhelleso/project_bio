@@ -54,7 +54,7 @@ const data = [
 	}
 ];
 
-const Single = ({ viewPromoAction, match: { params }, viewing }) => {
+const Single = ({ viewPromoAction, match: { params } }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		loading: true,
 		error: false
@@ -63,9 +63,8 @@ const Single = ({ viewPromoAction, match: { params }, viewing }) => {
 	const { loading, error } = state;
 
 	useEffect(() => {
+		// TODO: check if same promo is already loaded
 		async function loadPromo() {
-			// TODO: check if same promo is already loaded
-
 			// attempt to load promo by the given handler and param ID
 			const { handle, id } = params;
 			const response = await getPromo(handle, id);
@@ -129,7 +128,7 @@ const StyledPromoGrid = styled.div`
 		"comments adds"
 	;
 
-	@media screen and (max-width: 800px) {
+	@media screen and (max-width: 1000px) {
 		display: block;
 	}
 `;
