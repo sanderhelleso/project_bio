@@ -24,6 +24,7 @@ const StyledHeader = styled.div`
 	margin-bottom: 4rem;
 	h2 {
 		font-weight: 100;
+		font-size: 1.5rem;
 		color: #9e9e9e;
 	}
 `;

@@ -15,7 +15,7 @@ const Navbar = ({ created, avatar, handle }) => {
 		return (
 			<Nav>
 				<Logo />
-				<Menu avatar={avatar} handle={handle} />
+				<Menu />
 			</Nav>
 		);
 	};
@@ -23,6 +23,6 @@ const Navbar = ({ created, avatar, handle }) => {
 	return renderNavbar();
 };
 
-const mapStateToProps = ({ profile: { avatar, handle, created } }) => ({ avatar, handle, created });
+const mapStateToProps = ({ profile: { created } }) => ({ created });
 
 export default connect(mapStateToProps, null)(Navbar);

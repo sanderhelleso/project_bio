@@ -5,6 +5,8 @@ import FeaterIcons from 'feather-icons-react';
 import Options from './Options';
 import { fadeIn } from '../styles/Keyframes';
 
+import { connect } from 'react-redux';
+
 const Menu = ({ avatar, handle }) => {
 	const [ active, modifyMenu ] = useState(false);
 
@@ -32,7 +34,9 @@ const Menu = ({ avatar, handle }) => {
 	);
 };
 
-export default Menu;
+const mapStateToProps = ({ profile: { avatar, handle } }) => ({ avatar, handle });
+
+export default connect(mapStateToProps, null)(Menu);
 
 const StyledMenu = styled.div`
 	min-width: 285px;
