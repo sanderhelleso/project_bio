@@ -7,14 +7,14 @@ import CommentReply from './CommentReply';
 import { connect } from 'react-redux';
 
 const Comment = ({ profile, comment, ownerHandle, myHandle, reply, id }) => {
-	const isOwner = () => ownerHandle === profile.handle;
-	const isAuthor = () => myHandle === profile.handle;
+	const isOwner = ownerHandle === profile.handle;
+	const isAuthor = myHandle === profile.handle;
 
 	return (
 		<StyledComment>
-			<CommentProfile {...profile} isOwner={isOwner() && isAuthor()} />
+			<CommentProfile {...profile} isOwner={isOwner && isAuthor} />
 			<p>{comment}</p>
-			{isOwner() && !isAuthor() && !reply && <ReplyCommentField handle={profile.handle} />}
+			{isOwner && !isAuthor && !reply && <ReplyCommentField handle={profile.handle} />}
 			{reply && <CommentReply reply={reply} id={id} />}
 		</StyledComment>
 	);
