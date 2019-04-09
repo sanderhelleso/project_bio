@@ -9,11 +9,14 @@ import (
 	"./lib"
 	"./models"
 	"./redis"
+	"fmt"
 
 	"github.com/joho/godotenv"
 )
 
 func main() {
+
+	fmt.Println("Starting server...")
 
 	// load envs
 	err := godotenv.Load()

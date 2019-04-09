@@ -10,6 +10,7 @@ import PromoCard from './PromoCard';
 import Comments from '../comments/Comments';
 import PreviewsCard from '../preview/PreviewsCard';
 import { fadeIn } from '../../styles/Keyframes';
+import CurrentlyWatching from './CurrentlyWatching';
 
 const data = [
 	{
@@ -55,7 +56,7 @@ const data = [
 	}
 ];
 
-const Single = ({ viewPromoAction, match: { params } }) => {
+const Single = ({ viewPromoAction, match: { params }, promoID }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		loading: true,
 		error: false
@@ -84,28 +85,6 @@ const Single = ({ viewPromoAction, match: { params } }) => {
 				comments: data
 			});
 
-			// test socket
-			const socket = new WebSocket('ws://localhost:5000/sockets/promos/1');
-			console.log('Attempting to connect to socket...');
-
-			socket.onopen = () => {
-				console.log('Successfully Connected');
-				socket.send('Hi from Client!');
-			};
-
-			socket.onclose = (e) => {
-				console.log('Closed connection: ', e);
-				socket.send('Client closed!');
-			};
-
-			socket.onmessage = (e) => {
-				console.log(e.data, e);
-			};
-
-			socket.onerror = (err) => {
-				console.log('Socket error: ', err);
-			};
-
 			updateState({ loading: false });
 		}
 		loadPromo();
@@ -122,6 +101,7 @@ const Single = ({ viewPromoAction, match: { params } }) => {
 
 		return (
 			<StyledPromoGrid>
+				<CurrentlyWatching promoID={promoID} />
 				<PromoCard />
 				<Comments />
 				<PreviewsCard />
@@ -132,8 +112,8 @@ const Single = ({ viewPromoAction, match: { params } }) => {
 	return <Container max={85}>{renderPromo()}</Container>;
 };
 
-const mapStateToProps = ({ promos: { viewing }, profile: { userID } }) => {
-	return { viewing, userID };
+const mapStateToProps = ({ promos: { viewing: { promo: ID } } }) => {
+	return { promoID: ID };
 };
 
 const mapDispatchToProps = (dispatch) => {
