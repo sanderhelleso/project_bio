@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import FeatherIcons from 'feather-icons-react';
 
+import { connect } from 'react-redux';
+
 const CurrentlyWatching = ({ promoID }) => {
 	const [ watching, setwatching ] = useState(0);
 	const [ close, setclose ] = useState(false);
@@ -35,7 +37,11 @@ const CurrentlyWatching = ({ promoID }) => {
 	return renderWatching();
 };
 
-export default CurrentlyWatching;
+const mapStateToProps = ({ promos: { viewing: { promo: { ID } } } }) => {
+	return { promoID: ID };
+};
+
+export default connect(mapStateToProps, null)(CurrentlyWatching);
 
 const StyledCont = styled.div`
 	position: fixed;

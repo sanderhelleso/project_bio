@@ -56,7 +56,7 @@ const data = [
 	}
 ];
 
-const Single = ({ viewPromoAction, match: { params }, promoID }) => {
+const Single = ({ viewPromoAction, match: { params } }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		loading: true,
 		error: false
@@ -101,7 +101,7 @@ const Single = ({ viewPromoAction, match: { params }, promoID }) => {
 
 		return (
 			<StyledPromoGrid>
-				<CurrentlyWatching promoID={promoID} />
+				<CurrentlyWatching />
 				<PromoCard />
 				<Comments />
 				<PreviewsCard />
@@ -112,15 +112,11 @@ const Single = ({ viewPromoAction, match: { params }, promoID }) => {
 	return <Container max={85}>{renderPromo()}</Container>;
 };
 
-const mapStateToProps = ({ promos: { viewing: { promo: ID } } }) => {
-	return { promoID: ID };
-};
-
 const mapDispatchToProps = (dispatch) => {
 	return bindActionCreators({ viewPromoAction }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Single);
+export default connect(null, mapDispatchToProps)(Single);
 
 const StyledPromoGrid = styled.div`
 	display: grid;
