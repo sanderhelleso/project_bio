@@ -10,21 +10,16 @@ import (
 // 'PONG' should be returned
 func ping(c redis.Conn) error {
 
-	// send PING command to rendis
-	pong, err := c.Do("PING")
-	if err != nil {
-		return err
-	}
-
-	// PING command returns a redis "Simple String"
-	// We use redis.String to convert interface to string
-	s, err := redis.String(pong, err)
+	// Send PING command to Redis
+	// PING command returns a Redis "Simple String"
+	// Use redis.String to convert the interface type to string
+	pong, err := redis.String(c.Do("PING"))
 	if err != nil {
 		return err
 	}
 
 	// should output 'PONG'
-	fmt.Printf("PING Response: %s\n", s)
+	fmt.Printf("PING Response: %s\n", pong)
 
 	return nil
 }
