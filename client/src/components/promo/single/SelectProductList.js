@@ -12,10 +12,11 @@ const SelectProductList = ({ products, active, updateState }) => {
 	return (
 		<StyledList>
 			{renderProducts().map((product, id) => {
-				if (product === -1) return <SelectProductPlaceholder />;
+				if (product === -1) return <SelectProductPlaceholder key={Math.random()} />;
 
 				return (
 					<li
+						key={product.image}
 						onClick={() =>
 							updateState({
 								active: {
@@ -24,7 +25,7 @@ const SelectProductList = ({ products, active, updateState }) => {
 								}
 							})}
 					>
-						<SelectProductOption key={product.image} active={id === active.id} product={product} />
+						<SelectProductOption active={id === active.id} product={product} />
 					</li>
 				);
 			})}

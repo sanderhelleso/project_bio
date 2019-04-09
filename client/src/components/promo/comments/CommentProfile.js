@@ -4,7 +4,6 @@ import CommentAvatar from './CommentAvatar';
 import CommentInfo from './CommentInfo';
 
 const CommentProfile = ({ avatar, handle, postedAt, isOwner }) => {
-	console.log(postedAt);
 	return (
 		<StyledProfile>
 			<CommentAvatar {...{ handle, avatar }} isOwner={isOwner} />

@@ -69,7 +69,9 @@ const Single = ({ viewPromoAction, match: { params } }) => {
 			// attempt to load promo by the given handler and param ID
 			const { handle, id } = params;
 			const response = await getPromo(handle, id);
-			console.log(response);
+			//console.log(response);
+
+			// successfully found promotion
 			if (response.status > 400) {
 				return updateState({
 					error: response.message,
@@ -81,6 +83,24 @@ const Single = ({ viewPromoAction, match: { params } }) => {
 				...response.payload,
 				comments: data
 			});
+
+			// test socket
+			const socket = new WebSocket('ws://localhost:5000/sockets/promos/1');
+			console.log('Attempting to connect to socket...');
+
+			socket.onopen = () => {
+				console.log('Successfully Connected');
+				socket.send('Hi from Client!');
+			};
+
+			socket.onclose = (e) => {
+				console.log('Closed connection: ', e);
+				socket.send('Client closed!');
+			};
+
+			socket.onerror = (err) => {
+				console.log('Socket error: ', err);
+			};
 
 			updateState({ loading: false });
 		}

@@ -1,8 +1,8 @@
 package sockets
 
 import (
-	"log"
 	"net/http"
+	"log"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
@@ -12,48 +12,29 @@ var upgrader = websocket.Upgrader {
 	WriteBufferSize: 1024,
 }
 
+// ConnectUpgraders connects all upgrades endpoints
 func ConnectUpgraders(router *gin.Engine) {
 	sockets := router.Group("/sockets")
 	{
-		sockets.GET("/test", wsEndpoint)
+		sockets.GET("/promos/:id", WsPromos)
 	}
 }
 
-func reader(conn *websocket.Conn) {
-	for {
-		messageType, p, err := conn.ReadMessage()
-		if err != nil {
-			log.Println(err)
-			return
-		}
-
-		log.Println(string(p))
-
-		if err := conn.WriteMessage(messageType, p); err != nil {
-			log.Println(err)
-			return
-		}
-
-	}
-}
-
-func wsEndpoint(c *gin.Context) {
+// CreateConnection establishes and upgrades the current HTTP connection
+// to a new websocket connection that allows for sending/recieving of messages
+func CreateConnection(c *gin.Context) (*websocket.Conn, error) {
 
 	// required for no CORS
 	upgrader.CheckOrigin = func(r *http.Request) bool {
 		return true
 	}
 
+	// upgrade this connection to a WebSocket connection
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		log.Println(err)
+		return nil, err
 	}
 
-	log.Println("Client connected...")
-	reader(ws)
-}
-
-
-func main() {
-	
+	return ws, nil;
 }
