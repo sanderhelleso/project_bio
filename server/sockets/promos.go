@@ -40,7 +40,7 @@ func (pc *PromoConn) wsPromos(c *gin.Context)  {
 	if !isPresent {
 		fmt.Println("New pool detected, adding to map of pools...")
 		pool = NewPool()
-		go pool.Start()
+		go pool.Start(&pc.Pools, promoID)
 		pc.Pools[promoID] = pool
 	}
 

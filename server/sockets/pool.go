@@ -26,7 +26,7 @@ func NewPool() *Pool {
 }
 
 // Start starts a new pool, handling connect, disconnect and broadcasting
-func (pool *Pool) Start() {
+func (pool *Pool) Start(pools *map[string]*Pool, id string) {
 	for {
 		select {
 
@@ -41,12 +41,20 @@ func (pool *Pool) Start() {
 			break
 
 		// existing client disconnected from pool
-		case cllient := <- pool.Unregister:
-			delete(pool.Clients, cllient)
+		case client := <- pool.Unregister:
+			delete(pool.Clients, client)
 			fmt.Println("DISCONNECT - Size of connection pool: ", len(pool.Clients))
+
+			activeClients := len(pool.Clients)
 			for client := range pool.Clients {
-				client.Conn.WriteJSON(Message{ 1, parser.IntToStr(len(pool.Clients)) })
+				client.Conn.WriteJSON(Message{ 1, parser.IntToStr(activeClients) })
 			}
+
+			// if no connections in pool is left, remove from map of pools
+			if activeClients == 0 {
+				delete(*pools, id)
+			}
+
 			break
 		case message := <- pool.Broadcast:
 			fmt.Println("Sending message clients in pool...")
