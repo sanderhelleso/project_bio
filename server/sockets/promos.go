@@ -8,7 +8,7 @@ import (
 
 // WsPromos creates a connection to any valid endpoints
 // matching the sat route prefix of /sockets/promos/:id
-func wsPromos(c *gin.Context) {
+func (client *client) wsPromos(c *gin.Context)  {
 
 	ws, err := createConnection(c)
 	if err != nil {

@@ -5,6 +5,7 @@ import (
 	"log"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"github.com/gomodule/redigo/redis"
 )
 
 var upgrader = websocket.Upgrader {
@@ -12,11 +13,19 @@ var upgrader = websocket.Upgrader {
 	WriteBufferSize: 1024,
 }
 
+type client struct {
+	conn *redis.Conn
+}
+
 // ConnectUpgraders connects all upgraded endpoints
-func ConnectUpgraders(router *gin.Engine) {
+func ConnectUpgraders(router *gin.Engine, conn *redis.Conn) {
+
+	// create socket clients with connection to redis cache
+	promosClient := &client { conn }
+
 	sockets := router.Group("/sockets")
 	{
-		sockets.GET("/promos/:id", wsPromos)
+		sockets.GET("/promos/:id", promosClient.wsPromos)
 	}
 }
 

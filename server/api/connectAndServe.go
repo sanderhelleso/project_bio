@@ -4,6 +4,7 @@ import (
 	"../controllers"
 	"../sockets"
 	"github.com/gin-gonic/gin"
+	"github.com/gomodule/redigo/redis"
 )
 
 const maxMultiPartMem = 1 << 20 // 1mb
@@ -16,6 +17,7 @@ func ConnectAndServe(
 	promosC *controllers.Promos,
 	promoProductsC *controllers.PromoProducts,
 	profilesC *controllers.Profiles,
+	conn *redis.Conn,
 ) {
 
 	// connect router and API v1
@@ -31,7 +33,7 @@ func ConnectAndServe(
 	ProfilesRoutes(router, profilesC)
 
 	// connect sockets
-	sockets.ConnectUpgraders(router)
+	sockets.ConnectUpgraders(router, conn)
 
 	// connect fileserver
 	FileServer(router)
