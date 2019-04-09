@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"github.com/gorilla/websocket"
-
 )
 
 // WsPromos creates a connection to any valid endpoints
