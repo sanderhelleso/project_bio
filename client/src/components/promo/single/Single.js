@@ -98,6 +98,10 @@ const Single = ({ viewPromoAction, match: { params } }) => {
 				socket.send('Client closed!');
 			};
 
+			socket.onmessage = (e) => {
+				console.log(e.data, e);
+			};
+
 			socket.onerror = (err) => {
 				console.log('Socket error: ', err);
 			};

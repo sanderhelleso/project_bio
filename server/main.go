@@ -46,11 +46,11 @@ func main() {
 	lib.Must(redis.Ping(conn))
 
 	// setup controllers
-	usersC := controllers.NewUsers(services.User, emailer)
-	followersC := controllers.NewFollowers(services.Follower)
-	promosC := controllers.NewPromos(services.Promo, services.PromoProduct, services.Profile)
-	promoProductsC := controllers.NewPromoProducts(services.PromoProduct, services.Image)
-	profilesC := controllers.NewProfiles(services.Profile, services.Image)
+	usersC 			:= controllers.NewUsers(services.User, emailer)
+	followersC 		:= controllers.NewFollowers(services.Follower)
+	promosC 		:= controllers.NewPromos(services.Promo, services.PromoProduct, services.Profile)
+	promoProductsC 	:= controllers.NewPromoProducts(services.PromoProduct, services.Image)
+	profilesC 		:= controllers.NewProfiles(services.Profile, services.Image)
 
 	// defer close connections
 	defer services.Close()
