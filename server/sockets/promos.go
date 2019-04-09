@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"fmt"
+	"io"
 	"github.com/gorilla/websocket"
 	"github.com/gomodule/redigo/redis"
 	p "../lib/parser"
@@ -51,7 +52,7 @@ func (client *client) wsPromos(c *gin.Context)  {
 // define a reader which will listen for
 // new messages being sent to our WebSocket
 // endpoint
-func reader(wsConn *websocket.Conn, redisConn *redis.Conn, numCons int, promoID string) {
+func promoReader(wsConn *websocket.Conn, redisConn *redis.Conn, numCons int, promoID string) {
 	for {
 
 		// handle messages to be recieved from client
@@ -79,11 +80,39 @@ func reader(wsConn *websocket.Conn, redisConn *redis.Conn, numCons int, promoID 
 		// log recieved message
 		log.Println(string(p))
 
-		// handle messages to be writen to client
 		if err := wsConn.WriteMessage(messageType, p); err != nil {
 			log.Println(err)
 			return
 		}
 
+	}
+}
+
+func promoWriter(wsConn *websocket.Conn) {
+
+	for {
+		
+		fmt.Println("Sending message...")
+		messageType, r, err := wsConn.NextReader()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		w, err := wsConn.NextWriter(messageType)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		if _, err := io.Copy(w, r); err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		if err := w.Close(); err != nil {
+			fmt.Println(err)
+			return
+		}
 	}
 }

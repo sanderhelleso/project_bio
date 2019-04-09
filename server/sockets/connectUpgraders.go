@@ -11,6 +11,7 @@ import (
 var upgrader = websocket.Upgrader {
 	ReadBufferSize: 1024,
 	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
 type client struct {
@@ -38,11 +39,6 @@ func ConnectUpgraders(router *gin.Engine, conn *redis.Conn) {
 // CreateConnection establishes and upgrades the current HTTP connection
 // to a new websocket connection that allows for sending/recieving of messages
 func createConnection(c *gin.Context) (*websocket.Conn, error) {
-
-	// required for no CORS
-	upgrader.CheckOrigin = func(r *http.Request) bool {
-		return true
-	}
 
 	// upgrade this connection to a WebSocket connection
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
