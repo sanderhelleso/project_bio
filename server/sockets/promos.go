@@ -4,10 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"fmt"
-	//"../lib/parser"
-	"strconv"
 	"github.com/gorilla/websocket"
 	"github.com/gomodule/redigo/redis"
+	p "../lib/parser"
 	r "../redis"
 )
 
@@ -25,9 +24,8 @@ func (client *client) wsPromos(c *gin.Context)  {
 
 	// get current socket id from req context
 	promoID := fmt.Sprintf("promos/%s", c.Param("id"))
-	log.Println(promoID)
 
-	// new client connected, update redis cache with added value
+	// new client connected, retrieve and update redis cache with added value
 	numCons, err := r.Get(client.conn, promoID, "int")
 	if err != nil && err == redis.ErrNil {
 
@@ -41,21 +39,19 @@ func (client *client) wsPromos(c *gin.Context)  {
 	}
 
 	// send back the number of connections to current promo, back to client
-	//err = ws.WriteMessage(1, parser.MakeIntBytes(numCons.(int)))
-	log.Println(numCons)
-
-	s := strconv.Itoa(numCons.(int))
-	err = ws.WriteMessage(1, []byte(s))
+	n := numCons.(int) + 1 // +1 for newly connected user
+	if err = ws.WriteMessage(1, p.IntToStrBytes(n)); err != nil { return }
+	if err = r.Set(client.conn, promoID, n); err != nil { return }
 
 	// listen indefinitely for new messages coming
     // through on our WebSocket connection
-	reader(ws, client.conn, numCons.(int))
+	reader(ws, client.conn, n, promoID)
 }
 
 // define a reader which will listen for
 // new messages being sent to our WebSocket
 // endpoint
-func reader(wsConn *websocket.Conn, redisConn *redis.Conn, numCons int) {
+func reader(wsConn *websocket.Conn, redisConn *redis.Conn, numCons int, promoID string) {
 	for {
 
 		// handle messages to be recieved from client
@@ -63,6 +59,14 @@ func reader(wsConn *websocket.Conn, redisConn *redis.Conn, numCons int) {
 
 		// handles errors for read
 		if err != nil {
+
+			// users disconnected, connection went lost
+			// update redis cache to reflect new number of cons
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+				r.Set(redisConn, promoID, numCons - 1)
+				log.Printf("error: %v", err)
+			}
+
 			log.Println(err)
 			return
 		}
