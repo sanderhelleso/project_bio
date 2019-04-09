@@ -15,17 +15,23 @@ var upgrader = websocket.Upgrader {
 
 type client struct {
 	conn *redis.Conn
+	hub  *map[*client]bool
 }
 
 // ConnectUpgraders connects all upgraded endpoints
 func ConnectUpgraders(router *gin.Engine, conn *redis.Conn) {
 
-	// create socket clients with connection to redis cache
-	promosClient := &client { conn }
+	// create a new socket client with connection to redis cache
+	pc := &client { conn, nil }
+
+	// init a new hub and add the new client
+	h := make(map[*client]bool)
+	h[pc] = true
+	pc.hub = &h
 
 	sockets := router.Group("/sockets")
 	{
-		sockets.GET("/promos/:id", promosClient.wsPromos)
+		sockets.GET("/promos/:id", pc.wsPromos)
 	}
 }
 

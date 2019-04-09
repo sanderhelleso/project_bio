@@ -29,7 +29,7 @@ func (client *client) wsPromos(c *gin.Context)  {
 	numCons, err := r.Get(client.conn, promoID, "int")
 	if err != nil && err == redis.ErrNil {
 
-		// no value stored with the promos id, set initial value
+		// no value stored with the promo id, set initial value
 		err := r.Set(client.conn, promoID, 1)
 		if err != nil {
 			return
@@ -63,11 +63,16 @@ func reader(wsConn *websocket.Conn, redisConn *redis.Conn, numCons int, promoID 
 			// users disconnected, connection went lost
 			// update redis cache to reflect new number of cons
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				r.Set(redisConn, promoID, numCons - 1)
-				log.Printf("error: %v", err)
+
+				// if number of connections is 0, remove entry set
+				if numCons - 1 == 0 {
+					r.Delete(redisConn, promoID)
+				} else {
+					r.Set(redisConn, promoID, numCons - 1)
+				}
 			}
 
-			log.Println(err)
+			log.Printf("error: %v", err)
 			return
 		}
 
