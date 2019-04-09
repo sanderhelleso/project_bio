@@ -15,6 +15,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// IntToStrBytes takes in an integer 'n' and converts
+// the integer to its string byte value
+func IntToStrBytes(n int) []byte {
+	s := strconv.Itoa(n)
+	return []byte(s)
+}
+
 // MakeIntBytes takes in an integer 'n' and converts
 // the integer to its corresponding total byte value
 func MakeIntBytes(n int) []byte {
