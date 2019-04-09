@@ -16,13 +16,13 @@ var upgrader = websocket.Upgrader {
 func ConnectUpgraders(router *gin.Engine) {
 	sockets := router.Group("/sockets")
 	{
-		sockets.GET("/promos/:id", WsPromos)
+		sockets.GET("/promos/:id", wsPromos)
 	}
 }
 
 // CreateConnection establishes and upgrades the current HTTP connection
 // to a new websocket connection that allows for sending/recieving of messages
-func CreateConnection(c *gin.Context) (*websocket.Conn, error) {
+func createConnection(c *gin.Context) (*websocket.Conn, error) {
 
 	// required for no CORS
 	upgrader.CheckOrigin = func(r *http.Request) bool {

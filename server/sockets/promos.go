@@ -9,9 +9,9 @@ import (
 
 // WsPromos creates a connection to any valid endpoints
 // matching the sat route prefix of /sockets/promos/:id
-func WsPromos(c *gin.Context) {
+func wsPromos(c *gin.Context) {
 
-	ws, err := CreateConnection(c)
+	ws, err := createConnection(c)
 	if err != nil {
 		log.Println("Unable to establish connection...")
 		return
