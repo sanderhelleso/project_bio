@@ -12,7 +12,7 @@ var upgrader = websocket.Upgrader {
 	WriteBufferSize: 1024,
 }
 
-// ConnectUpgraders connects all upgrades endpoints
+// ConnectUpgraders connects all upgraded endpoints
 func ConnectUpgraders(router *gin.Engine) {
 	sockets := router.Group("/sockets")
 	{
