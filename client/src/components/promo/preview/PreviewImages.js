@@ -16,5 +16,6 @@ export default PreviewImages;
 
 const StyledImagesCont = styled.div`
 	position: relative;
-	margin: 2.5rem 0;
+	margin: 1rem 0;
+	float: left;
 `;

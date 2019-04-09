@@ -2,6 +2,7 @@ package api
 
 import (
 	"../controllers"
+	"../sockets"
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,6 +29,9 @@ func ConnectAndServe(
 	PromosRoutes(router, promosC)
 	PromoProductsRoutes(router, promoProductsC)
 	ProfilesRoutes(router, profilesC)
+
+	// connect sockets
+	sockets.ConnectUpgraders(router)
 
 	// connect fileserver
 	FileServer(router)

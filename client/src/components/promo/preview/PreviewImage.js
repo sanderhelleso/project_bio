@@ -21,7 +21,7 @@ const StyledImage = styled.div`
 		min-height: 3.5rem;
 		max-height: 3.5rem;
 		border-radius: 50%;
-		box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.05);
+		box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
 		border: 2px solid ${(props) => props.theme.secondaryColor};
 	}
 `;

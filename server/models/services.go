@@ -14,7 +14,8 @@ func NewServices() (*Services, error) {
 		return nil, err
 	}
 
-	db.LogMode(true)
+	db.LogMode(false) // turn true for logs
+
 	return &Services{
 		User:     		NewUserService(db),
 		Profile:  		NewProfileService(db),	

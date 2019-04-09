@@ -9,6 +9,7 @@ import Container from '../../styles/Container';
 import PromoCard from './PromoCard';
 import Comments from '../comments/Comments';
 import PreviewsCard from '../preview/PreviewsCard';
+import { fadeIn } from '../../styles/Keyframes';
 
 const data = [
 	{
@@ -54,7 +55,7 @@ const data = [
 	}
 ];
 
-const Single = ({ viewPromoAction, match: { params }, viewing }) => {
+const Single = ({ viewPromoAction, match: { params } }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		loading: true,
 		error: false
@@ -63,13 +64,14 @@ const Single = ({ viewPromoAction, match: { params }, viewing }) => {
 	const { loading, error } = state;
 
 	useEffect(() => {
+		// TODO: check if same promo is already loaded
 		async function loadPromo() {
-			// TODO: check if same promo is already loaded
-
 			// attempt to load promo by the given handler and param ID
 			const { handle, id } = params;
 			const response = await getPromo(handle, id);
-			console.log(response);
+			//console.log(response);
+
+			// successfully found promotion
 			if (response.status > 400) {
 				return updateState({
 					error: response.message,
@@ -81,6 +83,24 @@ const Single = ({ viewPromoAction, match: { params }, viewing }) => {
 				...response.payload,
 				comments: data
 			});
+
+			// test socket
+			const socket = new WebSocket('ws://localhost:5000/sockets/promos/1');
+			console.log('Attempting to connect to socket...');
+
+			socket.onopen = () => {
+				console.log('Successfully Connected');
+				socket.send('Hi from Client!');
+			};
+
+			socket.onclose = (e) => {
+				console.log('Closed connection: ', e);
+				socket.send('Client closed!');
+			};
+
+			socket.onerror = (err) => {
+				console.log('Socket error: ', err);
+			};
 
 			updateState({ loading: false });
 		}
@@ -122,6 +142,7 @@ const StyledPromoGrid = styled.div`
 	display: grid;
 	grid-template-columns: 1.5fr 1fr;
 	grid-column-gap: 3rem;
+	margin-bottom: 3rem;
 
 	/* prettier-ignore */
 	grid-template-areas:
@@ -129,7 +150,7 @@ const StyledPromoGrid = styled.div`
 		"comments adds"
 	;
 
-	@media screen and (max-width: 800px) {
+	@media screen and (max-width: 1000px) {
 		display: block;
 	}
 `;

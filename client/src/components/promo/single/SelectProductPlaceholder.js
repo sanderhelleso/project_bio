@@ -15,5 +15,11 @@ const StyledPlaceholder = styled.li`
 	max-height: 5rem;
 	border: 2px solid #eeeeee;
 	background-color: #eeeeee;
-	${fadeIn};
+	animation: ${fadeIn} 0.5s ease-in-out;
+	@media screen and (max-width: 600px) {
+		min-height: 4.5rem;
+		max-width: 4.5rem;
+		min-width: 4.5rem;
+		max-height: 4.5rem;
+	}
 `;

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import FeaterIcons from 'feather-icons-react';
 import Lightbox from 'react-image-lightbox';
+import { fadeIn } from '../../styles/Keyframes';
 
 const PromoImg = ({ image }) => {
 	const imageSrc = `http://localhost:5000/${image}`;
@@ -21,9 +22,10 @@ const PromoImg = ({ image }) => {
 export default PromoImg;
 
 const StyledImgCont = styled.div`
+	animation: ${fadeIn} 0.5s ease-in-out;
 	min-width: 100%;
 	text-align: center;
-	margin-top: 2.5rem;
+	margin-top: 5.65rem;
 	grid-area: image;
 
 	img {
@@ -54,5 +56,9 @@ const StyledImgCont = styled.div`
 			margin-bottom: -3px;
 			margin-left: 7.5px;
 		}
+	}
+
+	@media screen and (max-width: 600px) {
+		margin-top: 3rem;
 	}
 `;

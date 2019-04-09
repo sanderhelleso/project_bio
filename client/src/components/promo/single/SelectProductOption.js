@@ -28,12 +28,18 @@ const StyledOption = styled.div`
 	max-height: 5rem;
 	overflow: hidden;
 	border: 2px solid ${(props) => (props.active ? props.theme.secondaryColor : '#eeeeee')};
-	${fadeIn};
-
+	animation: ${fadeIn} 0.5s ease-in-out;
 	img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		border-radius: 50%;
+	}
+
+	@media screen and (max-width: 600px) {
+		min-height: 4.5rem;
+		max-width: 4.5rem;
+		min-width: 4.5rem;
+		max-height: 4.5rem;
 	}
 `;

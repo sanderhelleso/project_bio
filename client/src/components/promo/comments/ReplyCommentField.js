@@ -4,11 +4,12 @@ import { TextArea } from '../../styles/Input';
 import { Button } from '../../styles/Button';
 import ReplyCommentPublish from './ReplyCommentPublish';
 import CharactersRemaining from './CharactersRemaining';
+import { fadeIn } from '../../styles/Keyframes';
 
 const ReplyCommentField = ({ handle, id }) => {
 	const replyTo = `Reply to ${handle}`;
 	const minLength = 2;
-	const maxLength = 255;
+	const maxLength = 140;
 
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		isOpen: false,

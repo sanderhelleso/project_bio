@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 
 const PostComment = ({ updatePromoCommentsAction, handle, avatar }) => {
 	const minLength = 2;
-	const maxLength = 255;
+	const maxLength = 140;
 
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		comment: ''
@@ -78,6 +78,10 @@ const StyledComment = styled.div`
 	margin: 2rem 0;
 	textarea {
 		min-height: 150px;
+	}
+
+	@media screen and (max-width: 600px) {
+		margin-bottom: 5rem;
 	}
 `;
 

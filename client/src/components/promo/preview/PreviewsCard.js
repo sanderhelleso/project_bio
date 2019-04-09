@@ -24,6 +24,7 @@ const StyledHeader = styled.div`
 	margin-bottom: 4rem;
 	h2 {
 		font-weight: 100;
+		font-size: 1.5rem;
 		color: #9e9e9e;
 	}
 `;
@@ -31,4 +32,14 @@ const StyledHeader = styled.div`
 const StyledCont = styled.div`
 	min-height: 100%;
 	position: relative;
+
+	@media screen and (max-width: 1000px) {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-gap: 3rem;
+	}
+
+	@media screen and (max-width: 600px) {
+		grid-template-columns: 1fr;
+	}
 `;
