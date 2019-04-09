@@ -9,9 +9,27 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"bytes"
+	"encoding/binary"
 
 	"github.com/gin-gonic/gin"
 )
+
+// IntToStrBytes takes in an integer 'n' and converts
+// the integer to its string byte value
+func IntToStrBytes(n int) []byte {
+	s := strconv.Itoa(n)
+	return []byte(s)
+}
+
+// MakeIntBytes takes in an integer 'n' and converts
+// the integer to its corresponding total byte value
+func MakeIntBytes(n int) []byte {
+	buffer := new(bytes.Buffer)
+	_ = binary.Write(buffer, binary.LittleEndian, n)
+	
+	return buffer.Bytes()
+}
 
 // ParseUserID parses the given string representation of a user id
 // and validates conversion, will return uint value of given string.
