@@ -12,17 +12,17 @@ var upgrader = websocket.Upgrader {
 	WriteBufferSize: 1024,
 }
 
-// ConnectUpgraders connects all upgrades endpoints
+// ConnectUpgraders connects all upgraded endpoints
 func ConnectUpgraders(router *gin.Engine) {
 	sockets := router.Group("/sockets")
 	{
-		sockets.GET("/promos/:id", WsPromos)
+		sockets.GET("/promos/:id", wsPromos)
 	}
 }
 
 // CreateConnection establishes and upgrades the current HTTP connection
 // to a new websocket connection that allows for sending/recieving of messages
-func CreateConnection(c *gin.Context) (*websocket.Conn, error) {
+func createConnection(c *gin.Context) (*websocket.Conn, error) {
 
 	// required for no CORS
 	upgrader.CheckOrigin = func(r *http.Request) bool {
