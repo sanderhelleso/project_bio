@@ -1,7 +1,13 @@
 package sockets
 
-import "fmt"
+import (
+	"fmt"
+	"../lib/parser"
+)
 
+// Pool represents a connection pool
+// with required methods for a 
+// realtime socket connection
 type Pool struct {
 	Register 	chan *Client
 	Unregister 	chan *Client
@@ -9,6 +15,7 @@ type Pool struct {
 	Broadcast 	chan Message
 }
 
+// NewPool initializes a new pool of channels
 func NewPool() *Pool {
 	return &Pool {
 		Register: 	make(chan *Client),
@@ -18,6 +25,7 @@ func NewPool() *Pool {
 	}
 }
 
+// Start starts a new pool, handling connect, disconnect and broadcasting
 func (pool *Pool) Start() {
 	for {
 		select {
@@ -25,20 +33,19 @@ func (pool *Pool) Start() {
 		// new client connected to pool
 		case client := <- pool.Register:
 			pool.Clients[client] = true
-			fmt.Println("Size of connection pool: ", len(pool.Clients))
+			fmt.Println("CONNECT - Size of connection pool: ", len(pool.Clients))
 
 			for client := range pool.Clients {
-				fmt.Println(client)
-				client.Conn.WriteJSON(Message{ 1, "New user connected..." })
+				client.Conn.WriteJSON(Message{ 1, parser.IntToStr(len(pool.Clients)) })
 			}
 			break
 
 		// existing client disconnected from pool
 		case cllient := <- pool.Unregister:
 			delete(pool.Clients, cllient)
-			fmt.Println("Size of connection pool: ", len(pool.Clients))
+			fmt.Println("DISCONNECT - Size of connection pool: ", len(pool.Clients))
 			for client := range pool.Clients {
-				client.Conn.WriteJSON(Message{ 1, "User disconnected..."})
+				client.Conn.WriteJSON(Message{ 1, parser.IntToStr(len(pool.Clients)) })
 			}
 			break
 		case message := <- pool.Broadcast:
