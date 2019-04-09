@@ -5,10 +5,10 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
-// ping tests the connectivity for redis
+// Ping tests the connectivity for redis
 //
 // 'PONG' should be returned
-func ping(c redis.Conn) error {
+func Ping(c redis.Conn) error {
 
 	// Send PING command to Redis
 	// PING command returns a Redis "Simple String"
