@@ -14,28 +14,6 @@ var upgrader = websocket.Upgrader {
 	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
-type client struct {
-	conn *redis.Conn
-	hub  *map[*client]bool
-}
-
-// ConnectUpgraders connects all upgraded endpoints
-func ConnectUpgraders(router *gin.Engine, conn *redis.Conn) {
-
-	// create a new socket client with connection to redis cache
-	pc := &client { conn, nil }
-
-	// init a new hub and add the new client
-	h := make(map[*client]bool)
-	h[pc] = true
-	pc.hub = &h
-
-	sockets := router.Group("/sockets")
-	{
-		sockets.GET("/promos/:id", pc.wsPromos)
-	}
-}
-
 // CreateConnection establishes and upgrades the current HTTP connection
 // to a new websocket connection that allows for sending/recieving of messages
 func createConnection(c *gin.Context) (*websocket.Conn, error) {
@@ -48,4 +26,18 @@ func createConnection(c *gin.Context) (*websocket.Conn, error) {
 	}
 
 	return ws, nil;
+}
+
+// ConnectUpgraders connects all upgraded endpoints
+func ConnectUpgraders(router *gin.Engine, redisConn *redis.Conn) {
+
+	// setup all connection pools
+	promoPools := make(map[string]*Pool)
+	pc := &PromoConn{ redisConn, promoPools }
+
+	// serve pools on endpoint hit
+	sockets := router.Group("/sockets")
+	{
+		sockets.GET("/promos/:id", pc.wsPromos)
+	}
 }
