@@ -5,23 +5,25 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
-func get(c redis.Conn, key string, valType interface{}) (interface{}, error) {
+// Get excecutes the redis GET command with the 
+// given key passed in
+func Get(c redis.Conn, key string, expecting string) (interface{}, error) {
 
-	var val interface{}
-	var err error
-	
-	switch valType.(type) {
-	case string:
+	var (
+		val interface{}
+		err error
+	)
+
+	switch expecting {
+	case "string":
 		val, err = redis.String(c.Do("GET", key))
-		if err = checkRedisErr(key, err); err != nil {
-			return nil, err
-		}
 
-	case int:
+	case "int":
 		val, err = redis.Int(c.Do("GET", key))
-		if err = checkRedisErr(key, err); err != nil {
-			return nil, err
-		}
+	}
+
+	if err = checkRedisErr(key, err); err != nil {
+		return nil, err
 	}
 
 	return val, nil

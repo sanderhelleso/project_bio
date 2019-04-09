@@ -9,6 +9,7 @@ import (
 	"./lib"
 	"./models"
 	"./redis"
+	"fmt"
 
 	"github.com/joho/godotenv"
 )
@@ -55,6 +56,10 @@ func main() {
 	// defer close connections
 	defer services.Close()
 	defer conn.Close()
+
+	err = redis.Set(conn, "test", 1337)
+	val, err := redis.Get(conn, "test", "int")
+	fmt.Println(val)
 
 	// connect and serve app
 	api.ConnectAndServe(usersC, followersC, promosC, promoProductsC, profilesC)
