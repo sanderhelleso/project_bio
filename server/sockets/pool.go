@@ -29,7 +29,7 @@ func (pool *Pool) Start() {
 
 			for client := range pool.Clients {
 				fmt.Println(client)
-				client.WsConn.WriteJSON(Message{ 1, "New user connected..." })
+				client.Conn.WriteJSON(Message{ 1, "New user connected..." })
 			}
 			break
 
@@ -38,13 +38,13 @@ func (pool *Pool) Start() {
 			delete(pool.Clients, cllient)
 			fmt.Println("Size of connection pool: ", len(pool.Clients))
 			for client := range pool.Clients {
-				client.WsConn.WriteJSON(Message{ 1, "User disconnected..."})
+				client.Conn.WriteJSON(Message{ 1, "User disconnected..."})
 			}
 			break
 		case message := <- pool.Broadcast:
 			fmt.Println("Sending message clients in pool...")
 			for client := range pool.Clients {
-				if err := client.WsConn.WriteJSON(message); err != nil {
+				if err := client.Conn.WriteJSON(message); err != nil {
 					fmt.Println(err)
 					return
 				}
