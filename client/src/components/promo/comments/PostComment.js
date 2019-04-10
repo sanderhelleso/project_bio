@@ -81,7 +81,7 @@ const StyledComment = styled.div`
 	}
 
 	@media screen and (max-width: 600px) {
-		margin-bottom: 5rem;
+		margin-bottom: 10rem;
 	}
 `;
 

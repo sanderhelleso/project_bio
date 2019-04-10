@@ -78,4 +78,8 @@ const StyledCont = styled.div`
 			top: 35%;
 		}
 	}
+
+	@media screen and (max-width: 600px) {
+		min-width: 225px;
+	}
 `;

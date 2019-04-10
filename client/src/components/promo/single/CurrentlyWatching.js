@@ -68,4 +68,15 @@ const StyledCont = styled.div`
 		widows: 0.9rem;
 		cursor: pointer;
 	}
+
+	@media screen and (max-width: 475px) {
+		left: 50%;
+		transform: translate(-50%);
+		min-width: 80%;
+		bottom: 1rem;
+	}
+
+	@media screen and (max-width: 330px) {
+		min-width: 95%;
+	}
 `;

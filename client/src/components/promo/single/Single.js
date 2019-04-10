@@ -101,7 +101,6 @@ const Single = ({ viewPromoAction, match: { params } }) => {
 
 		return (
 			<StyledPromoGrid>
-				<CurrentlyWatching />
 				<PromoCard />
 				<Comments />
 				<PreviewsCard />
