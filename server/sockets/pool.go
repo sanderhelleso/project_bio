@@ -53,6 +53,7 @@ func (pool *Pool) Start(pools *map[string]*Pool, id string) {
 			// if no connections in pool is left, remove from map of pools
 			if activeClients == 0 {
 				delete(*pools, id)
+				return
 			}
 
 			break

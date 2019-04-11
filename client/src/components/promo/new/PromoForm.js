@@ -44,7 +44,7 @@ class PromoForm extends Component {
 
 		this.setState(
 			{
-				checked: this.props.promo.promotion_code ? true : false
+				checked: this.props.promo.code ? true : false
 			},
 			() => {
 				// set code fields with potensial deactivation
@@ -54,7 +54,7 @@ class PromoForm extends Component {
 							placeholder: 'Promotion code',
 							max: 255,
 							min: 2,
-							name: 'promotion_code',
+							name: 'code',
 							type: 'text',
 							required: true,
 							error: false,
@@ -64,7 +64,7 @@ class PromoForm extends Component {
 							placeholder: 'Discount amount',
 							max: 3,
 							min: 1,
-							name: 'discount_amount',
+							name: 'discount',
 							type: 'text',
 							required: true,
 							error: false,
@@ -73,7 +73,7 @@ class PromoForm extends Component {
 						},
 						{
 							placeholder: 'When does the promotion expire?',
-							name: 'expires_at',
+							name: 'expires',
 							type: 'date',
 							required: true,
 							min: new Date().toISOString().split('T')[0],
@@ -104,6 +104,7 @@ class PromoForm extends Component {
 	handleChange = (e) => {
 		// handles all fields and select
 		const toUpdate = typeof e === 'object' ? { [e.target.name]: e.target.value } : { ['category']: e };
+		console.log(toUpdate);
 
 		this.setState({
 			promo: {

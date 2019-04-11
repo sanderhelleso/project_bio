@@ -16,9 +16,9 @@ type PromoForm struct {
 	Title			string 	  	`form:"title" binding:"required"`
 	Description		string	  	`form:"description" binding:"required"`
 	Category		string 	  	`form:"category" binding:"required"`
-	Code			string	  	`form:"promotion_code"`	
-	Discount		uint	  	`form:"discount_amount"`	
-	ExpiresAt		time.Time 	`form:"expires_at"`
+	Code			string	  	`form:"code" binding:"required"`	
+	Discount		uint	  	`form:"discount" binding:"required"`	
+	Expires			int64 		`form:"expires" binding:"required"`
 
 	Products 		[]*PromoProductForm `form:"products" binding:"required"`
 }
@@ -29,10 +29,10 @@ type UpdatePromoForm struct {
 	ID				uint      `form:"id" binding:"required"`
 	Title			string 	  `form:"title" binding:"required"`
 	Description		string	  `form:"description" binding:"required"`
-	Category		string 	  	`form:"category" binding:"required"`
-	Code			string	  `form:"promotion_code"`	
-	Discount		uint	  `form:"discount_amount"`	
-	ExpiresAt		time.Time `form:"expiresAt"`
+	Category		string 	  `form:"category" binding:"required"`
+	Code			string	  `form:"code"`	
+	Discount		uint	  `form:"discount"`	
+	Expires			time.Time `form:"expiresAt"`
 }
 
 // PromoFormWithID represents the request body to the endpoints
@@ -72,14 +72,16 @@ func (p *Promos) Create(c *gin.Context) {
 
 
 	var form PromoForm
-	if c.Bind(&form) != nil {
-		fmt.Println(fmt.Println(&form))
+	if err := c.Bind(&form); err != nil {
+		fmt.Println(err)
 		response.RespondWithError(
 			c, 
 			http.StatusUnprocessableEntity, 
 			"Unable to process form data due to invalid format")
 		return
 	}
+
+	fmt.Println(form)
 
 	// attempt to create and store promo in DB
 	promo := models.Promo {
@@ -89,7 +91,7 @@ func (p *Promos) Create(c *gin.Context) {
 		Category:		form.Category,
 		Code:			form.Code,
 		Discount:		form.Discount,
-		ExpiresAt:		form.ExpiresAt,
+		ExpiresAt:		parser.TsToTime(form.Expires),
 	}
 
 	// create promo
@@ -162,7 +164,7 @@ func (p *Promos) Update(c *gin.Context) {
 		Description:	form.Description,
 		Code:			form.Code,
 		Discount:		form.Discount,
-		ExpiresAt:		form.ExpiresAt,
+		ExpiresAt:		form.Expires,
 	}
 
 	if err := p.ps.Update(&promo); err != nil {

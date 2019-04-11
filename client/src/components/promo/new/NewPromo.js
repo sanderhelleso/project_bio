@@ -15,9 +15,9 @@ class NewPromo extends Component {
 			title: '',
 			description: '',
 			category: '',
-			expires_at: '',
-			promotion_code: '',
-			discount_amount: '',
+			expires: '',
+			code: '',
+			discount: '',
 			products: []
 		},
 		...this.resetCurrProd()

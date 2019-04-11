@@ -11,6 +11,7 @@ import (
 	"strings"
 	"bytes"
 	"encoding/binary"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -129,4 +130,9 @@ func takeArg(arg interface{}, kind reflect.Kind) (val reflect.Value, ok bool) {
 	}
 
 	return
+}
+
+// TsToTime converts a int64 timetamp to time format
+func TsToTime(ts int64) time.Time {
+	return time.Unix(ts / 1000, 0)
 }

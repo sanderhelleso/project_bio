@@ -2,11 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import FavoritePromo from './FavoritePromo';
 import SharePromo from './SharePromo';
+import CurrentlyWatching from './CurrentlyWatching';
 
 const ToolCont = () => (
 	<StyledCont>
 		<FavoritePromo />
 		<SharePromo />
+		<CurrentlyWatching />
 	</StyledCont>
 );
 
