@@ -16,14 +16,23 @@ class Publish extends Component {
 
 	normalizePromo() {
 		// normalizes the promo before sending
-		this.props.promo.products = this.props.promo.products.map((p) => {
+
+		const promo = this.props.promo;
+
+		// discount
+		if (promo.discount) {
+			promo.discount = parseInt(promo.discount);
+		}
+
+		// products
+		promo.products = promo.products.map((p) => {
 			return {
 				...p,
 				price: Math.round(p.price * 100) / 100
 			};
 		});
 
-		return this.props.promo;
+		return promo;
 	}
 
 	createPromo = async () => {
@@ -31,6 +40,8 @@ class Publish extends Component {
 
 		// create promo
 		const promo = this.normalizePromo();
+		console.log(promo);
+
 		const response = await createPromo(promo);
 
 		// if success, upload promo products releated image
@@ -44,9 +55,9 @@ class Publish extends Component {
 					);
 				})
 			);
-		}
 
-		this.updateAndRedir(response.payload.promoID, promo);
+			return this.updateAndRedir(response.payload.promoID, promo);
+		}
 	};
 
 	uploadPromoProductImg = async (blob, id) => {
