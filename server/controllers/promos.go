@@ -18,7 +18,7 @@ type PromoForm struct {
 	Category		string 	  	`form:"category" binding:"required"`
 	Code			string	  	`form:"code" binding:"required"`	
 	Discount		uint	  	`form:"discount" binding:"required"`	
-	ExpiresAt		time.Time 	`form:"expires" binding:"required"`
+	Expires			int64 		`form:"expires" binding:"required"`
 
 	Products 		[]*PromoProductForm `form:"products" binding:"required"`
 }
@@ -32,7 +32,7 @@ type UpdatePromoForm struct {
 	Category		string 	  `form:"category" binding:"required"`
 	Code			string	  `form:"code"`	
 	Discount		uint	  `form:"discount"`	
-	ExpiresAt		time.Time `form:"expiresAt"`
+	Expires			time.Time `form:"expiresAt"`
 }
 
 // PromoFormWithID represents the request body to the endpoints
@@ -91,7 +91,7 @@ func (p *Promos) Create(c *gin.Context) {
 		Category:		form.Category,
 		Code:			form.Code,
 		Discount:		form.Discount,
-		ExpiresAt:		form.ExpiresAt,
+		ExpiresAt:		parser.TsToTime(form.Expires),
 	}
 
 	// create promo
@@ -164,7 +164,7 @@ func (p *Promos) Update(c *gin.Context) {
 		Description:	form.Description,
 		Code:			form.Code,
 		Discount:		form.Discount,
-		ExpiresAt:		form.ExpiresAt,
+		ExpiresAt:		form.Expires,
 	}
 
 	if err := p.ps.Update(&promo); err != nil {

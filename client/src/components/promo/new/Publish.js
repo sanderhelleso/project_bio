@@ -22,6 +22,7 @@ class Publish extends Component {
 		// discount
 		if (promo.discount) {
 			promo.discount = parseInt(promo.discount);
+			promo.expires = new Date(promo.expires).getTime();
 		}
 
 		// products
