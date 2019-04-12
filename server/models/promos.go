@@ -14,9 +14,9 @@ type Promo struct {
 	Title			string 		`gorm:"not null;size:100" json:"title"`
 	Description		string		`gorm:"not null;size:500" json:"description"`
 	Category		string  	`gorm:"not null" json:"category"`
-	Code			string  	`json:"promotion_code"`
-	Discount		uint		`json:"discount_amount"`
-	ExpiresAt		time.Time	`json:"expires_at"`
+	Code			string  	`json:"code"`
+	Discount		uint		`json:"discount"`
+	ExpiresAt		time.Time	`json:"expires"`
 }
 
 // PromoDB is used to interact with the promos database

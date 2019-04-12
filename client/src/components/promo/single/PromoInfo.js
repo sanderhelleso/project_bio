@@ -12,7 +12,7 @@ import { fadeIn } from '../../styles/Keyframes';
 import FavoritePromo from './FavoritePromo';
 
 const PromoInfo = ({
-	promo: { title, description, promotion_code, CreatedAt },
+	promo: { title, description, code, CreatedAt, discount },
 	active: { name, brand, price, currency, link }
 }) => {
 	return (
@@ -23,12 +23,12 @@ const PromoInfo = ({
 				<p>{description}</p>
 			</StyledInfoHeader>
 			<StyledInfoBody>
-				<ProductNameBrand name={name} brand={brand} />
-				<PromoPrice price={price} currency={currency} />
+				<ProductNameBrand {...{ name, brand }} />
+				<PromoPrice {...{ price, currency, discount }} />
 			</StyledInfoBody>
 			<StyledActionCont>
-				<p>Use the code below to get {20}% off this product</p>
-				<PromoCode code={promotion_code} />
+				<p>Use the code below to get {discount}% off this product</p>
+				<PromoCode code={code} />
 				<PromoLink link={link} />
 			</StyledActionCont>
 		</StyledInfoCont>

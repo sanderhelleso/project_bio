@@ -104,7 +104,6 @@ class PromoForm extends Component {
 	handleChange = (e) => {
 		// handles all fields and select
 		const toUpdate = typeof e === 'object' ? { [e.target.name]: e.target.value } : { ['category']: e };
-		console.log(toUpdate);
 
 		this.setState({
 			promo: {
