@@ -154,22 +154,22 @@ class PromoForm extends Component {
 		return (
 			<StyledCont>
 				<StyledGrid>
-					<StyledForm id="info-form">
+					<div className="form">
 						<Inputs stretch={true}>
 							<SelectCategory category={this.state.promo.category} handleChange={this.handleChange} />
 							{this.renderFields(this.state.infoFields)}
 						</Inputs>
-					</StyledForm>
-					<div>
+					</div>
+					<div className="form">
 						<div id="checkbox">
 							<label className="no-select">
 								<Checkbox checked={this.state.checked} onChange={() => this.handleCheckboxChange()} />
 								<span>Got a promotion code?</span>
 							</label>
 						</div>
-						<StyledForm>
+						<div>
 							<Inputs stretch={true}>{this.renderFields(this.state.codeFields)}</Inputs>
-						</StyledForm>
+						</div>
 						<Button onClick={() => this.validatePromo()}>
 							<FeatherIcons icon="arrow-right" />
 							Continue
@@ -183,8 +183,6 @@ class PromoForm extends Component {
 
 export default withToastManager(PromoForm);
 
-const StyledForm = styled.div`min-width: 500px;`;
-
 const StyledCont = styled.div`
 	max-width: 85%;
 	margin: 6rem auto;
@@ -197,10 +195,22 @@ const StyledCont = styled.div`
 
 const StyledGrid = styled.div`
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	grid-column-gap: 4rem;
-	justify-items: center;
-	align-content: space-evenly;
+	grid-template-columns: 50% 50%;
+	grid-column-gap: 3rem;
+	min-width: 500px;
+
+	@media screen and (max-width: 1100px) {
+		grid-template-columns: 100%;
+
+		.form {
+			margin-bottom: 6rem;
+		}
+	}
+
+	@media screen and (max-width: 600px) {
+		min-width: 100%;
+		max-width: 100%;
+	}
 
 	#info-form {
 		margin-top: 2.3rem;

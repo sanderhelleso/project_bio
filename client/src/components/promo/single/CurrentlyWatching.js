@@ -19,7 +19,6 @@ const CurrentlyWatching = ({ promoID }) => {
 		};
 
 		socket.onerror = (err) => console.log('Socket error: ', err);
-
 		return () => socket.close();
 	}, []);
 

@@ -91,7 +91,7 @@ class NewPromo extends Component {
 						promo={this.state.promo}
 						valid={this.state.promo.products.length > 0}
 					/>
-					<Grid>
+					<div>
 						<Form
 							updateProducts={this.updateProducts}
 							removeProduct={this.removeProduct}
@@ -99,7 +99,7 @@ class NewPromo extends Component {
 							canAddMore={this.state.promo.products.length < 3}
 						/>
 						<PreviewList list={this.state.promo.products} selectProduct={this.selectProduct} />
-					</Grid>
+					</div>
 				</Fragment>
 			);
 		}
@@ -130,5 +130,19 @@ const StyledNewPromo = styled.div`
 			margin-left: 2rem;
 			min-width: 150px;
 		}
+
+		@media screen and (max-width: 600px) {
+			min-width: 100%;
+
+			button {
+				float: none;
+				min-width: 100% !important;
+				margin: 2rem auto;
+			}
+		}
+	}
+
+	@media screen and (max-width: 600px) {
+		margin-bottom: 3rem;
 	}
 `;
