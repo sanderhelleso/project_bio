@@ -154,7 +154,7 @@ class PromoForm extends Component {
 		return (
 			<StyledCont>
 				<StyledGrid>
-					<div className="form">
+					<div className="form info">
 						<Inputs stretch={true}>
 							<SelectCategory category={this.state.promo.category} handleChange={this.handleChange} />
 							{this.renderFields(this.state.infoFields)}
@@ -195,19 +195,38 @@ const StyledCont = styled.div`
 
 const StyledGrid = styled.div`
 	display: grid;
-	grid-template-columns: 50% 50%;
-	grid-column-gap: 3rem;
-	min-width: 500px;
+	grid-template-columns: 1fr 1fr;
+	grid-column-gap: 5rem;
+	min-width: 100%;
+	max-width: 100%;
+	margin: 0 auto;
+
+	@media screen and (min-width: 1600px) {
+		min-width: 1000px;
+		max-width: 1000px;
+	}
+
+	.form {
+		min-width: 100%;
+		max-width: 500px;
+		margin: 0 auto;
+
+		&.info {
+			margin-top: 2.25rem;
+		}
+	}
 
 	@media screen and (max-width: 1100px) {
 		grid-template-columns: 100%;
+		min-width: 600px;
+		max-width: 600px;
 
 		.form {
 			margin-bottom: 6rem;
 		}
 	}
 
-	@media screen and (max-width: 600px) {
+	@media screen and (max-width: 800px) {
 		min-width: 100%;
 		max-width: 100%;
 	}

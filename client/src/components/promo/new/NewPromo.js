@@ -119,7 +119,7 @@ class NewPromo extends Component {
 export default NewPromo;
 
 const StyledNewPromo = styled.div`
-	margin: 6rem auto 12.5rem auto;
+	margin: 5rem auto;
 
 	#cont {
 		min-width: 85%;
