@@ -39,10 +39,8 @@ class Publish extends Component {
 	createPromo = async () => {
 		this.setState({ loading: true });
 
-		// create promo
+		// create promo and attempt publish
 		const promo = this.normalizePromo();
-		console.log(promo);
-
 		const response = await createPromo(promo);
 
 		// if success, upload promo products releated image

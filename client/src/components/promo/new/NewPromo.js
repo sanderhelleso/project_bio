@@ -91,15 +91,16 @@ class NewPromo extends Component {
 						promo={this.state.promo}
 						valid={this.state.promo.products.length > 0}
 					/>
-					<Grid>
+					<StyledCont>
 						<Form
 							updateProducts={this.updateProducts}
 							removeProduct={this.removeProduct}
 							currentProduct={this.state.currentProduct}
 							canAddMore={this.state.promo.products.length < 3}
+							list={this.state.promo.products}
 						/>
 						<PreviewList list={this.state.promo.products} selectProduct={this.selectProduct} />
-					</Grid>
+					</StyledCont>
 				</Fragment>
 			);
 		}
@@ -119,7 +120,7 @@ class NewPromo extends Component {
 export default NewPromo;
 
 const StyledNewPromo = styled.div`
-	margin: 6rem auto 12.5rem auto;
+	margin: 5rem auto;
 
 	#cont {
 		min-width: 85%;
@@ -130,5 +131,59 @@ const StyledNewPromo = styled.div`
 			margin-left: 2rem;
 			min-width: 150px;
 		}
+
+		@media screen and (max-width: 600px) {
+			min-width: 100%;
+
+			button {
+				float: none;
+				clear: both;
+				margin: 2rem auto;
+				width: 100%;
+			}
+		}
+	}
+
+	@media screen and (max-width: 600px) {
+		margin-bottom: 3rem;
+	}
+`;
+
+const StyledCont = styled.div`
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 0.85fr);
+
+	/* prettier-ignore */
+	grid-template-areas: 
+		"upload form list"
+	;
+
+	grid-gap: 3.5rem;
+
+	@media screen and (max-width: 1200px) {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+
+		max-width: 800px;
+		margin: 0 auto;
+
+		/* prettier-ignore */
+		grid-template-areas: 
+			"upload list"
+			"form form"
+		;
+	}
+
+	@media screen and (max-width: 800px) {
+		grid-template-columns: minmax(0, 1fr);
+
+		max-width: 80%;
+		margin: 0 auto;
+
+		/* prettier-ignore */
+		grid-template-areas: 
+			"list"
+			"upload"
+			"form"
+		;
 	}
 `;

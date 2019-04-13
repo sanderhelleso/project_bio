@@ -104,7 +104,6 @@ class PromoForm extends Component {
 	handleChange = (e) => {
 		// handles all fields and select
 		const toUpdate = typeof e === 'object' ? { [e.target.name]: e.target.value } : { ['category']: e };
-		console.log(toUpdate);
 
 		this.setState({
 			promo: {
@@ -155,22 +154,22 @@ class PromoForm extends Component {
 		return (
 			<StyledCont>
 				<StyledGrid>
-					<StyledForm id="info-form">
+					<div className="form info">
 						<Inputs stretch={true}>
 							<SelectCategory category={this.state.promo.category} handleChange={this.handleChange} />
 							{this.renderFields(this.state.infoFields)}
 						</Inputs>
-					</StyledForm>
-					<div>
+					</div>
+					<div className="form">
 						<div id="checkbox">
 							<label className="no-select">
 								<Checkbox checked={this.state.checked} onChange={() => this.handleCheckboxChange()} />
 								<span>Got a promotion code?</span>
 							</label>
 						</div>
-						<StyledForm>
+						<div>
 							<Inputs stretch={true}>{this.renderFields(this.state.codeFields)}</Inputs>
-						</StyledForm>
+						</div>
 						<Button onClick={() => this.validatePromo()}>
 							<FeatherIcons icon="arrow-right" />
 							Continue
@@ -184,8 +183,6 @@ class PromoForm extends Component {
 
 export default withToastManager(PromoForm);
 
-const StyledForm = styled.div`min-width: 500px;`;
-
 const StyledCont = styled.div`
 	max-width: 85%;
 	margin: 6rem auto;
@@ -198,10 +195,41 @@ const StyledCont = styled.div`
 
 const StyledGrid = styled.div`
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	grid-column-gap: 4rem;
-	justify-items: center;
-	align-content: space-evenly;
+	grid-template-columns: 1fr 1fr;
+	grid-column-gap: 5rem;
+	min-width: 100%;
+	max-width: 100%;
+	margin: 0 auto;
+
+	@media screen and (min-width: 1600px) {
+		min-width: 1000px;
+		max-width: 1000px;
+	}
+
+	.form {
+		min-width: 100%;
+		max-width: 500px;
+		margin: 0 auto;
+
+		&.info {
+			margin-top: 2.25rem;
+		}
+	}
+
+	@media screen and (max-width: 1100px) {
+		grid-template-columns: 100%;
+		min-width: 600px;
+		max-width: 600px;
+
+		.form {
+			margin-bottom: 6rem;
+		}
+	}
+
+	@media screen and (max-width: 800px) {
+		min-width: 100%;
+		max-width: 100%;
+	}
 
 	#info-form {
 		margin-top: 2.3rem;

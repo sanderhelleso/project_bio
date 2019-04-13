@@ -21,7 +21,7 @@ const PromoCode = ({ code }) => {
 	return (
 		<Fragment>
 			<StyledCode data-tip={tooltip} data-for="code-tooltip" onClick={copyToClipboard} className="no-select">
-				KAFFI20
+				{code}
 			</StyledCode>
 			<Tooltip id="code-tooltip" place="bottom" type="dark" effect="solid" getContent={() => tooltip} />
 		</Fragment>
