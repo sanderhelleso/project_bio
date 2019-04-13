@@ -53,6 +53,7 @@ export default Price;
 const StyledPrice = styled.div`
 	input {
 		max-width: 47.5%;
+		min-width: 47.5%;
 
 		&:nth-child(1) {
 			margin-right: 5%;

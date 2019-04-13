@@ -91,15 +91,16 @@ class NewPromo extends Component {
 						promo={this.state.promo}
 						valid={this.state.promo.products.length > 0}
 					/>
-					<div>
+					<StyledCont>
 						<Form
 							updateProducts={this.updateProducts}
 							removeProduct={this.removeProduct}
 							currentProduct={this.state.currentProduct}
 							canAddMore={this.state.promo.products.length < 3}
+							list={this.state.promo.products}
 						/>
 						<PreviewList list={this.state.promo.products} selectProduct={this.selectProduct} />
-					</div>
+					</StyledCont>
 				</Fragment>
 			);
 		}
@@ -144,5 +145,44 @@ const StyledNewPromo = styled.div`
 
 	@media screen and (max-width: 600px) {
 		margin-bottom: 3rem;
+	}
+`;
+
+const StyledCont = styled.div`
+	display: grid;
+	grid-template-columns: 1fr 1.15fr 0.85fr;
+
+	/* prettier-ignore */
+	grid-template-areas: 
+		"upload form list"
+	;
+
+	grid-gap: 3.5rem;
+
+	@media screen and (max-width: 1200px) {
+		grid-template-columns: 1fr 1fr;
+
+		max-width: 800px;
+		margin: 0 auto;
+
+		/* prettier-ignore */
+		grid-template-areas: 
+			"upload list"
+			"form form"
+		;
+	}
+
+	@media screen and (max-width: 800px) {
+		grid-template-columns: 1fr;
+
+		max-width: 90%;
+		margin: 0 auto;
+
+		/* prettier-ignore */
+		grid-template-areas: 
+			"list"
+			"upload"
+			"form"
+		;
 	}
 `;
