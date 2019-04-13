@@ -25,16 +25,14 @@ class DetailsOverview extends Component {
 	render() {
 		return (
 			<StyledCont>
-				<Grid>
-					<div id="details">
-						<div>
-							<span>Title</span>
-							<h3>{this.props.promo.title}</h3>
-						</div>
-						<p>{this.props.promo.description}</p>
+				<div id="details">
+					<div>
+						<span>Title</span>
+						<h3>{this.props.promo.title}</h3>
 					</div>
-					<div>{this.renderButtons()}</div>
-				</Grid>
+					<p>{this.props.promo.description}</p>
+				</div>
+				<div id="btns">{this.renderButtons()}</div>
 			</StyledCont>
 		);
 	}
@@ -46,35 +44,67 @@ const StyledCont = styled.div`
 	max-width: 95%;
 	margin: 0 auto;
 	min-height: 175px;
-	padding-bottom: 1rem;
+	padding-bottom: 3rem;
 	margin-bottom: 4rem;
 	border-bottom: 1px solid #e0e0e0;
+	display: grid;
+	grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+
+	/* prettier-ignore */
+	grid-template-areas: 
+		"details buttons"
+	;
+
+	h3,
+	p {
+		word-wrap: break-word;
+		max-width: 95%;
+	}
 
 	#details {
 		max-width: 900px;
+		grid-area: details;
 
 		p {
-			max-width: 90%;
 			font-size: 0.9rem;
 			color: #212121;
 		}
 
 		div {
-			min-width: 90%;
-			max-width: 90;
-			margin-right: 1%;
-			grid-column: 1;
-
-			h3 {
-				word-wrap: break-word;
-			}
-
 			span {
 				text-transform: uppercase;
 				letter-spacing: 2px;
 				color: #9e9e9e;
 				font-size: 0.8rem;
 			}
+		}
+	}
+
+	#btns {
+		grid-area: buttons;
+
+		@media screen and (max-width: 600px) {
+			button {
+				margin-bottom: 0 !important;
+			}
+		}
+	}
+
+	@media screen and (max-width: 800px) {
+		grid-template-columns: minmax(0, 1fr);
+		padding-bottom: 4rem;
+		max-width: 85%;
+		margin: 0 auto 4rem auto;
+
+		/* prettier-ignore */
+		grid-template-areas: 
+		"details"
+		"buttons"
+		;
+
+		#details,
+		#btns {
+			max-width: 100%;
 		}
 	}
 `;

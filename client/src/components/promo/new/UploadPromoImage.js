@@ -129,4 +129,14 @@ const StyledUpload = styled.div`
 		stroke: #9e9e9e;
 		opacity: 0.5;
 	}
+
+	@media screen and (max-width: 400px) {
+		max-width: 100%;
+		min-width: 100%;
+
+		img {
+			min-width: 100%;
+			max-width: 100%;
+		}
+	}
 `;

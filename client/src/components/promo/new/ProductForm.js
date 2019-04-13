@@ -178,4 +178,18 @@ export default withToastManager(Form);
 const StyledForm = styled.div`
 	margin-top: -1rem;
 	grid-area: form;
+
+	@media screen and (max-width: 800px) {
+		margin-top: 2rem;
+	}
+
+	@media screen and (max-width: 600px) {
+		button {
+			min-height: 55px !important;
+			font-size: 0.9rem !important;
+			margin-bottom: 0;
+		}
+
+		margin-bottom: 5rem;
+	}
 `;

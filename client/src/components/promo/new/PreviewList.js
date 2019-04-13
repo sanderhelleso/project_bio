@@ -66,4 +66,14 @@ const StyledPreview = styled.div`
 			margin-bottom: 2.5rem;
 		}
 	}
+
+	@media screen and (max-width: 800px) {
+		min-width: 350px;
+		max-width: 350px;
+	}
+
+	@media screen and (max-width: 400px) {
+		min-width: 100%;
+		max-width: 100%;
+	}
 `;

@@ -137,8 +137,9 @@ const StyledNewPromo = styled.div`
 
 			button {
 				float: none;
-				min-width: 100% !important;
+				clear: both;
 				margin: 2rem auto;
+				width: 100%;
 			}
 		}
 	}
@@ -150,7 +151,7 @@ const StyledNewPromo = styled.div`
 
 const StyledCont = styled.div`
 	display: grid;
-	grid-template-columns: 1fr 1.15fr 0.85fr;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 0.85fr);
 
 	/* prettier-ignore */
 	grid-template-areas: 
@@ -160,7 +161,7 @@ const StyledCont = styled.div`
 	grid-gap: 3.5rem;
 
 	@media screen and (max-width: 1200px) {
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 
 		max-width: 800px;
 		margin: 0 auto;
@@ -173,9 +174,9 @@ const StyledCont = styled.div`
 	}
 
 	@media screen and (max-width: 800px) {
-		grid-template-columns: 1fr;
+		grid-template-columns: minmax(0, 1fr);
 
-		max-width: 90%;
+		max-width: 80%;
 		margin: 0 auto;
 
 		/* prettier-ignore */
