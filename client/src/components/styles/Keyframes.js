@@ -24,39 +24,39 @@ export const load = keyframes`
   }
 
   10% {
-    opacity: 0.9;
+    opacity: 0.85;
   }
 
   20% {
-    opacity: 0.8;
+    opacity: 0.70;
   }
 
   30% {
-    opacity: 0.7;
+    opacity: 0.55;
   }
 
   40% {
-    opacity: 0.6;
+    opacity: 0.40;
   }
 
   50% {
-    opacity: 0.5;
+    opacity: 0.25;
   }
 
   60% {
-    opacity: 0.6;
+    opacity: 0.40;
   }
 
   70% {
-    opacity: 0.7;
+    opacity: 0.55;
   }
 
   80% {
-    opacity: 0.8;
+    opacity: 0.70;
   }
 
   90% {
-    opacity: 0.9;
+    opacity: 0.85;
   }
 
   100% {
