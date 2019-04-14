@@ -2,51 +2,49 @@ import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import { Input, Label } from '../../styles/Input';
 
-class Price extends Component {
-	fields = [
+const Price = (props) => {
+	const fields = [
 		{
 			placeholder: 'Price',
 			max: 10,
 			name: 'price',
 			type: 'text',
-			onChange: (e) => this.formatPrice(e)
+			onChange: (e) => formatPrice(e)
 		},
 		{
 			placeholder: 'Currency',
 			max: 3,
 			name: 'currency',
 			type: 'text',
-			onChange: (e) => this.formatCurrency(e)
+			onChange: (e) => formatCurrency(e)
 		}
 	];
 
-	formatPrice = (e) => {
+	const formatPrice = (e) => {
 		e.target.value = e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
-		this.props.onChange(e);
+		props.onChange(e);
 	};
 
-	formatCurrency = (e) => {
+	const formatCurrency = (e) => {
 		if (e.target.value.length > 3) return;
 
 		e.target.value = e.target.value.toUpperCase();
-		this.props.onChange(e);
+		props.onChange(e);
 	};
 
-	renderFields() {
-		return this.fields.map((field) => {
-			return <Input key={field.name} value={this.props[field.name]} {...field} />;
+	const renderFields = () => {
+		return fields.map((field) => {
+			return <Input key={field.name} value={props[field.name]} {...field} />;
 		});
-	}
+	};
 
-	render() {
-		return (
-			<Fragment>
-				<Label htmlFor="price" text="Price & Currency" />
-				<StyledPrice>{this.renderFields()}</StyledPrice>
-			</Fragment>
-		);
-	}
-}
+	return (
+		<Fragment>
+			<Label htmlFor="price" text="Price & Currency" />
+			<StyledPrice>{renderFields()}</StyledPrice>
+		</Fragment>
+	);
+};
 
 export default Price;
 
