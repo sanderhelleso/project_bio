@@ -2,47 +2,40 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 import Preview from './Preview';
-import NoProductsPlaceholder from './NoProductsPlaceholder';
 import PreviewPlaceholder from './PreviewPlaceholder';
 
-class PreviewList extends Component {
-	maxProducts = 3;
+const PreviewList = ({ selectProduct, list }) => {
+	const MAX_PRODUCTS = 3;
 
-	selectProduct = (product) => {
-		this.props.selectProduct(product);
-	};
-
-	renderList() {
-		const list = this.props.list.map((product) => {
+	const renderList = () => {
+		const productList = list.map((product) => {
 			return (
-				<li key={product.name} onClick={() => this.selectProduct(product)}>
+				<li key={product.name} onClick={() => selectProduct(product)}>
 					<Preview {...product} />
 				</li>
 			);
 		});
 
-		for (let i = 0; i < this.maxProducts - this.props.list.length; i++) {
-			list.push(
+		for (let i = 0; i < MAX_PRODUCTS - list.length; i++) {
+			productList.push(
 				<li key={i}>
 					<PreviewPlaceholder />
 				</li>
 			);
 		}
 
-		return list;
-	}
+		return productList;
+	};
 
-	render() {
-		return (
-			<StyledPreview>
-				<StyledInfo>
-					{this.props.list.length}/{this.maxProducts} products added
-				</StyledInfo>
-				<ul>{this.renderList()}</ul>
-			</StyledPreview>
-		);
-	}
-}
+	return (
+		<StyledPreview>
+			<StyledInfo>
+				{list.length}/{MAX_PRODUCTS} products added
+			</StyledInfo>
+			<ul>{renderList()}</ul>
+		</StyledPreview>
+	);
+};
 
 export default PreviewList;
 
