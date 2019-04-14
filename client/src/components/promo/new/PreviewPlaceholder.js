@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { fadeIn } from '../../styles/Keyframes';
 
 const PreviewPlaceholder = () => <StyledPlaceholder />;
 
@@ -12,5 +11,4 @@ const StyledPlaceholder = styled.div`
 	min-width: 100%;
 	background-color: #eeeeee;
 	border-radius: 4px;
-	animation: ${fadeIn} 0.5s ease-in-out;
 `;

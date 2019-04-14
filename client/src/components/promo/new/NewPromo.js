@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 
 import Container from '../../styles/Container';
-import { Grid } from '../../styles/Grid';
 import Form from './ProductForm';
 import PreviewList from './PreviewList';
 import PromoForm from './PromoForm';
