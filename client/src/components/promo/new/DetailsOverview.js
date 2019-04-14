@@ -1,14 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import { FlatButton } from '../../styles/Button';
-import { Grid } from '../../styles/Grid';
 import FeaterIcons from 'feather-icons-react';
 import Publish from './Publish';
 
-class DetailsOverview extends Component {
-	renderButtons() {
+const DetailsOverview = ({ promo, valid, backToPromo }) => {
+	const renderButtons = () => {
 		const editBtn = (
-			<FlatButton onClick={() => this.props.backToPromo()}>
+			<FlatButton onClick={() => backToPromo()}>
 				<FeaterIcons icon="edit" />
 				Edit
 			</FlatButton>
@@ -16,27 +15,25 @@ class DetailsOverview extends Component {
 
 		return (
 			<Fragment>
-				<Publish disabled={!this.props.valid} promo={this.props.promo} />
+				<Publish disabled={!valid} promo={promo} />
 				{editBtn}
 			</Fragment>
 		);
-	}
+	};
 
-	render() {
-		return (
-			<StyledCont>
-				<div id="details">
-					<div>
-						<span>Title</span>
-						<h3>{this.props.promo.title}</h3>
-					</div>
-					<p>{this.props.promo.description}</p>
+	return (
+		<StyledCont>
+			<div id="details">
+				<div>
+					<span>Title</span>
+					<h3>{promo.title}</h3>
 				</div>
-				<div id="btns">{this.renderButtons()}</div>
-			</StyledCont>
-		);
-	}
-}
+				<p>{promo.description}</p>
+			</div>
+			<div id="btns">{renderButtons()}</div>
+		</StyledCont>
+	);
+};
 
 export default DetailsOverview;
 
