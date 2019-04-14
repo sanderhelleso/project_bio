@@ -88,7 +88,7 @@ const Single = ({ viewPromoAction, match: { params } }) => {
 				comments: data
 			});
 
-			updateState({ loading: false });
+			//updateState({ loading: false });
 		}
 		loadPromo();
 	}, []);
@@ -133,11 +133,12 @@ export default connect(null, mapDispatchToProps)(Single);
 const StyledPromoGrid = styled.div`
 	display: grid;
 	grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-	grid-row-gap: 3rem;
+	grid-row-gap: 4rem;
 	grid-column-gap: 3rem;
 	margin-bottom: 3rem;
 	min-height: 90vh;
-	margin-top: 10vh;
+	margin-top: 5rem;
+	margin-bottom: 5rem;
 
 	/* prettier-ignore */
 	grid-template-areas:
