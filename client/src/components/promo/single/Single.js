@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, Fragment } from 'react';
 import styled from 'styled-components';
 import { getPromo } from '../../../api/promo/promo';
 
@@ -11,6 +11,9 @@ import Comments from '../comments/Comments';
 import PreviewsCard from '../preview/PreviewsCard';
 import { fadeIn } from '../../styles/Keyframes';
 import CurrentlyWatching from './CurrentlyWatching';
+import PromoLoader from './PromoLoader';
+import CommentsLoader from '../comments/CommentsLoader';
+import PreviewLoader from '../preview/PreviewLoader';
 
 const data = [
 	{
@@ -96,19 +99,29 @@ const Single = ({ viewPromoAction, match: { params } }) => {
 		}
 
 		if (loading) {
-			return <p>Loading...</p>;
+			return (
+				<Fragment>
+					<PromoLoader />
+					<CommentsLoader />
+					<PreviewLoader />
+				</Fragment>
+			);
 		}
 
 		return (
-			<StyledPromoGrid>
+			<Fragment>
 				<PromoCard />
 				<Comments />
 				<PreviewsCard />
-			</StyledPromoGrid>
+			</Fragment>
 		);
 	};
 
-	return <Container max={85}>{renderPromo()}</Container>;
+	return (
+		<Container max={85}>
+			<StyledPromoGrid>{renderPromo()}</StyledPromoGrid>
+		</Container>
+	);
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -119,9 +132,12 @@ export default connect(null, mapDispatchToProps)(Single);
 
 const StyledPromoGrid = styled.div`
 	display: grid;
-	grid-template-columns: 1.5fr 1fr;
+	grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+	grid-row-gap: 3rem;
 	grid-column-gap: 3rem;
 	margin-bottom: 3rem;
+	min-height: 90vh;
+	margin-top: 10vh;
 
 	/* prettier-ignore */
 	grid-template-areas:
@@ -130,6 +146,13 @@ const StyledPromoGrid = styled.div`
 	;
 
 	@media screen and (max-width: 1000px) {
-		display: block;
+		grid-template-columns: minmax(0, 1fr);
+
+		/* prettier-ignore */
+		grid-template-areas:
+			"promo promo"
+			"comments comments"
+			"adds adds"
+		;
 	}
 `;

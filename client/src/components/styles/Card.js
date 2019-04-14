@@ -16,8 +16,6 @@ export const PromoCardSingle = styled.div`
 	${cardStyles};
 	${promoCardStyles};
 	position: relative;
-	margin-top: 5rem;
-	margin-bottom: 3rem;
 	grid-area: promo;
 	grid-template-columns: 30% 55% 15%;
 	grid-template-areas: "image info options";
@@ -49,7 +47,6 @@ export const CommentsCard = styled.div`
 	${cardStyles};
 	${promoCardStyles};
 	grid-area: comments;
-	margin-bottom: 3rem;
 	padding: 4rem;
 	word-break: break-all;
 
@@ -80,7 +77,6 @@ export const PreviewsCardSingle = styled.div`
 	grid-area: adds;
 	padding: 4rem;
 	word-break: break-all;
-	margin-bottom: 3rem;
 
 	@media screen and (max-width: 1050px) {
 		padding: 2rem;
