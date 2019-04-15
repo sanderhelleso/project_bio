@@ -5,11 +5,12 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
+// PromoComment represents a comment releated to a promo
 type PromoComment struct {
 	gorm.Model
 	UserID  uint   `gorm:"not null;index" json:"-"`
 	PromoID uint   `gorm:"not null;index" json:"-"`
-	Body    string `gorm:"not null; json:"body"`
+	Body    string `gorm:"not null;" json:"body"`
 }
 
 type PromoCommentDB interface {
