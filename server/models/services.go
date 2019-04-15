@@ -1,10 +1,10 @@
-
 package models
 
 import (
-	"github.com/jinzhu/gorm"
-	"../lib"
 	"os"
+
+	"../lib"
+	"github.com/jinzhu/gorm"
 )
 
 // NewServices create a connection to all services of the application
@@ -17,25 +17,27 @@ func NewServices() (*Services, error) {
 	db.LogMode(false) // turn true for logs
 
 	return &Services{
-		User:     		NewUserService(db),
-		Profile:  		NewProfileService(db),	
-		Follower: 		NewFollowerService(db),
-		Promo:	  		NewPromoService(db),
-		PromoProduct: 	NewPromoProductService(db),
-		Image:	  		NewImageService(),	
-		db:       		db,
+		User:         NewUserService(db),
+		Profile:      NewProfileService(db),
+		Follower:     NewFollowerService(db),
+		Promo:        NewPromoService(db),
+		PromoProduct: NewPromoProductService(db),
+		PromoComment: NewPromoCommentService(db),
+		Image:        NewImageService(),
+		db:           db,
 	}, nil
 }
 
 // Services connects all of the application services
 type Services struct {
-	User     		UserService
-	Profile  		ProfileService
-	Follower 		FollowerService
-	Promo	 		PromoService
-	PromoProduct 	PromoProductService
-	Image	 		ImageService
-	db       		*gorm.DB
+	User         UserService
+	Profile      ProfileService
+	Follower     FollowerService
+	Promo        PromoService
+	PromoProduct PromoProductService
+	PromoComment PromoCommentService
+	Image        ImageService
+	db           *gorm.DB
 }
 
 // CreateReleations create the table releationships
@@ -54,12 +56,13 @@ func (s *Services) Close() error {
 func (s *Services) DestructiveReset() error {
 	err := s.db.DropTableIfExists(
 		&User{},
-		&Follower{}, 
-		&Promo{}, 
-		&Profile{},
-		&pwReset{}, 
-		&accVerify{},
+		&Follower{},
+		&Promo{},
 		&PromoProduct{},
+		&PromoComment{},
+		&Profile{},
+		&pwReset{},
+		&accVerify{},
 	).Error
 
 	if err != nil {
@@ -72,14 +75,15 @@ func (s *Services) DestructiveReset() error {
 // AutoMigrate will attempt to automatically migrate all tables
 func (s *Services) AutoMigrate() error {
 	err := s.db.AutoMigrate(
-		&User{}, 
-		&Follower{}, 
-		&Promo{}, 
-		&Profile{}, 
-		&pwReset{}, 
-		&accVerify{},
+		&User{},
+		&Follower{},
+		&Promo{},
 		&PromoProduct{},
+		&PromoComment{},
+		&Profile{},
+		&pwReset{},
+		&accVerify{},
 	).Error
-	
+
 	return err
 }

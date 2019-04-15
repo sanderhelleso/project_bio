@@ -1,23 +1,24 @@
 package models
 
 import (
-	"strings"
-	"github.com/jinzhu/gorm"
-	"../lib/parser"
 	"net/url"
+	"strings"
+
+	"../lib/parser"
+	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 // PromoProduct represents a product in a promotion in the application
 type PromoProduct struct {
-	gorm.Model			`json:"-"`
-	PromoID		uint 	`gorm:"not null;index" json:"-"`
-	Name 		string	`gorm:"not null;size:100" json:"name"`
-	Brand 		string  `gorm:"not null;size:100" json:"brand"` 
-	Link		string  `gorm:"not null" json:"link"`
-	Image		string  `json:"image"`
-	Price		float64 `gorm:"not null" json:"price"`
-	Currency    string  `gorm:"not null;size:3" json:"currency"`  
+	gorm.Model `json:"-"`
+	PromoID    uint    `gorm:"not null;index" json:"-"`
+	Name       string  `gorm:"not null;size:100" json:"name"`
+	Brand      string  `gorm:"not null;size:100" json:"brand"`
+	Link       string  `gorm:"not null" json:"link"`
+	Image      string  `json:"image"`
+	Price      float64 `gorm:"not null" json:"price"`
+	Currency   string  `gorm:"not null;size:3" json:"currency"`
 }
 
 type PromoProductDB interface {
@@ -51,7 +52,7 @@ func NewPromoProductService(db *gorm.DB) PromoProductService {
 	ppg := &promoProductGorm{db}
 	ppv := newPromoProductValidator(ppg)
 
-	return &promoProductService {
+	return &promoProductService{
 		PromoProductDB: ppv,
 	}
 }
@@ -75,7 +76,7 @@ func runPromoProductsValFunc(promoProduct *PromoProduct, fns ...promoProductValF
 }
 
 func newPromoProductValidator(ppdb PromoProductDB) *promoProductValidator {
-	return &promoProductValidator {
+	return &promoProductValidator{
 		PromoProductDB: ppdb,
 	}
 }
@@ -107,13 +108,14 @@ func (ppv *promoProductValidator) validateLength(field string) promoProductValFu
 		var e error
 		min, max := 2, 100
 		switch field {
-			case "name":
-				s = promoProduct.Name
-				e = ErrPromoProductNameInvalid
-			case "brand":
-				s = promoProduct.Brand
-				e = ErrPromoProductBrandInvalid
-			default: break;
+		case "name":
+			s = promoProduct.Name
+			e = ErrPromoProductNameInvalid
+		case "brand":
+			s = promoProduct.Brand
+			e = ErrPromoProductBrandInvalid
+		default:
+			break
 		}
 
 		sLen := len(strings.TrimSpace(s))
@@ -135,10 +137,9 @@ func (ppv *promoProductValidator) validateLink(promoProduct *PromoProduct) error
 	if err != nil {
 		return ErrPromoProductLinkInvalid
 	}
-	
+
 	return nil
 }
-
 
 func (ppv *promoProductValidator) validateCurrency() promoProductValFunc {
 	return promoProductValFunc(func(promoProduct *PromoProduct) error {
@@ -153,11 +154,11 @@ func (ppv *promoProductValidator) validateCurrency() promoProductValFunc {
 // Create will validate and and backfill data
 func (ppv *promoProductValidator) Create(promoProduct *PromoProduct) error {
 	err := runPromoProductsValFunc(promoProduct,
-	ppv.validateLength("name"),
-	ppv.validateLength("brand"),
-	ppv.validateLink,
-	ppv.normalizeCurrency,
-	ppv.normalizeCurrency)
+		ppv.validateLength("name"),
+		ppv.validateLength("brand"),
+		ppv.validateLink,
+		ppv.normalizeCurrency,
+		ppv.normalizeCurrency)
 
 	if err != nil {
 		return err
@@ -169,12 +170,12 @@ func (ppv *promoProductValidator) Create(promoProduct *PromoProduct) error {
 // Update will validate update promo product
 func (ppv *promoProductValidator) Update(promoProduct *PromoProduct) error {
 	err := runPromoProductsValFunc(promoProduct,
-	ppv.idGreaterThan(0),
-	ppv.validateLength("name"),
-	ppv.validateLength("brand"),
-	ppv.validateLink,
-	ppv.normalizeCurrency,
-	ppv.normalizeCurrency)
+		ppv.idGreaterThan(0),
+		ppv.validateLength("name"),
+		ppv.validateLength("brand"),
+		ppv.validateLink,
+		ppv.normalizeCurrency,
+		ppv.normalizeCurrency)
 
 	if err != nil {
 		return err
@@ -182,8 +183,6 @@ func (ppv *promoProductValidator) Update(promoProduct *PromoProduct) error {
 
 	return ppv.PromoProductDB.Update(promoProduct)
 }
-
-
 
 /****************************************************************/
 
@@ -218,10 +217,9 @@ func (ppg *promoProductGorm) Create(promoProduct *PromoProduct) error {
 
 // Update will update the releated promo product with all of the data
 // in the provided promo product object.
-func (ppg *promoProductGorm) Update(promoProduct *PromoProduct) error {	
+func (ppg *promoProductGorm) Update(promoProduct *PromoProduct) error {
 	return ppg.db.Save(promoProduct).Error
 }
-
 
 // Delete will delete the promo product with the provided ID
 func (ppg *promoProductGorm) Delete(id uint) error {
@@ -232,5 +230,3 @@ func (ppg *promoProductGorm) Delete(id uint) error {
 	promoProduct := PromoProduct{Model: gorm.Model{ID: id}}
 	return ppg.db.Delete(&promoProduct).Error
 }
-
-

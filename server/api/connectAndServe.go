@@ -16,6 +16,7 @@ func ConnectAndServe(
 	followersC *controllers.Followers,
 	promosC *controllers.Promos,
 	promoProductsC *controllers.PromoProducts,
+	promoCommentsC *controllers.PromoComments,
 	profilesC *controllers.Profiles,
 	conn *redis.Conn,
 ) {
@@ -30,6 +31,7 @@ func ConnectAndServe(
 	FollowersRoutes(router, followersC)
 	PromosRoutes(router, promosC)
 	PromoProductsRoutes(router, promoProductsC)
+	PromoCommentsRoutes(router, promoCommentsC)
 	ProfilesRoutes(router, profilesC)
 
 	// connect sockets

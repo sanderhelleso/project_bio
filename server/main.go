@@ -3,13 +3,14 @@ package main
 import (
 	"os"
 
+	"fmt"
+
 	"./api"
 	"./controllers"
 	"./email"
 	"./lib"
 	"./models"
 	"./redis"
-	"fmt"
 
 	"github.com/joho/godotenv"
 )
@@ -22,7 +23,7 @@ func main() {
 	err := godotenv.Load()
 	lib.Must(err)
 
-	// setup mail client 
+	// setup mail client
 	emailer := email.NewClient(
 		email.WithSender(
 			os.Getenv("MAIL_DEFAULT_NAME"),
@@ -49,16 +50,17 @@ func main() {
 	lib.Must(redis.Ping(conn))
 
 	// setup controllers
-	usersC 			:= controllers.NewUsers(services.User, emailer)
-	followersC 		:= controllers.NewFollowers(services.Follower)
-	promosC 		:= controllers.NewPromos(services.Promo, services.PromoProduct, services.Profile)
-	promoProductsC 	:= controllers.NewPromoProducts(services.PromoProduct, services.Image)
-	profilesC 		:= controllers.NewProfiles(services.Profile, services.Image)
+	usersC := controllers.NewUsers(services.User, emailer)
+	followersC := controllers.NewFollowers(services.Follower)
+	promosC := controllers.NewPromos(services.Promo, services.PromoProduct, services.Profile)
+	promoProductsC := controllers.NewPromoProducts(services.PromoProduct, services.Image)
+	promoCommentsC := controllers.NewPromoComments(services.PromoComments)
+	profilesC := controllers.NewProfiles(services.Profile, services.Image)
 
 	// defer close connections
 	defer services.Close()
 	defer conn.Close()
 
 	// connect and serve app
-	api.ConnectAndServe(usersC, followersC, promosC, promoProductsC, profilesC, &conn)
+	api.ConnectAndServe(usersC, followersC, promosC, promoProductsC, promoCommentsC, profilesC, &conn)
 }

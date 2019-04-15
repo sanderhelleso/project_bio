@@ -9,7 +9,7 @@ import PostComment from './PostComment';
 
 import { connect } from 'react-redux';
 
-const Comments = ({ comments }) => {
+const Comments = ({ comments, ID }) => {
 	const renderComments = () => {
 		const loadedComments = comments.map((comment, i) => {
 			return [ <Comment key={`${i}a`} {...comment} />, <CommentSeperator key={`${i}b`} /> ];
@@ -31,14 +31,14 @@ const Comments = ({ comments }) => {
 	return (
 		<CommentsCard id="comments-cont">
 			<CommentsInfo amountOfComments={comments.length} />
-			<PostComment />
+			<PostComment promoID={ID} />
 			{renderComments()}
 		</CommentsCard>
 	);
 };
 
-const mapStateToProps = ({ promos: { viewing: { comments } } }) => {
-	return { comments };
+const mapStateToProps = ({ promos: { viewing: { comments, promo: { ID } } } }) => {
+	return { comments, ID };
 };
 
 export default connect(mapStateToProps, null)(Comments);

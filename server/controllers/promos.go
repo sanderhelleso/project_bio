@@ -1,59 +1,60 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
+	"fmt"
 	"net/http"
 	"time"
-	"fmt"
+
 	"../lib/parser"
-	"../models"
 	"../lib/response"
+	"../models"
+	"github.com/gin-gonic/gin"
 )
 
 // PromoForm represents the request body to the endpoint /promos.
 // PromoForms structure is used for create
 type PromoForm struct {
-	Title			string 	  	`form:"title" binding:"required"`
-	Description		string	  	`form:"description" binding:"required"`
-	Category		string 	  	`form:"category" binding:"required"`
-	Code			string	  	`form:"code" binding:"required"`	
-	Discount		uint	  	`form:"discount" binding:"required"`	
-	Expires			int64 		`form:"expires" binding:"required"`
+	Title       string `form:"title" binding:"required"`
+	Description string `form:"description" binding:"required"`
+	Category    string `form:"category" binding:"required"`
+	Code        string `form:"code" binding:"required"`
+	Discount    uint   `form:"discount" binding:"required"`
+	Expires     int64  `form:"expires" binding:"required"`
 
-	Products 		[]*PromoProductForm `form:"products" binding:"required"`
+	Products []*PromoProductForm `form:"products" binding:"required"`
 }
 
 // UpdatePromoForm represents the request body to the endpoint /promos/update.
 // UpdatePromoForms structure is used for update
 type UpdatePromoForm struct {
-	ID				uint      `form:"id" binding:"required"`
-	Title			string 	  `form:"title" binding:"required"`
-	Description		string	  `form:"description" binding:"required"`
-	Category		string 	  `form:"category" binding:"required"`
-	Code			string	  `form:"code"`	
-	Discount		uint	  `form:"discount"`	
-	Expires			time.Time `form:"expiresAt"`
+	ID          uint      `form:"id" binding:"required"`
+	Title       string    `form:"title" binding:"required"`
+	Description string    `form:"description" binding:"required"`
+	Category    string    `form:"category" binding:"required"`
+	Code        string    `form:"code"`
+	Discount    uint      `form:"discount"`
+	Expires     time.Time `form:"expiresAt"`
 }
 
 // PromoFormWithID represents the request body to the endpoints
 // /promos/delete and /promos/image
 type PromoFormWithID struct {
-	ID 	uint `form:"id" binding:"required"`
+	ID uint `form:"id" binding:"required"`
 }
 
 // Promos represents the controller for a promoer releationship in the app
 type Promos struct {
-	ps 	models.PromoService
-	pps models.PromoProductService
-	profs  models.ProfileService
+	ps    models.PromoService
+	pps   models.PromoProductService
+	profs models.ProfileService
 }
 
 // NewPromos is used to create a new promoer controller
 func NewPromos(
-	ps models.PromoService, 
+	ps models.PromoService,
 	pps models.PromoProductService,
 	profs models.ProfileService) *Promos {
-	return &Promos {
+	return &Promos{
 		ps,
 		pps,
 		profs,
@@ -61,8 +62,8 @@ func NewPromos(
 }
 
 // Create is used to process the promo form
-// when a usuer subits the form. This is used to
-// create a new promo for a product owned by a user
+// when a user submits the form. This is used to
+// create a new promo owned by a user
 //
 // METHOD: 	POST
 // ROUTE:	/promos/new
@@ -70,37 +71,33 @@ func NewPromos(
 // BODY:	PromoForm
 func (p *Promos) Create(c *gin.Context) {
 
-
 	var form PromoForm
 	if err := c.Bind(&form); err != nil {
-		fmt.Println(err)
 		response.RespondWithError(
-			c, 
-			http.StatusUnprocessableEntity, 
-			"Unable to process form data due to invalid format")
+			c,
+			http.StatusUnprocessableEntity,
+			"Unable to process form data due to invalid format",
+		)
 		return
 	}
 
-	fmt.Println(form)
-
 	// attempt to create and store promo in DB
-	promo := models.Promo {
-		UserID: 		parser.GetIDFromCTX(c),
-		Title:			form.Title,
-		Description:	form.Description,
-		Category:		form.Category,
-		Code:			form.Code,
-		Discount:		form.Discount,
-		ExpiresAt:		parser.TsToTime(form.Expires),
+	promo := models.Promo{
+		UserID:      parser.GetIDFromCTX(c),
+		Title:       form.Title,
+		Description: form.Description,
+		Category:    form.Category,
+		Code:        form.Code,
+		Discount:    form.Discount,
+		ExpiresAt:   parser.TsToTime(form.Expires),
 	}
 
 	// create promo
 	promoID, err := p.ps.Create(&promo)
 	if err != nil {
-		fmt.Println(err)
 		response.RespondWithError(
-			c, 
-			http.StatusInternalServerError, 
+			c,
+			http.StatusInternalServerError,
 			err.Error())
 		return
 	}
@@ -109,19 +106,19 @@ func (p *Promos) Create(c *gin.Context) {
 	promoProductIDs := make([]uint, 0)
 	for _, product := range form.Products {
 
-		promoProduct := models.PromoProduct {
-			PromoID: 	promoID,
-			Name:		product.Name,
-			Brand:		product.Brand,
-			Link:		product.Link,
-			Price:		product.Price,
-			Currency:	product.Currency,
+		promoProduct := models.PromoProduct{
+			PromoID:  promoID,
+			Name:     product.Name,
+			Brand:    product.Brand,
+			Link:     product.Link,
+			Price:    product.Price,
+			Currency: product.Currency,
 		}
 
 		if err := p.pps.Create(&promoProduct); err != nil {
 			response.RespondWithError(
-				c, 
-				http.StatusInternalServerError, 
+				c,
+				http.StatusInternalServerError,
 				err.Error())
 			return
 		}
@@ -129,12 +126,12 @@ func (p *Promos) Create(c *gin.Context) {
 		promoProductIDs = append(promoProductIDs, promoProduct.ID)
 	}
 
-	c.JSON(http.StatusCreated, gin.H {
-		"message": 	"Promo successfully created",
-		"status": 	http.StatusCreated,
-		"payload": 	gin.H {
+	c.JSON(http.StatusCreated, gin.H{
+		"message": "Promo successfully created",
+		"status":  http.StatusCreated,
+		"payload": gin.H{
 			"promoProductIDs": promoProductIDs,
-			"promoID": promoID,
+			"promoID":         promoID,
 		},
 	})
 }
@@ -152,33 +149,33 @@ func (p *Promos) Update(c *gin.Context) {
 	var form UpdatePromoForm
 	if c.Bind(&form) != nil {
 		response.RespondWithError(
-			c, 
-			http.StatusUnprocessableEntity, 
+			c,
+			http.StatusUnprocessableEntity,
 			"Unable to process form data due to invalid format")
 		return
 	}
 
 	// attempt to update and store promo in DB
-	promo := models.Promo {
-		Title:			form.Title,
-		Description:	form.Description,
-		Code:			form.Code,
-		Discount:		form.Discount,
-		ExpiresAt:		form.Expires,
+	promo := models.Promo{
+		Title:       form.Title,
+		Description: form.Description,
+		Code:        form.Code,
+		Discount:    form.Discount,
+		ExpiresAt:   form.Expires,
 	}
 
 	if err := p.ps.Update(&promo); err != nil {
 		response.RespondWithError(
-			c, 
-			http.StatusInternalServerError, 
+			c,
+			http.StatusInternalServerError,
 			"Something went wrong when attempting to update promo. Please try again")
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H {
-		"message": 	"Promo successfully updated",
-		"status": 	http.StatusOK,
-		"payload": 	promo,
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Promo successfully updated",
+		"status":  http.StatusOK,
+		"payload": promo,
 	})
 }
 
@@ -194,16 +191,17 @@ func (p *Promos) Delete(c *gin.Context) {
 	var form PromoFormWithID
 	if c.Bind(&form) != nil {
 		response.RespondWithError(
-			c, 
-			http.StatusUnprocessableEntity, 
+			c,
+			http.StatusUnprocessableEntity,
 			"Unable to process form data due to invalid format")
 		return
 	}
 
-	err := p.ps.Delete(form.ID); if err != nil {
+	err := p.ps.Delete(form.ID)
+	if err != nil {
 		response.RespondWithError(
-			c, 
-			http.StatusInternalServerError, 
+			c,
+			http.StatusInternalServerError,
 			"Something went wrong when attempting to delete promo Please try again")
 		return
 	}
@@ -225,12 +223,12 @@ func (p *Promos) ByID(c *gin.Context) {
 
 	// attempt to find the user by the provided handle
 	handle := c.Params.ByName("handle")
-	profile , err := p.profs.ByHandle(handle)
+	profile, err := p.profs.ByHandle(handle)
 
 	if err != nil {
 		response.RespondWithError(
-			c, 
-			http.StatusNotFound, 
+			c,
+			http.StatusNotFound,
 			fmt.Sprintf("Could not find any profiles with the handle: %s", handle))
 		return
 	}
@@ -241,29 +239,29 @@ func (p *Promos) ByID(c *gin.Context) {
 
 	if err != nil || promo.UserID != profile.UserID {
 		response.RespondWithError(
-			c, 
-			http.StatusNotFound, 
+			c,
+			http.StatusNotFound,
 			fmt.Sprintf("%s does not have any promotions with the ID: %d", handle, id))
 		return
 	}
-	
+
 	// find the promos products by the promos id
 	prroducts, err := p.pps.ByPromoID(promo.ID)
 	if err != nil {
 		response.RespondWithError(
-			c, 
-			http.StatusNotFound, 
+			c,
+			http.StatusNotFound,
 			fmt.Sprintf("Unable to get the promotions products at this time. Please try again."))
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H {
-		"message": 	"Promo successfully fetched",
-		"status": 	http.StatusOK,
-		"payload": 	gin.H {
-			"promo": promo,
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Promo successfully fetched",
+		"status":  http.StatusOK,
+		"payload": gin.H{
+			"promo":    promo,
 			"products": prroducts,
-			"profile": profile,
+			"profile":  profile,
 		},
 	})
 }
