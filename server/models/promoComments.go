@@ -8,15 +8,17 @@ import (
 // PromoComment represents a comment releated to a promo
 type PromoComment struct {
 	gorm.Model
-	UserID  uint   `gorm:"not null;index" json:"-"`
-	PromoID uint   `gorm:"not null;index" json:"-"`
-	Body    string `gorm:"not null;" json:"body"`
+	UserID       uint   `gorm:"not null;index" json:"-"`
+	PromoID      uint   `gorm:"not null;index" json:"-"`
+	ResponseToID uint   `json:"-"`
+	Body         string `gorm:"not null;" json:"body"`
 }
 
 type PromoCommentDB interface {
 
 	// method for quering specific promo comments
 	ByPromoID(id uint) ([]*PromoComment, error)
+	ByResponseToID(id uint) (*PromoComment, error)
 
 	// methods for altering promo comments
 	Create(promoComment *PromoComment) error
@@ -91,12 +93,20 @@ type promoCommentGorm struct {
 // ensure interface is matching
 var _ PromoCommentDB = &promoCommentGorm{}
 
-// ByPromoID will liik up a promo comment with the provided promo id
+// ByPromoID will lookk up a promo comment with the provided promo id
 func (pcg *promoCommentGorm) ByPromoID(id uint) ([]*PromoComment, error) {
 	var promoComments []*PromoComment
 	db := pcg.db.Where("promo_id = ?", id)
 	err := all(db, &promoComments)
 	return promoComments, err
+}
+
+// ByResponseID will lookk up a promo comment with the provided responseTo promo id
+func (pcg *promoCommentGorm) ByResponseToID(id uint) (*PromoComment, error) {
+	var promoComment *PromoComment
+	db := pcg.db.Where("response_to_id = ?", id)
+	err := first(db, &promoComment)
+	return promoComment, err
 }
 
 // Create will create the provided promo comment

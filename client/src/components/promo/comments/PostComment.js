@@ -8,8 +8,9 @@ import updatePromoCommentsAction from '../../../actions/promoActions/updatePromo
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { createComment } from '../../../api/promo/comment';
 
-const PostComment = ({ updatePromoCommentsAction, handle, avatar }) => {
+const PostComment = ({ handle, avatar, userID, promoID, updatePromoCommentsAction }) => {
 	const minLength = 2;
 	const maxLength = 140;
 
@@ -20,7 +21,6 @@ const PostComment = ({ updatePromoCommentsAction, handle, avatar }) => {
 	const { comment } = state;
 
 	const buildAndPostComment = async () => {
-		
 		// TODO: send to endpoint
 		const newComment = {
 			comment,
@@ -31,8 +31,20 @@ const PostComment = ({ updatePromoCommentsAction, handle, avatar }) => {
 			}
 		};
 
+		const data = {
+			userID,
+			promoID,
+			body: comment
+		};
+
+		const response = await createComment(data);
+		if (response.statis < 400) {
+			// todo
+		}
+
 		updatePromoCommentsAction([ newComment ]);
 		updateState({ comment: '' });
+		console.log(response);
 	};
 
 	const updateComment = (e) => {
@@ -65,8 +77,8 @@ const PostComment = ({ updatePromoCommentsAction, handle, avatar }) => {
 	);
 };
 
-const mapStateToProps = ({ profile: { handle, avatar } }) => {
-	return { handle, avatar };
+const mapStateToProps = ({ profile: { handle, avatar, userID } }) => {
+	return { handle, avatar, userID };
 };
 
 const mapDispatchToProps = (dispatch) => {

@@ -11,9 +11,10 @@ import (
 // PromoCommentForm represents part of request body connected to a promo
 // and endpoint /promos/comments/new
 type PromoCommentForm struct {
-	UserID  uint   `form:"userID" binding:"required"`
-	PromoID uint   `form:"promoID" binding:"required"`
-	Body    string `form:"body" binding:"required"`
+	UserID       uint   `form:"userID" binding:"required"`
+	PromoID      uint   `form:"promoID" binding:"required"`
+	ResponseToID uint   `form:"responseToID"`
+	Body         string `form:"body" binding:"required"`
 }
 
 // PromoCommentFormWithID represents the request body to the endpoint
@@ -56,9 +57,10 @@ func (pc *PromoComments) Create(c *gin.Context) {
 
 	// attempt to create and store comment in DB
 	promoComment := models.PromoComment{
-		UserID:  form.UserID,
-		PromoID: form.PromoID,
-		Body:    form.Body,
+		UserID:       form.UserID,
+		PromoID:      form.PromoID,
+		ResponseToID: form.ResponseToID,
+		Body:         form.Body,
 	}
 
 	err := pc.pcs.Create(&promoComment)
