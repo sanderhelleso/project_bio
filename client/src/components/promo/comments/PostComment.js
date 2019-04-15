@@ -20,6 +20,7 @@ const PostComment = ({ updatePromoCommentsAction, handle, avatar }) => {
 	const { comment } = state;
 
 	const buildAndPostComment = async () => {
+		
 		// TODO: send to endpoint
 		const newComment = {
 			comment,
