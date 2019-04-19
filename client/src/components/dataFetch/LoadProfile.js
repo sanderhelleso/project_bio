@@ -16,7 +16,7 @@ class LoadProfile extends Component {
         console.log(response);
     }
 
-    render = () => <p>Loding...</p>;
+    render = () => <p>Loading...</p>;
 }
 
 export default withRouter(LoadProfile);
