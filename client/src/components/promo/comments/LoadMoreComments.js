@@ -73,6 +73,14 @@ const StyledCont = styled.div`
 
 	button {
 		min-width: 100%;
+		background-color: transparent;
+		border: 1px solid #9e9e9e;
+		color: #9e9e9e;
+		box-shadow: none;
+
+		&:hover {
+			opacity: 1;
+		}
 
 		svg {
 			top: 35%;
