@@ -8,9 +8,30 @@ import ScrollTopOfComments from './ScrollTopOfComments';
 import PostComment from './PostComment';
 
 import { connect } from 'react-redux';
+import { getComments } from '../../../api/promo/comment';
 
-const Comments = ({ comments, ID }) => {
+const Comments = ({ ID }) => {
+	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
+		comments: [],
+		loading: true
+	});
+
+	const { comments, loading } = state;
+
+	// load comments
+	useEffect(() => {
+		async function loadComments() {
+			const response = await getComments(ID);
+			console.log(response);
+		}
+
+		loadComments();
+	}, []);
+
 	const renderComments = () => {
+		if (loading) return <p>Loading...</p>;
+		if (!comments.length) return null;
+
 		const loadedComments = comments.map((comment, i) => {
 			return [ <Comment key={`${i}a`} {...comment} />, <CommentSeperator key={`${i}b`} /> ];
 		});
@@ -28,17 +49,25 @@ const Comments = ({ comments, ID }) => {
 		return null;
 	};
 
+	const renderInfo = () => {
+		if (!loading) {
+			return <CommentsInfo amountOfComments={comments.length} />;
+		}
+
+		return null;
+	};
+
 	return (
 		<CommentsCard id="comments-cont">
-			<CommentsInfo amountOfComments={comments.length} />
+			{renderInfo()}
 			<PostComment promoID={ID} />
 			{renderComments()}
 		</CommentsCard>
 	);
 };
 
-const mapStateToProps = ({ promos: { viewing: { comments, promo: { ID } } } }) => {
-	return { comments, ID };
+const mapStateToProps = ({ promos: { viewing: { promo: { ID } } } }) => {
+	return { ID };
 };
 
 export default connect(mapStateToProps, null)(Comments);

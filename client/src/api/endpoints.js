@@ -7,7 +7,8 @@ const ENDPOINTS = {
 	uploadPromo: 'promos/products/image',
 	createComment: 'promos/comments/new',
 	getPromo: (handle, id) => `promos/${handle}/${id}`,
-	getPromos: (handle) => `promos/${handle}`
+	getPromos: (handle) => `promos/${handle}`,
+	getComments: (id) => `promos/comments/${id}`
 };
 
 export default ENDPOINTS;
