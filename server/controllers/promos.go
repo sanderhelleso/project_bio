@@ -246,7 +246,7 @@ func (p *Promos) ByID(c *gin.Context) {
 	}
 
 	// find the promos products by the promos id
-	prroducts, err := p.pps.ByPromoID(promo.ID)
+	products, err := p.pps.ByPromoID(promo.ID)
 	if err != nil {
 		response.RespondWithError(
 			c,
@@ -260,7 +260,7 @@ func (p *Promos) ByID(c *gin.Context) {
 		"status":  http.StatusOK,
 		"payload": gin.H{
 			"promo":    promo,
-			"products": prroducts,
+			"products": products,
 			"profile":  profile,
 		},
 	})

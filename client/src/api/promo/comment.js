@@ -13,7 +13,7 @@ export async function createComment(data) {
 
 export async function getComments(id) {
 	try {
-		const response = await API.post(ENDPOINTS.getComments(id));
+		const response = await API.get(ENDPOINTS.getComments(id));
 		return response.data;
 	} catch (error) {
 		console.log(error.response);
