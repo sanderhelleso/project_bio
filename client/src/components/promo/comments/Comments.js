@@ -29,7 +29,7 @@ const Comments = ({ ID }) => {
 	const loadComments = async () => {
 		const response = await getComments(ID, offset, LIMIT);
 		if (response.status < 400) {
-			updateState({ comments: response.payload, offset: offset + LIMIT });
+			updateState({ comments: [ ...comments, ...response.payload ], offset: offset + LIMIT });
 		}
 
 		// stop loading
@@ -50,7 +50,7 @@ const Comments = ({ ID }) => {
 			return (
 				<Fragment>
 					{loadedComments}
-					<LoadMoreComments limit={16} listLength={loadedComments.length} />
+					<LoadMoreComments limit={16} listLength={loadedComments.length} loadMore={loadComments} />
 					<ScrollTopOfComments currAmount={loadedComments.length} />
 				</Fragment>
 			);

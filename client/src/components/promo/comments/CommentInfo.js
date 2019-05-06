@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { getFormatedDateAndTime } from '../../../lib/format';
 
-const CommentInfo = ({ handle, postedAt }) => (
+const CommentInfo = ({ createdAt, handle }) => (
 	<StyledInfo>
-		<span>{getFormatedDateAndTime(postedAt)}</span>
+		<span>{getFormatedDateAndTime(new Date(createdAt).getTime())}</span>
 		<h5>{handle}</h5>
 	</StyledInfo>
 );

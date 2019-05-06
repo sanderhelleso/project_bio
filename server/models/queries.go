@@ -69,6 +69,9 @@ func findFollowers(db *gorm.DB, dst User, id uint) (*[]UserData, error) {
 func findCommentsAndUser(db *gorm.DB, id, offset, limit uint) ([]*PromoCommentWithUser, error) {
 	comments := []*PromoCommentWithUser{}
 
+	// TODO: check current offset + limit and compare to count() of records
+	// modify limit if needed, return empty list to avoid err if no more records
+
 	query := db.
 	Offset(offset).
 	Limit(limit).
@@ -76,7 +79,7 @@ func findCommentsAndUser(db *gorm.DB, id, offset, limit uint) ([]*PromoCommentWi
 	Select("promo_comments.created_at, promo_comments.body, profiles.avatar, profiles.handle").
 	Joins("JOIN profiles ON profiles.id = promo_comments.user_id").
 	Where("promo_comments.promo_id = ?", id).
-	Order("promo_comments.created_at")
+	Order("promo_comments.created_at desc")
 
 	err := query.Find(&comments).Error
 

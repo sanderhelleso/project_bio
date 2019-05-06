@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import CommentAvatar from './CommentAvatar';
 import CommentInfo from './CommentInfo';
 
-const CommentProfile = ({ avatar, handle, postedAt, isOwner }) => {
+const CommentProfile = ({ createdAt, handle, avatar, isOwner }) => {
 	return (
 		<StyledProfile>
 			<CommentAvatar {...{ handle, avatar }} isOwner={isOwner} />
-			<CommentInfo {...{ handle, postedAt }} />
+			<CommentInfo {...{ handle, createdAt }} />
 		</StyledProfile>
 	);
 };
