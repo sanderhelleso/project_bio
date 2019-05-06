@@ -30,6 +30,7 @@ const StyledInfo = styled.div`
 	p {
 		color: #9e9e9e;
 		font-weight: 100;
+		margin-bottom: 3rem;
 	}
 
 	margin-bottom: 1.25rem;
@@ -39,6 +40,7 @@ const StyledHeading = styled.h5`
 	font-size: 1.5rem;
 	margin-top: 1rem;
 	margin-bottom: 0.5rem;
+
 	color: ${(props) => (props.empty ? '' : '#9e9e9e')};
 	font-weight: ${(props) => (props.empty ? '' : 100)};
 	text-align: ${(props) => (props.empty ? '' : 'left')};

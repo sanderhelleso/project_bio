@@ -88,7 +88,7 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(mapStateToProps, mapDispatchToProps)(PostComment);
 
 const StyledComment = styled.div`
-	margin: 2rem 0;
+	margin: 2rem 0 8rem 0;
 	textarea {
 		min-height: 150px;
 	}

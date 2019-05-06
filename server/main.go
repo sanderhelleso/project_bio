@@ -54,7 +54,7 @@ func main() {
 	followersC := controllers.NewFollowers(services.Follower)
 	promosC := controllers.NewPromos(services.Promo, services.PromoProduct, services.Profile)
 	promoProductsC := controllers.NewPromoProducts(services.PromoProduct, services.Image)
-	promoCommentsC := controllers.NewPromoComments(services.PromoComments)
+	promoCommentsC := controllers.NewPromoComments(services.PromoComment)
 	profilesC := controllers.NewProfiles(services.Profile, services.Image)
 
 	// defer close connections

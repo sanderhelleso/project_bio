@@ -5,9 +5,10 @@ const ENDPOINTS = {
 	uploadAvatar: 'profiles/avatar',
 	createPromo: 'promos/new',
 	uploadPromo: 'promos/products/image',
-	createComment: 'promos/comments/new',
+	createComment: 'comments/new',
 	getPromo: (handle, id) => `promos/${handle}/${id}`,
-	getPromos: (handle) => `promos/${handle}`
+	getPromos: (handle) => `promos/${handle}`,
+	getComments: (id) => `comments/${id}`
 };
 
 export default ENDPOINTS;

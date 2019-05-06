@@ -10,3 +10,13 @@ export async function createComment(data) {
 		return error.response.data;
 	}
 }
+
+export async function getComments(id) {
+	try {
+		const response = await API.get(ENDPOINTS.getComments(id));
+		return response.data;
+	} catch (error) {
+		console.log(error.response);
+		return error.response.data;
+	}
+}

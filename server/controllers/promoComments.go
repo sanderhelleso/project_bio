@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"../lib/response"
+	p "../lib/parser"
 	"../models"
 	"github.com/gin-gonic/gin"
 )
@@ -75,5 +76,40 @@ func (pc *PromoComments) Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "Comment successfully posted",
 		"status":  http.StatusCreated,
+	})
+}
+
+// ByPromoID is used to fetch comments releated to the passed
+// in promoIDs promotion.
+//
+// METHOD: GET
+// ROUTE: /comments/:id
+//
+func (pc *PromoComments) ByPromoID(c *gin.Context) {
+
+	id, err := p.ParseUserID(c.Params.ByName("id"))
+	if err != nil {
+		response.RespondWithError(
+			c,
+			http.StatusInternalServerError,
+			"Unable to load comments",
+		)
+		return
+	}
+	
+	// attempt to load comments releated to recieved promo ID
+	comments, err := pc.pcs.ByPromoID(id)
+	if err != nil {
+		response.RespondWithError(
+			c,
+			http.StatusInternalServerError,
+			err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Comments successfully fetched",
+		"status":  http.StatusOK,
+		"payload": comments,
 	})
 }

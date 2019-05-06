@@ -85,7 +85,7 @@ const Single = ({ viewPromoAction, match: { params } }) => {
 
 			viewPromoAction({
 				...response.payload,
-				comments: data
+				comments: [] //data
 			});
 
 			updateState({ loading: false });
