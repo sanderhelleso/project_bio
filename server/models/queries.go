@@ -63,3 +63,22 @@ func findFollowers(db *gorm.DB, dst User, id uint) (*[]UserData, error) {
 
 	return &results, nil
 }
+
+func findCommentsAndUser(db *gorm.DB, id uint) ([]*PromoCommentWithUser, error) {
+	comments := []*PromoCommentWithUser{}
+
+	query := db.
+	Table("promo_comments").
+	Select("promo_comments.created_at, promo_comments.body, profiles.avatar, profiles.handle").
+	Joins("JOIN profiles ON profiles.id = promo_comments.user_id").
+	Where("promo_comments.promo_id = ?", id).
+	Order("promo_comments.created_at")
+
+	err := query.Find(&comments).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return nil, ErrNotFound
+	}
+
+	return comments, nil
+}
