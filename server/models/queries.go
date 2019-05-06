@@ -63,3 +63,29 @@ func findFollowers(db *gorm.DB, dst User, id uint) (*[]UserData, error) {
 
 	return &results, nil
 }
+
+// findCommentsAndUser will find comments with its posters data within the offset -> limit range
+// for a given promotion provided with the ID
+func findCommentsAndUser(db *gorm.DB, id, offset, limit uint) ([]*PromoCommentWithUser, error) {
+	comments := []*PromoCommentWithUser{}
+
+	// TODO: check current offset + limit and compare to count() of records
+	// modify limit if needed, return empty list to avoid err if no more records
+
+	query := db.
+	Offset(offset).
+	Limit(limit).
+	Table("promo_comments").
+	Select("promo_comments.created_at, promo_comments.body, profiles.avatar, profiles.handle").
+	Joins("JOIN profiles ON profiles.id = promo_comments.user_id").
+	Where("promo_comments.promo_id = ?", id).
+	Order("promo_comments.created_at desc")
+
+	err := query.Find(&comments).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return nil, ErrNotFound
+	}
+
+	return comments, nil
+}

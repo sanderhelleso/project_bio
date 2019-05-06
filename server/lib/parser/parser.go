@@ -37,11 +37,11 @@ func MakeIntBytes(n int) []byte {
 	return buffer.Bytes()
 }
 
-// ParseUserID parses the given string representation of a user id
+// StrToInt parses the given string representation of a user id
 // and validates conversion, will return uint value of given string.
 //
 // If unable to parse, send back http status that form data is invalid
-func ParseUserID(value string) (uint, error) {
+func StrToInt(value string) (uint, error) {
 	n, err := strconv.Atoi(value)
 	if err != nil {
 		return 0, err
@@ -66,7 +66,7 @@ func GetDomainNameFromURL(u *url.URL) string {
 // GetIDFromCTX fetches the userID from current context
 func GetIDFromCTX(c *gin.Context) uint {
 	val := c.MustGet(os.Getenv("CTX_USER_KEY"))
-	id, err := ParseUserID(fmt.Sprint(val))
+	id, err := StrToInt(fmt.Sprint(val))
 	if err != nil {
 
 		// this is a VERY rare error, should add some logs here...

@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"time"
 )
 
 // PromoComment represents a comment releated to a promo
@@ -14,10 +15,17 @@ type PromoComment struct {
 	Body         string `gorm:"not null;" json:"body"`
 }
 
+type PromoCommentWithUser struct {
+	Created_at  time.Time `json:"createdAt"`
+	Handle  	string 	  `json:"handle"`
+	Avatar 		string 	  `json:"avatar"`
+	Body 		string    `json:"body"`
+}
+
 type PromoCommentDB interface {
 
 	// method for quering specific promo comments
-	ByPromoID(id uint) ([]*PromoComment, error)
+	ByPromoID(id, offset, limit uint) ([]*PromoCommentWithUser, error)
 	ByResponseToID(id uint) (*PromoComment, error)
 
 	// methods for altering promo comments
@@ -93,15 +101,13 @@ type promoCommentGorm struct {
 // ensure interface is matching
 var _ PromoCommentDB = &promoCommentGorm{}
 
-// ByPromoID will lookk up a promo comment with the provided promo id
-func (pcg *promoCommentGorm) ByPromoID(id uint) ([]*PromoComment, error) {
-	var promoComments []*PromoComment
-	db := pcg.db.Where("promo_id = ?", id)
-	err := all(db, &promoComments)
-	return promoComments, err
+// ByPromoID will look up a promo comment with the provided promo id
+func (pcg *promoCommentGorm) ByPromoID(id, offset, limit uint) ([]*PromoCommentWithUser, error) {
+	comments, err := findCommentsAndUser(pcg.db, id, offset, limit)
+	return comments, err
 }
 
-// ByResponseID will lookk up a promo comment with the provided responseTo promo id
+// ByResponseID will look up a promo comment with the provided responseTo promo id
 func (pcg *promoCommentGorm) ByResponseToID(id uint) (*PromoComment, error) {
 	var promoComment *PromoComment
 	db := pcg.db.Where("response_to_id = ?", id)

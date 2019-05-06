@@ -87,8 +87,14 @@ func (pc *PromoComments) Create(c *gin.Context) {
 //
 func (pc *PromoComments) ByPromoID(c *gin.Context) {
 
-	id, err := p.ParseUserID(c.Params.ByName("id"))
-	if err != nil {
+	// fetch required params
+	q := c.Request.URL.Query()
+
+	id, err := p.StrToInt(c.Params.ByName("id")) // promo ID
+	offset, oErr := p.StrToInt(q["offset"][0])  // offset start
+	limit, lErr := p.StrToInt(q["limit"][0])   // limit after offset (eg : 97 + 3)
+
+	if err != nil || oErr != nil || lErr != nil {
 		response.RespondWithError(
 			c,
 			http.StatusInternalServerError,
@@ -98,7 +104,7 @@ func (pc *PromoComments) ByPromoID(c *gin.Context) {
 	}
 	
 	// attempt to load comments releated to recieved promo ID
-	comments, err := pc.pcs.ByPromoID(id)
+	comments, err := pc.pcs.ByPromoID(id, offset, limit)
 	if err != nil {
 		response.RespondWithError(
 			c,

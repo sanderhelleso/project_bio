@@ -7,15 +7,15 @@ import CommentReply from './CommentReply';
 import { connect } from 'react-redux';
 import { fadeIn } from '../../styles/Keyframes';
 
-const Comment = ({ profile, comment, ownerHandle, myHandle, reply, id }) => {
+const Comment = ({ createdAt, handle, avatar, body, ownerHandle, myHandle, reply, id }) => {
 	const isOwner = ownerHandle === myHandle;
-	const isAuthor = myHandle === profile.handle;
+	const isAuthor = myHandle === handle;
 
 	return (
 		<StyledComment>
-			<CommentProfile {...profile} isOwner={isOwner && isAuthor} />
-			<p>{comment}</p>
-			{isOwner && !isAuthor && !reply && <ReplyCommentField handle={profile.handle} id={id} />}
+			<CommentProfile {...{ createdAt, handle, avatar }} isOwner={isOwner && isAuthor} />
+			<p>{body}</p>
+			{isOwner && !isAuthor && !reply && <ReplyCommentField {...{ handle, id }} />}
 			{reply && <CommentReply reply={reply} />}
 		</StyledComment>
 	);
