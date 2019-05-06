@@ -11,22 +11,32 @@ import { connect } from 'react-redux';
 import { getComments } from '../../../api/promo/comment';
 
 const Comments = ({ ID }) => {
+	const LIMIT = 5; // num of comments to fetch at a time
+
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		comments: [],
+		offset: 0,
 		loading: true
 	});
 
-	const { comments, loading } = state;
+	const { comments, offset, loading } = state;
 
-	// load comments
+	// load comments on load
 	useEffect(() => {
-		async function loadComments() {
-			const response = await getComments(ID);
-			console.log(response);
-		}
-
 		loadComments();
 	}, []);
+
+	const loadComments = async () => {
+		const response = await getComments(ID, offset, LIMIT);
+		if (response.status < 400) {
+			updateState({ comments: response.payload, offset: offset + LIMIT });
+		}
+
+		// stop loading
+		updateState({ loading: false });
+
+		console.log(response);
+	};
 
 	const renderComments = () => {
 		if (loading) return <p>Loading...</p>;

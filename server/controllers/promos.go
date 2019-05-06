@@ -234,7 +234,7 @@ func (p *Promos) ByID(c *gin.Context) {
 	}
 
 	// find the promo by the given id
-	id, _ := parser.ParseUserID(c.Params.ByName("id"))
+	id, _ := parser.StrToInt(c.Params.ByName("id"))
 	promo, err := p.ps.ByID(id)
 
 	if err != nil || promo.UserID != profile.UserID {

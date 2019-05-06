@@ -11,9 +11,11 @@ export async function createComment(data) {
 	}
 }
 
-export async function getComments(id) {
+export async function getComments(id, offset, limit) {
+	const params = { offset, limit };
+
 	try {
-		const response = await API.get(ENDPOINTS.getComments(id));
+		const response = await API.get(ENDPOINTS.getComments(id), { params });
 		return response.data;
 	} catch (error) {
 		console.log(error.response);

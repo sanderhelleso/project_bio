@@ -25,7 +25,7 @@ type PromoCommentWithUser struct {
 type PromoCommentDB interface {
 
 	// method for quering specific promo comments
-	ByPromoID(id uint) ([]*PromoCommentWithUser, error)
+	ByPromoID(id, offset, limit uint) ([]*PromoCommentWithUser, error)
 	ByResponseToID(id uint) (*PromoComment, error)
 
 	// methods for altering promo comments
@@ -102,8 +102,8 @@ type promoCommentGorm struct {
 var _ PromoCommentDB = &promoCommentGorm{}
 
 // ByPromoID will look up a promo comment with the provided promo id
-func (pcg *promoCommentGorm) ByPromoID(id uint) ([]*PromoCommentWithUser, error) {
-	comments, err := findCommentsAndUser(pcg.db, id)
+func (pcg *promoCommentGorm) ByPromoID(id, offset, limit uint) ([]*PromoCommentWithUser, error) {
+	comments, err := findCommentsAndUser(pcg.db, id, offset, limit)
 	return comments, err
 }
 
