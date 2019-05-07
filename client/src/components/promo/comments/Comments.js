@@ -19,7 +19,7 @@ const Comments = ({ ID }) => {
 		loading: true
 	});
 
-	const { comments, offset, limit, loading } = state;
+	const { comments, count, offset, limit, loading } = state;
 
 	// load comments and count on load
 	useEffect(() => {
@@ -32,8 +32,10 @@ const Comments = ({ ID }) => {
 		if (response.status < 400) {
 			// update count and load in comments if exists
 			updateState({ count: response.payload });
-			if (response.payload) loadComments();
+			if (response.payload) return await loadComments();
 		}
+
+		updateState({ loading: false });
 	};
 
 	// loads a new batch of comments
@@ -43,10 +45,7 @@ const Comments = ({ ID }) => {
 			updateState({ comments: [ ...comments, ...response.payload ], offset: offset + limit });
 		}
 
-		// stop loading
 		updateState({ loading: false });
-
-		console.log(response);
 	};
 
 	const renderComments = () => {
@@ -61,7 +60,7 @@ const Comments = ({ ID }) => {
 			return (
 				<Fragment>
 					{loadedComments}
-					<LoadMoreComments limit={16} listLength={loadedComments.length} loadMore={loadComments} />
+					<LoadMoreComments limit={count} listLength={loadedComments.length} loadMore={loadComments} />
 					<ScrollTopOfComments currAmount={loadedComments.length} />
 				</Fragment>
 			);
