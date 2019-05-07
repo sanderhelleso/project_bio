@@ -38,7 +38,7 @@ const PostComment = ({ handle, avatar, userID, promoID, updatePromoCommentsActio
 		};
 
 		const response = await createComment(data);
-		if (response.statis < 400) {
+		if (response.status < 400) {
 			// todo
 		}
 
