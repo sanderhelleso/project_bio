@@ -22,3 +22,13 @@ export async function getComments(id, offset, limit) {
 		return error.response.data;
 	}
 }
+
+export async function getCommentsCount(id) {
+	try {
+		const response = await API.get(ENDPOINTS.getCommentsCount(id));
+		return response.data;
+	} catch (error) {
+		console.log(error.response);
+		return error.response.data;
+	}
+}

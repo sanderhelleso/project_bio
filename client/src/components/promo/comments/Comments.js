@@ -8,34 +8,44 @@ import ScrollTopOfComments from './ScrollTopOfComments';
 import PostComment from './PostComment';
 
 import { connect } from 'react-redux';
-import { getComments } from '../../../api/promo/comment';
+import { getComments, getCommentsCount } from '../../../api/promo/comment';
 
 const Comments = ({ ID }) => {
-	const LIMIT = 5; // num of comments to fetch at a time
-
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		comments: [],
-		offset: 0,
+		count: 0, // number of total comments for current promo
+		offset: 0, // keep tracks of where to fetch next batch from
+		limit: 5, // num of comments to fetch at a time
 		loading: true
 	});
 
-	const { comments, offset, loading } = state;
+	const { comments, count, offset, limit, loading } = state;
 
-	// load comments on load
+	// load comments and count on load
 	useEffect(() => {
-		loadComments();
+		countComments();
 	}, []);
 
-	const loadComments = async () => {
-		const response = await getComments(ID, offset, LIMIT);
+	// loads the amount of comments for the current promo
+	const countComments = async () => {
+		const response = await getCommentsCount(ID);
 		if (response.status < 400) {
-			updateState({ comments: [ ...comments, ...response.payload ], offset: offset + LIMIT });
+			// update count and load in comments if exists
+			updateState({ count: response.payload });
+			if (response.payload) return await loadComments();
 		}
 
-		// stop loading
 		updateState({ loading: false });
+	};
 
-		console.log(response);
+	// loads a new batch of comments
+	const loadComments = async () => {
+		const response = await getComments(ID, offset, limit);
+		if (response.status < 400) {
+			updateState({ comments: [ ...comments, ...response.payload ], offset: offset + limit });
+		}
+
+		updateState({ loading: false });
 	};
 
 	const renderComments = () => {
@@ -50,7 +60,7 @@ const Comments = ({ ID }) => {
 			return (
 				<Fragment>
 					{loadedComments}
-					<LoadMoreComments limit={16} listLength={loadedComments.length} loadMore={loadComments} />
+					<LoadMoreComments limit={count} listLength={loadedComments.length} loadMore={loadComments} />
 					<ScrollTopOfComments currAmount={loadedComments.length} />
 				</Fragment>
 			);

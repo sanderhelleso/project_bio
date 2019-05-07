@@ -8,7 +8,8 @@ const ENDPOINTS = {
 	createComment: 'comments/new',
 	getPromo: (handle, id) => `promos/${handle}/${id}`,
 	getPromos: (handle) => `promos/${handle}`,
-	getComments: (id) => `comments/${id}`
+	getComments: (id) => `comments/${id}`,
+	getCommentsCount: (id) => `comments/${id}/count`
 };
 
 export default ENDPOINTS;

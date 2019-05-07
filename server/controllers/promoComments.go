@@ -119,3 +119,38 @@ func (pc *PromoComments) ByPromoID(c *gin.Context) {
 		"payload": comments,
 	})
 }
+
+// Count is used to fetch comments count releated to the passed
+// in promoIDs promotion.
+//
+// METHOD: GET
+// ROUTE: /comments/:id/count
+//
+func (pc *PromoComments) Count(c *gin.Context) {
+	id, err := p.StrToInt(c.Params.ByName("id"))
+
+	if err != nil {
+		response.RespondWithError(
+			c,
+			http.StatusInternalServerError,
+			"Unable to load comments count",
+		)
+		return
+	}
+
+	// attempt to loa comments count
+	count, err := pc.pcs.Count(id)
+	if err != nil {
+		response.RespondWithError(
+			c,
+			http.StatusInternalServerError,
+			err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Comments count successfully fetched",
+		"status":  http.StatusOK,
+		"payload": count,
+	})		
+} 
