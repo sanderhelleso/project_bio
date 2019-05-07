@@ -14,4 +14,5 @@ func PromoCommentsRoutes(router *gin.Engine, pcc *controllers.PromoComments) {
 	v1.Use(middelware.RequireToken)
 	v1.POST("/new", pcc.Create)
 	v1.GET("/:id", pcc.ByPromoID)
+	v1.GET("/:id/count", pcc.Count)
 }

@@ -27,6 +27,9 @@ type PromoCommentDB interface {
 	// method for quering specific promo comments
 	ByPromoID(id, offset, limit uint) ([]*PromoCommentWithUser, error)
 	ByResponseToID(id uint) (*PromoComment, error)
+	
+	// aggregates
+	Count(id uint) (uint, error)
 
 	// methods for altering promo comments
 	Create(promoComment *PromoComment) error
@@ -113,6 +116,13 @@ func (pcg *promoCommentGorm) ByResponseToID(id uint) (*PromoComment, error) {
 	db := pcg.db.Where("response_to_id = ?", id)
 	err := first(db, &promoComment)
 	return promoComment, err
+}
+
+// Count counts the number of records matching the proved promo ID
+func (pcg *promoCommentGorm) Count(id uint) (uint, error) {
+	var count uint
+	err := pcg.db.Where("promo_id = ? AND response_to_id = 0", id).Count(&count).Error
+	return count, err
 }
 
 // Create will create the provided promo comment
