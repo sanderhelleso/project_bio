@@ -26,6 +26,12 @@ const Comments = ({ ID }) => {
 		countComments();
 	}, []);
 
+	// adds a new comment to the list of comments, passed down
+	// to child component 'PostComment' to update list with new
+	const addComment = (comment) => {
+		updateState({ comments: [ comment, ...comments ] });
+	};
+
 	// loads the amount of comments for the current promo
 	const countComments = async () => {
 		const response = await getCommentsCount(ID);
@@ -80,7 +86,7 @@ const Comments = ({ ID }) => {
 	return (
 		<CommentsCard id="comments-cont">
 			{renderInfo()}
-			<PostComment promoID={ID} />
+			<PostComment promoID={ID} addComment={addComment} />
 			{renderComments()}
 		</CommentsCard>
 	);

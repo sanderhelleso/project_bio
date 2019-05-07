@@ -68,10 +68,7 @@ func findFollowers(db *gorm.DB, dst User, id uint) (*[]UserData, error) {
 // for a given promotion provided with the ID
 func findCommentsAndUser(db *gorm.DB, id, offset, limit uint) ([]*PromoCommentWithUser, error) {
 	comments := []*PromoCommentWithUser{}
-
-	// TODO: check current offset + limit and compare to count() of records
-	// modify limit if needed, return empty list to avoid err if no more records
-
+	
 	query := db.
 	Offset(offset).
 	Limit(limit).
