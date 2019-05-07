@@ -8,28 +8,39 @@ import ScrollTopOfComments from './ScrollTopOfComments';
 import PostComment from './PostComment';
 
 import { connect } from 'react-redux';
-import { getComments } from '../../../api/promo/comment';
+import { getComments, getCommentsCount } from '../../../api/promo/comment';
 
 const Comments = ({ ID }) => {
-	const LIMIT = 5; // num of comments to fetch at a time
-
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		comments: [],
-		offset: 0,
+		count: 0, // number of total comments for current promo
+		offset: 0, // keep tracks of where to fetch next batch from
+		limit: 5, // num of comments to fetch at a time
 		loading: true
 	});
 
-	const { comments, offset, loading } = state;
+	const { comments, offset, limit, loading } = state;
 
-	// load comments on load
+	// load comments and count on load
 	useEffect(() => {
-		loadComments();
+		countComments();
 	}, []);
 
-	const loadComments = async () => {
-		const response = await getComments(ID, offset, LIMIT);
+	// loads the amount of comments for the current promo
+	const countComments = async () => {
+		const response = await getCommentsCount(ID);
 		if (response.status < 400) {
-			updateState({ comments: [ ...comments, ...response.payload ], offset: offset + LIMIT });
+			// update count and load in comments if exists
+			updateState({ count: response.payload });
+			if (response.payload) loadComments();
+		}
+	};
+
+	// loads a new batch of comments
+	const loadComments = async () => {
+		const response = await getComments(ID, offset, limit);
+		if (response.status < 400) {
+			updateState({ comments: [ ...comments, ...response.payload ], offset: offset + limit });
 		}
 
 		// stop loading

@@ -121,7 +121,11 @@ func (pcg *promoCommentGorm) ByResponseToID(id uint) (*PromoComment, error) {
 // Count counts the number of records matching the proved promo ID
 func (pcg *promoCommentGorm) Count(id uint) (uint, error) {
 	var count uint
-	err := pcg.db.Where("promo_id = ? AND response_to_id = 0", id).Count(&count).Error
+	err := pcg.db.
+		Model(&PromoComment{}).
+		Where("promo_id = ? AND response_to_id = ?", id, 0).
+		Count(&count).Error
+
 	return count, err
 }
 
