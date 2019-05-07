@@ -15,23 +15,23 @@ const ReplyCommentPublish = ({
 	maxLength,
 	id,
 	handle,
-	avatar
+	avatar,
+	userID,
+	ID // current promoID
 }) => {
 	const publishReply = async () => {
 		const reply = {
-			id: Math.round(),
-			comment,
-			profile: {
-				handle,
-				avatar,
-				postedAt: new Date()
-			}
+			userID,
+			promoID: ID,
+			responseToID: id,
+			body: comment
 		};
 
 		newCommentReplyAction({
 			id,
 			reply
 		});
+
 		updateState({ comment: '' });
 	};
 
@@ -54,8 +54,8 @@ const ReplyCommentPublish = ({
 	);
 };
 
-const mapStateToProps = ({ profile: { handle, avatar } }) => {
-	return { handle, avatar };
+const mapStateToProps = ({ profile: { handle, avatar, userID }, viewing: { promo: { ID } } }) => {
+	return { handle, avatar, userID, ID };
 };
 
 const mapDispatchToProps = (dispatch) => {

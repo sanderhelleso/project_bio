@@ -34,6 +34,7 @@ const StyledComment = styled.div`
 	background-color: #f3f8ff;
 	padding: 3rem;
 	border-radius: 12px;
+	display: grid;
 
 	p {
 		font-size: 0.8rem;

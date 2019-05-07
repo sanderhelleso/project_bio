@@ -4,13 +4,11 @@ import { TextArea } from '../../styles/Input';
 import CharactersRemaining from './CharactersRemaining';
 import { Button, Buttons } from '../../styles/Button';
 import FeatherIcons from 'feather-icons-react';
-import updatePromoCommentsAction from '../../../actions/promoActions/updatePromoCommentsAction';
 
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createComment } from '../../../api/promo/comment';
 
-const PostComment = ({ handle, avatar, userID, promoID, updatePromoCommentsAction }) => {
+const PostComment = ({ handle, avatar, userID, promoID, addComment }) => {
 	const minLength = 2;
 	const maxLength = 140;
 
@@ -21,29 +19,22 @@ const PostComment = ({ handle, avatar, userID, promoID, updatePromoCommentsActio
 	const { comment } = state;
 
 	const buildAndPostComment = async () => {
-		// TODO: send to endpoint
 		const newComment = {
-			comment,
-			profile: {
-				handle,
-				avatar,
-				postedAt: new Date()
-			}
-		};
-
-		const data = {
 			userID,
 			promoID,
+			handle,
+			avatar,
+			createdAt: new Date().getTime(),
 			body: comment
 		};
 
-		const response = await createComment(data);
-		if (response.statis < 400) {
+		const response = await createComment(newComment);
+		if (response.status < 400) {
 			// todo
 		}
 
-		updatePromoCommentsAction([ newComment ]);
-		updateState({ comment: '' });
+		addComment(newComment);
+		updateState({ comment: '' }); // reset comment field
 		console.log(response);
 	};
 
@@ -81,11 +72,7 @@ const mapStateToProps = ({ profile: { handle, avatar, userID } }) => {
 	return { handle, avatar, userID };
 };
 
-const mapDispatchToProps = (dispatch) => {
-	return bindActionCreators({ updatePromoCommentsAction }, dispatch);
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(PostComment);
+export default connect(mapStateToProps, null)(PostComment);
 
 const StyledComment = styled.div`
 	margin: 2rem 0 8rem 0;
