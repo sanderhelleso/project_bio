@@ -16,10 +16,12 @@ type PromoComment struct {
 }
 
 type PromoCommentWithUser struct {
-	CreatedAt  time.Time `json:"createdAt"`
-	Handle  	string 	  `json:"handle"`
-	Avatar 		string 	  `json:"avatar"`
-	Body 		string    `json:"body"`
+	ID			uint	  			  `json:"id"`
+	CreatedAt   time.Time 			  `json:"createdAt"`
+	Handle  	string 	  			  `json:"handle"`
+	Avatar 		string 	  			  `json:"avatar"`
+	Body 		string    			  `json:"body"`
+	Reply		*PromoCommentWithUser `json:"reply"`
 }
 
 type PromoCommentDB interface {

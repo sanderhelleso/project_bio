@@ -68,15 +68,15 @@ func findFollowers(db *gorm.DB, dst User, id uint) (*[]UserData, error) {
 // for a given promotion provided with the ID
 func findCommentsAndUser(db *gorm.DB, id, offset, limit uint) ([]*PromoCommentWithUser, error) {
 	comments := []*PromoCommentWithUser{}
-	
+
 	query := db.
-	Offset(offset).
-	Limit(limit).
-	Table("promo_comments").
-	Select("promo_comments.created_at, promo_comments.body, profiles.avatar, profiles.handle").
-	Joins("JOIN profiles ON profiles.id = promo_comments.user_id").
-	Where("promo_comments.promo_id = ?", id).
-	Order("promo_comments.created_at desc")
+		Offset(offset).
+		Limit(limit).
+		Table("promo_comments").
+		Select("promo_comments.id, promo_comments.created_at, promo_comments.body, profiles.avatar, profiles.handle").
+		Joins("JOIN profiles ON profiles.id = promo_comments.user_id").
+		Where("promo_comments.promo_id = ? AND promo_comments.response_to_id = ?", id, 0).
+		Order("promo_comments.created_at desc")
 
 	err := query.Find(&comments).Error
 
@@ -84,5 +84,30 @@ func findCommentsAndUser(db *gorm.DB, id, offset, limit uint) ([]*PromoCommentWi
 		return nil, ErrNotFound
 	}
 
+	// check if comment has a reply, if found - add to model
+	for _, comment := range comments {
+		if reply, err := findCommentReply(db, comment.ID); err == nil  {
+			comment.Reply = reply
+		}
+	}
+
 	return comments, nil
+}
+
+func findCommentReply(db *gorm.DB, id uint) (*PromoCommentWithUser, error) {
+	var reply PromoCommentWithUser
+
+	query := db.
+		Table("promo_comments").
+		Select("promo_comments.id, promo_comments.created_at, promo_comments.body, profiles.avatar, profiles.handle").
+		Joins("JOIN profiles ON profiles.id = promo_comments.user_id").
+		Where("promo_comments.response_to_id = ?", id)
+
+	err := query.First(&reply).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return nil, ErrNotFound
+	}
+
+	return &reply, nil
 }
