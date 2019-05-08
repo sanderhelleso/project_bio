@@ -16,7 +16,8 @@ type PromoComment struct {
 }
 
 type PromoCommentWithUser struct {
-	CreatedAt  time.Time `json:"createdAt"`
+	ID			uint	  `json:"id"`
+	CreatedAt   time.Time `json:"createdAt"`
 	Handle  	string 	  `json:"handle"`
 	Avatar 		string 	  `json:"avatar"`
 	Body 		string    `json:"body"`

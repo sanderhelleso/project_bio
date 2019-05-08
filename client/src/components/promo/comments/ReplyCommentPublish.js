@@ -7,6 +7,8 @@ import newCommentReplyAction from '../../../actions/promoActions/newCommentReply
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import { createComment } from '../../../api/promo/comment';
+
 const ReplyCommentPublish = ({
 	newCommentReplyAction,
 	updateState,
@@ -20,19 +22,25 @@ const ReplyCommentPublish = ({
 	ID // current promoID
 }) => {
 	const publishReply = async () => {
-		const reply = {
+		const replyComment = {
 			userID,
 			promoID: ID,
 			responseToID: id,
 			body: comment
 		};
 
-		newCommentReplyAction({
+		const response = await createComment(replyComment);
+		if (response.status < 400) {
+			// todo
+		}
+
+		/*newCommentReplyAction({
 			id,
-			reply
-		});
+			comment: { ...replyComment, avatar, handle }
+		});*/
 
 		updateState({ comment: '' });
+		console.log(response);
 	};
 
 	return (
@@ -54,7 +62,7 @@ const ReplyCommentPublish = ({
 	);
 };
 
-const mapStateToProps = ({ profile: { handle, avatar, userID }, viewing: { promo: { ID } } }) => {
+const mapStateToProps = ({ profile: { handle, avatar, userID }, promos: { viewing: { promo: { ID } } } }) => {
 	return { handle, avatar, userID, ID };
 };
 
