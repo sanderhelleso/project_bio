@@ -3,13 +3,15 @@ package models
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"time"
 )
 
 // Favorite represents a promo favorite in the application
 type Favorite struct {
-	gorm.Model
-	UserID 	uint `gorm:"not null;index" json:"-"`
-	PromoID uint `gorm:"not null;index" json:"promoID"` 
+	ID      uint `gorm:"primary_key"`
+	UserID 	uint `gorm:"not null;unique_index:idx_favorite_code" json:"-"`
+	PromoID uint `gorm:"not null;unique_index:idx_favorite_code" json:"promoID"` 
+	CreatedAt  time.Time
 }
 
 // FavoriteDB is used to interact with the favorites database
@@ -111,7 +113,7 @@ func (fg *favoriteGorm) Delete(id uint) error {
 		return ErrIDInvalid
 	}
 	
-	favorite := Favorite{Model: gorm.Model{ID: id}}
+	favorite := Favorite{ID: id}
 	return fg.db.Delete(&favorite).Error
 }
 

@@ -40,7 +40,7 @@ func main() {
 	services, err := models.NewServices()
 	lib.Must(err)
 
-	//services.DestructiveReset()
+	services.DestructiveReset()
 	services.AutoMigrate()
 	services.CreateReleations()
 
@@ -50,17 +50,27 @@ func main() {
 	lib.Must(redis.Ping(conn))
 
 	// setup controllers
-	usersC := controllers.NewUsers(services.User, emailer)
-	followersC := controllers.NewFollowers(services.Follower)
-	promosC := controllers.NewPromos(services.Promo, services.PromoProduct, services.Profile)
-	promoProductsC := controllers.NewPromoProducts(services.PromoProduct, services.Image)
-	promoCommentsC := controllers.NewPromoComments(services.PromoComment)
-	profilesC := controllers.NewProfiles(services.Profile, services.Image)
+	usersC 			:= controllers.NewUsers(services.User, emailer)
+	followersC 		:= controllers.NewFollowers(services.Follower)
+	promosC 		:= controllers.NewPromos(services.Promo, services.PromoProduct, services.Profile)
+	promoProductsC 	:= controllers.NewPromoProducts(services.PromoProduct, services.Image)
+	promoCommentsC 	:= controllers.NewPromoComments(services.PromoComment)
+	favoritesC     	:= controllers.NewFavorites(services.Favorite)
+	profilesC 		:= controllers.NewProfiles(services.Profile, services.Image)
 
 	// defer close connections
 	defer services.Close()
 	defer conn.Close()
 
 	// connect and serve app
-	api.ConnectAndServe(usersC, followersC, promosC, promoProductsC, promoCommentsC, profilesC, &conn)
+	api.ConnectAndServe(
+		usersC, 
+		followersC,
+		promosC, 
+		promoProductsC, 
+		promoCommentsC, 
+		profilesC, 
+		favoritesC, 
+		&conn,
+	)
 }

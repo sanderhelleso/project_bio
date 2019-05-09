@@ -23,6 +23,7 @@ func NewServices() (*Services, error) {
 		Promo:        NewPromoService(db),
 		PromoProduct: NewPromoProductService(db),
 		PromoComment: NewPromoCommentService(db),
+		Favorite	: NewFavoriteService(db),
 		Image:        NewImageService(),
 		db:           db,
 	}, nil
@@ -36,6 +37,7 @@ type Services struct {
 	Promo        PromoService
 	PromoProduct PromoProductService
 	PromoComment PromoCommentService
+	Favorite     FavoriteService
 	Image        ImageService
 	db           *gorm.DB
 }
@@ -61,6 +63,7 @@ func (s *Services) DestructiveReset() error {
 		&PromoProduct{},
 		&PromoComment{},
 		&Profile{},
+		&Favorite{},
 		&pwReset{},
 		&accVerify{},
 	).Error
@@ -81,6 +84,7 @@ func (s *Services) AutoMigrate() error {
 		&PromoProduct{},
 		&PromoComment{},
 		&Profile{},
+		&Favorite{},
 		&pwReset{},
 		&accVerify{},
 	).Error

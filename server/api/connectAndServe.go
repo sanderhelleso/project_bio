@@ -5,6 +5,7 @@ import (
 	"../sockets"
 	"github.com/gin-gonic/gin"
 	"github.com/gomodule/redigo/redis"
+	"../lib/middleware"
 )
 
 const maxMultiPartMem = 1 << 20 // 1mb
@@ -18,12 +19,13 @@ func ConnectAndServe(
 	promoProductsC *controllers.PromoProducts,
 	promoCommentsC *controllers.PromoComments,
 	profilesC *controllers.Profiles,
+	favoritesC *controllers.Favorites,
 	conn *redis.Conn,
 ) {
 
 	// connect router and API v1
 	router := gin.Default()
-	router.Use(corsMiddleware())
+	router.Use(middleware.Cors())
 	router.MaxMultipartMemory = maxMultiPartMem
 
 	// routes
@@ -32,6 +34,7 @@ func ConnectAndServe(
 	PromosRoutes(router, promosC)
 	PromoProductsRoutes(router, promoProductsC)
 	PromoCommentsRoutes(router, promoCommentsC)
+	FavoriteRoutes(router, favoritesC)
 	ProfilesRoutes(router, profilesC)
 
 	// connect sockets
@@ -41,21 +44,4 @@ func ConnectAndServe(
 	FileServer(router)
 
 	router.Run() // listen and serve on 0.0.0.0:5000
-}
-
-func corsMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
-		c.Writer.Header().Set("Access-Control-Max-Age", "86400")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, UPDATE")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-		c.Writer.Header().Set("Access-Control-Expose-Headers", "Content-Length")
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(200)
-		} else {
-			c.Next()
-		}
-	}
 }

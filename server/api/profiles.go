@@ -2,7 +2,7 @@ package api
 
 import (
 	"../controllers"
-	"../lib/middelware"
+	"../lib/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -10,10 +10,10 @@ import (
 func ProfilesRoutes(router *gin.Engine, pc *controllers.Profiles) {
 	v1 := router.Group("/api/v1/profiles")
 	{
-		v1.Use(middelware.RequireToken)
+		v1.Use(middleware.RequireToken)
 		v1.GET("/get", pc.ByUserID)
 
-		//v1.Use(middelware.RequireVerified)
+		//v1.Use(middleware.RequireVerified)
 		v1.POST("/new", pc.Create)
 		v1.PUT("/avatar", pc.AvatarUpload)
 		//v1.DELETE("/delete", pc.Delete)
