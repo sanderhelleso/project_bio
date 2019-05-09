@@ -2,7 +2,7 @@ package api
 
 import (
 	"../controllers"
-	"../lib/middelware"
+	"../lib/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,7 +15,7 @@ func UsersRoutes(router *gin.Engine, uc *controllers.Users) {
 		v1.POST("/forgot", uc.InitiateReset)
 		v1.POST("/reset", uc.CompleteReset)
 
-		v1.Use(middelware.RequireToken)
+		v1.Use(middleware.RequireToken)
 		v1.DELETE("/delete", uc.Delete)
 	}
 }
