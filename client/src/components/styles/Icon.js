@@ -19,10 +19,10 @@ const themes = {
 };
 
 const iconStyles = `
-min-height: 2.75rem;
-	min-width: 2.75rem;
-	max-height: 2.75rem;
-	max-width: 2.75rem;
+		min-height: 2.75rem;
+		min-width: 2.75rem;
+		max-height: 2.75rem;
+		max-width: 2.75rem;
     border-radius: 50%;
     position: relative;
     cursor: pointer;
@@ -30,12 +30,12 @@ min-height: 2.75rem;
     margin: 0 0.5rem;
     
     svg {
-		position: absolute;
-		top: 30%;
-		left: 50%;
-		transform: translate(-50%);
-		height: 1.15rem;
-		width: 1.15rem;
+			position: absolute;
+			top: 30%;
+			left: 50%;
+			transform: translate(-50%);
+			height: 1.15rem;
+			width: 1.15rem;
 	}
 `;
 

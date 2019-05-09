@@ -40,7 +40,7 @@ func main() {
 	services, err := models.NewServices()
 	lib.Must(err)
 
-	services.DestructiveReset()
+	//services.DestructiveReset()
 	services.AutoMigrate()
 	services.CreateReleations()
 
