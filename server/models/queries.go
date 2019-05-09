@@ -94,6 +94,7 @@ func findCommentsAndUser(db *gorm.DB, id, offset, limit uint) ([]*PromoCommentWi
 	return comments, nil
 }
 
+// findCommentReply finds a comment replied to a given comments ID
 func findCommentReply(db *gorm.DB, id uint) (*PromoCommentWithUser, error) {
 	var reply PromoCommentWithUser
 

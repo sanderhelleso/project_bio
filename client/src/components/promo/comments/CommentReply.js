@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import CommentProfile from './CommentProfile';
 import { fadeIn } from '../../styles/Keyframes';
 
-const CommentReply = ({ reply: { profile, comment } }) => (
+const CommentReply = ({ avatar, body, createdAt, handle }) => (
 	<StyledReply>
-		<CommentProfile {...profile} isOwner={true} />
-		<p>{comment}</p>
+		<CommentProfile {...{ avatar, handle, createdAt }} isOwner={true} />
+		<p>{body}</p>
 	</StyledReply>
 );
 

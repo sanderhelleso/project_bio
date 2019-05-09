@@ -3,15 +3,14 @@ import styled from 'styled-components';
 import { Button, Buttons, FlatButton } from '../../styles/Button';
 import FeatherIcons from 'feather-icons-react';
 
-import newCommentReplyAction from '../../../actions/promoActions/newCommentReplyAction';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { createComment } from '../../../api/promo/comment';
 
 const ReplyCommentPublish = ({
-	newCommentReplyAction,
 	updateState,
+	setReplyAndClose,
 	comment,
 	minLength,
 	maxLength,
@@ -29,18 +28,10 @@ const ReplyCommentPublish = ({
 			body: comment
 		};
 
-		const response = await createComment(replyComment);
-		if (response.status < 400) {
-			// todo
-		}
-
-		/*newCommentReplyAction({
-			id,
-			comment: { ...replyComment, avatar, handle }
-		});*/
-
-		updateState({ comment: '' });
-		console.log(response);
+		// set and display the reply to comment and resets state of field
+		const profile = { avatar, handle, createdAt: new Date().getTime() };
+		setReplyAndClose({ ...replyComment, ...profile });
+		createComment(replyComment);
 	};
 
 	return (
@@ -66,11 +57,7 @@ const mapStateToProps = ({ profile: { handle, avatar, userID }, promos: { viewin
 	return { handle, avatar, userID, ID };
 };
 
-const mapDispatchToProps = (dispatch) => {
-	return bindActionCreators({ newCommentReplyAction }, dispatch);
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ReplyCommentPublish);
+export default connect(mapStateToProps, null)(ReplyCommentPublish);
 
 const StyledCont = styled.div`
 	margin-top: 1rem;

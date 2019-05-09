@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import CommentProfile from './CommentProfile';
 import ReplyCommentField from './ReplyCommentField';
@@ -8,15 +8,27 @@ import { connect } from 'react-redux';
 import { fadeIn } from '../../styles/Keyframes';
 
 const Comment = ({ createdAt, handle, avatar, body, ownerHandle, myHandle, reply, id }) => {
+	// decide owner and author state
 	const isOwner = ownerHandle === myHandle;
 	const isAuthor = myHandle === handle;
+
+	// sets a new reply to current comments
+	const [ replyComment, setReply ] = useState(reply);
+
+	const renderCommentField = () => {
+		if (isOwner && !isAuthor && !replyComment) {
+			return <ReplyCommentField {...{ handle, id }} setReply={setReply} />;
+		}
+
+		return null;
+	};
 
 	return (
 		<StyledComment>
 			<CommentProfile {...{ createdAt, handle, avatar }} isOwner={isOwner && isAuthor} />
 			<p>{body}</p>
-			{isOwner && !isAuthor && !reply && <ReplyCommentField {...{ handle, id }} />}
-			{reply && <CommentReply reply={reply} />}
+			{renderCommentField()}
+			{replyComment && <CommentReply {...replyComment} />}
 		</StyledComment>
 	);
 };
