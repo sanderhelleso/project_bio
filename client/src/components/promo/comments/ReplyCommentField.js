@@ -4,9 +4,8 @@ import { TextArea } from '../../styles/Input';
 import { Button } from '../../styles/Button';
 import ReplyCommentPublish from './ReplyCommentPublish';
 import CharactersRemaining from './CharactersRemaining';
-import { fadeIn } from '../../styles/Keyframes';
 
-const ReplyCommentField = ({ handle, id }) => {
+const ReplyCommentField = ({ handle, id, setReply }) => {
 	const replyTo = `Reply to ${handle}`;
 	const minLength = 2;
 	const maxLength = 140;
@@ -23,6 +22,12 @@ const ReplyCommentField = ({ handle, id }) => {
 		updateState({ [e.target.name]: e.target.value });
 	};
 
+	// sets the given reply to the comment and resets the state of comment field
+	const setReplyAndClose = (reply) => {
+		updateState({ comment: '', isOpen: false });
+		setReply(reply);
+	};
+
 	const renderField = () => {
 		if (isOpen) {
 			return (
@@ -37,11 +42,12 @@ const ReplyCommentField = ({ handle, id }) => {
 						value={comment}
 					/>
 					<ReplyCommentPublish
-						updateState={updateState}
 						minLength={minLength}
 						maxLength={maxLength}
 						comment={comment}
 						id={id}
+						updateState={updateState}
+						setReplyAndClose={setReplyAndClose}
 					/>
 					<CharactersRemaining curr={comment.length} max={maxLength} />
 				</Fragment>

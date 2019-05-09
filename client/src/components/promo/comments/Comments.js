@@ -59,7 +59,10 @@ const Comments = ({ ID }) => {
 		if (!comments.length) return null;
 
 		const loadedComments = comments.map((comment, i) => {
-			return [ <Comment key={`${i}a`} {...comment} />, <CommentSeperator key={`${i}b`} /> ];
+			return [
+				<Comment key={`${comments.length - i}a`} {...comment} />,
+				<CommentSeperator key={`${comments.length - i}b`} />
+			];
 		});
 
 		if (loadedComments.length) {
