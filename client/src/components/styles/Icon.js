@@ -27,7 +27,8 @@ const iconStyles = `
     position: relative;
     cursor: pointer;
     display: inline-block;
-    margin: 0 0.5rem;
+		margin: 0 0.5rem;
+		transition: 0.3s ease-in-out;
     
     svg {
 			position: absolute;
@@ -41,17 +42,17 @@ const iconStyles = `
 
 const StyledFavorite = styled.div`
 	${iconStyles};
-	background-color: ${themes.red.bg};
+	background-color: ${(props) => (props.favorited ? themes.red.color : themes.red.bg)};
 
 	svg {
-		stroke: ${themes.red.color};
+		stroke: ${(props) => (props.favorited ? themes.red.bg : themes.red.color)};
 	}
 `;
 
-export const Favorite = () => (
-	<StyledFavorite data-tip="Favorite" data-for="favorite-tooltip">
+export const Favorite = ({ favorited, message }) => (
+	<StyledFavorite data-tip={message} data-for="favorite-tooltip" favorited={favorited}>
 		<FeatherIcons icon="heart" />
-		<ReactTooltip id="favorite-tooltip" place="top" type="dark" effect="solid" />
+		<ReactTooltip id="favorite-tooltip" place="top" type="dark" effect="solid" getContent={() => message} />
 	</StyledFavorite>
 );
 

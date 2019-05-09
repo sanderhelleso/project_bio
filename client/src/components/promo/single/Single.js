@@ -4,60 +4,15 @@ import { getPromo } from '../../../api/promo/promo';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
 import viewPromoAction from '../../../actions/promoActions/viewPromoAction';
 import Container from '../../styles/Container';
 import PromoCard from './PromoCard';
 import Comments from '../comments/Comments';
 import PreviewsCard from '../preview/PreviewsCard';
-import { fadeIn } from '../../styles/Keyframes';
-import CurrentlyWatching from './CurrentlyWatching';
 import PromoLoader from './PromoLoader';
 import CommentsLoader from '../comments/CommentsLoader';
 import PreviewLoader from '../preview/PreviewLoader';
-
-const data = [
-	{
-		id: 1,
-		profile: {
-			handle: 'sanderhelleso',
-			avatar: '',
-			postedAt: new Date()
-		},
-		reply: false,
-		comment:
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
-	},
-	{
-		id: 2,
-		profile: {
-			handle: 'janteigen',
-			avatar: '',
-			postedAt: new Date()
-		},
-		reply: {
-			profile: {
-				handle: 'sanderhelleso',
-				avatar: '',
-				postedAt: new Date()
-			},
-			comment:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
-		},
-		comment:
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
-	},
-	{
-		id: 3,
-		profile: {
-			handle: 'rudycruz',
-			avatar: '',
-			postedAt: new Date()
-		},
-		reply: false,
-		comment:
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean luctus lorem id porta sodales. Etiam a leo convallis, rhoncus felis at, pharetra mi. '
-	}
-];
 
 const Single = ({ viewPromoAction, match: { params } }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {

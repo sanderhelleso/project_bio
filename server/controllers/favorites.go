@@ -25,6 +25,8 @@ func NewFavorites(fs models.FavoriteService) *Favorites {
 	}
 }
 
+// Create creates a new favorite releationship 
+// between provided userID and promoID
 func (f *Favorites) Create(c *gin.Context) {
 
 	var form FavoriteForm
@@ -53,6 +55,57 @@ func (f *Favorites) Create(c *gin.Context) {
 	response.RespondWithSuccess(
 		c,
 		http.StatusCreated,
-		"Favorite successfull!")
+		"Favorited promotion successfully!")
 }
 
+// Check checks if there exists a favorite releationship 
+// between passed in userID and promoID
+func (f *Favorites) Check(c *gin.Context) {
+
+	var form FavoriteForm
+	if c.Bind(&form) != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			"Unable to process form data due to invalid format")
+		return
+	}
+
+	var found bool
+	if err := f.fs.ByUserAndPromoID(form.UserID, form.PromoID); err == nil {
+		found = true
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  http.StatusOK,
+		"payload": found,
+	})
+}
+
+// Delete removes a favorite releationship 
+// between provided userID and promoID
+func (f *Favorites) Delete(c *gin.Context) {
+
+	var form FavoriteForm
+	if c.Bind(&form) != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			"Unable to process form data due to invalid format")
+		return
+	}
+
+	// attempt to create and store favorite in DB
+	if err := f.fs.Delete(form.UserID, form.PromoID); err != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusBadRequest, 
+			err.Error())
+		return
+	}
+
+	response.RespondWithSuccess(
+		c,
+		http.StatusCreated,
+		"Unfavorited successfully!")
+}
