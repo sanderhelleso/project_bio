@@ -3,9 +3,9 @@ import styled from 'styled-components';
 
 import ModalContent from './ModalContent';
 
-const Modal = (props) => (
-	<StyledOverlay onClick={(e) => (e.target.id !== 'modal-inner' ? props.close() : null)}>
-		<ModalContent />
+const Modal = ({ close, content }) => (
+	<StyledOverlay onClick={(e) => (e.target.id !== 'modal-inner' ? close() : null)}>
+		<ModalContent content={content} />
 	</StyledOverlay>
 );
 
