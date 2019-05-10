@@ -23,7 +23,7 @@ type FavoriteDB interface {
 
 	// methods for altering favorites
 	Create(favorite *Favorite) error
-	Delete(id uint) error 
+	Delete(userID, promoID uint) error 
 }
 
 // FavoriteService is a set of methods used to manupulate
@@ -97,8 +97,8 @@ type favoriteGorm struct {
 // ByUserAndPromoID looks up a favorite matching provided
 // user ID and promotion ID
 func (fg *favoriteGorm) ByUserAndPromoID(userID, promoID uint) error {
-	db := fg.db.Where("user_id = ? AND promoID = ?", userID, promoID)
-	return first(db, Favorite{})
+	db := fg.db.Where("user_id = ? AND promo_id = ?", userID, promoID)
+	return first(db, &Favorite{})
 }
 
 // Create will create the provided favorite
@@ -108,12 +108,12 @@ func (fg *favoriteGorm) Create(favorite *Favorite) error {
 }
 
 // Delete will delete the favorite with the provided ID
-func (fg *favoriteGorm) Delete(id uint) error {
-	if id <= 0 {
+func (fg *favoriteGorm) Delete(userID, promoID uint) error {
+	if userID <= 0 || promoID <= 0 {
 		return ErrIDInvalid
 	}
 	
-	favorite := Favorite{ID: id}
+	favorite := Favorite{ UserID: userID, PromoID: promoID }
 	return fg.db.Delete(&favorite).Error
 }
 

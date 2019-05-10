@@ -18,6 +18,7 @@ const StyledCont = styled.div`
 	position: absolute;
 	left: 2rem;
 	top: 2rem;
+	z-index: 99;
 
 	@media screen and (max-width: 1100px) {
 		right: 2rem;

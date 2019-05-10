@@ -19,39 +19,40 @@ const themes = {
 };
 
 const iconStyles = `
-min-height: 2.75rem;
-	min-width: 2.75rem;
-	max-height: 2.75rem;
-	max-width: 2.75rem;
+		min-height: 2.75rem;
+		min-width: 2.75rem;
+		max-height: 2.75rem;
+		max-width: 2.75rem;
     border-radius: 50%;
     position: relative;
     cursor: pointer;
     display: inline-block;
-    margin: 0 0.5rem;
+		margin: 0 0.5rem;
+		transition: 0.3s ease-in-out;
     
     svg {
-		position: absolute;
-		top: 30%;
-		left: 50%;
-		transform: translate(-50%);
-		height: 1.15rem;
-		width: 1.15rem;
+			position: absolute;
+			top: 30%;
+			left: 50%;
+			transform: translate(-50%);
+			height: 1.15rem;
+			width: 1.15rem;
 	}
 `;
 
 const StyledFavorite = styled.div`
 	${iconStyles};
-	background-color: ${themes.red.bg};
+	background-color: ${(props) => (props.favorited ? themes.red.color : themes.red.bg)};
 
 	svg {
-		stroke: ${themes.red.color};
+		stroke: ${(props) => (props.favorited ? themes.red.bg : themes.red.color)};
 	}
 `;
 
-export const Favorite = () => (
-	<StyledFavorite data-tip="Favorite" data-for="favorite-tooltip">
+export const Favorite = ({ favorited, message }) => (
+	<StyledFavorite data-tip={message} data-for="favorite-tooltip" favorited={favorited}>
 		<FeatherIcons icon="heart" />
-		<ReactTooltip id="favorite-tooltip" place="top" type="dark" effect="solid" />
+		<Tooltip id="favorite-tooltip" place="top" type="dark" effect="solid" getContent={() => message} />
 	</StyledFavorite>
 );
 
@@ -72,3 +73,8 @@ export const Share = () => (
 		<ReactTooltip id="share-tooltip" place="top" type="dark" effect="solid" />
 	</StyledShare>
 );
+
+const Tooltip = styled(ReactTooltip)`
+	text-align: center !important;
+	min-width: 120px !important;
+`;
