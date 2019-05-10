@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import ModalShare from './ModalShare';
+import ModalClose from './ModalClose';
 
-const ModalContent = ({ content }) => {
+const ModalContent = ({ close, content }) => {
 	const setContent = () => {
 		switch (content) {
 			case 'share':
@@ -10,7 +11,12 @@ const ModalContent = ({ content }) => {
 		}
 	};
 
-	return <StyledContent id="modal-inner">{setContent()}</StyledContent>;
+	return (
+		<StyledContent>
+			<ModalClose close={close} />
+			{setContent()}
+		</StyledContent>
+	);
 };
 
 export default ModalContent;
@@ -24,6 +30,8 @@ const StyledContent = styled.div`
 	min-height: 300px;
 	min-width: 500px;
 	background-color: #ffffff;
+	box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+	border-radius: 4px;
 
 	@media screen and (max-width: 600px) {
 		min-width: 90%;
