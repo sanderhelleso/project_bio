@@ -52,7 +52,7 @@ const StyledFavorite = styled.div`
 export const Favorite = ({ favorited, message }) => (
 	<StyledFavorite data-tip={message} data-for="favorite-tooltip" favorited={favorited}>
 		<FeatherIcons icon="heart" />
-		<ReactTooltip id="favorite-tooltip" place="top" type="dark" effect="solid" getContent={() => message} />
+		<Tooltip id="favorite-tooltip" place="top" type="dark" effect="solid" getContent={() => message} />
 	</StyledFavorite>
 );
 
@@ -73,3 +73,8 @@ export const Share = () => (
 		<ReactTooltip id="share-tooltip" place="top" type="dark" effect="solid" />
 	</StyledShare>
 );
+
+const Tooltip = styled(ReactTooltip)`
+	text-align: center !important;
+	min-width: 120px !important;
+`;
