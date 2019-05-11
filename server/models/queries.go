@@ -86,7 +86,7 @@ func findCommentsAndUser(db *gorm.DB, id, offset, limit uint) ([]*PromoCommentWi
 
 	// check if comment has a reply, if found - add to model
 	for _, comment := range comments {
-		if reply, err := findCommentReply(db, comment.ID); err == nil  {
+		if reply, err := findCommentReply(db, comment.ID); err == nil {
 			comment.Reply = reply
 		}
 	}
@@ -111,4 +111,42 @@ func findCommentReply(db *gorm.DB, id uint) (*PromoCommentWithUser, error) {
 	}
 
 	return &reply, nil
+}
+
+// findCommentReply finds a comment replied to a given comments ID
+func findRecomendations(db *gorm.DB, history []*PromoFromHist) ([]*Promo, error) {
+
+	recomendations := make([]*Promo, 0)
+	uniqueIds := make([]uint, 0)
+	uniqueIds = append(uniqueIds, history[0].ID)
+
+	for _, promo := range history {
+
+		if p, err := findRecomendation(db, promo, &uniqueIds); err == nil {
+			uniqueIds = append(uniqueIds, p.ID)
+			recomendations = append(recomendations, p)
+		}
+	}
+
+	return recomendations, nil
+}
+
+// findCommentReply finds a comment replied to a given comments ID
+func findRecomendation(db *gorm.DB, promo *PromoFromHist, uniqueIds *[]uint) (*Promo, error) {
+
+	var p Promo
+
+	query := db.
+		Table("promos").
+		Select("*").
+		Not(*uniqueIds).
+		Where("category = ?", promo.Category)
+
+	err := query.First(&p).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return nil, ErrNotFound
+	}
+
+	return &p, nil
 }

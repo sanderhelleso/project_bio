@@ -226,6 +226,11 @@ func (pg *promoGorm) Delete(id uint) error {
 
 // FindRecomendations ...
 func (pg *promoGorm) FindRecomendations(history []*PromoFromHist) ([]*Promo, error) {
-	recomendations := make([]*Promo, 0)
+	recomendations, err := findRecomendations(pg.db, history)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return recomendations, nil
 }
