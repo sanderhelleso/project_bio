@@ -54,6 +54,9 @@ func NewPromos(
 	ps models.PromoService,
 	pps models.PromoProductService,
 	profs models.ProfileService) *Promos {
+
+	//ps.Seed()
+
 	return &Promos{
 		ps,
 		pps,

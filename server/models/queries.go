@@ -1,6 +1,9 @@
 package models
 
 import (
+	"fmt"
+
+	"../lib/parser"
 	"github.com/jinzhu/gorm"
 )
 
@@ -135,14 +138,26 @@ func findRecomendations(db *gorm.DB, history []*PromoFromHist) ([]*Promo, error)
 func findRecomendation(db *gorm.DB, promo *PromoFromHist, uniqueIds *[]uint) (*Promo, error) {
 
 	var p Promo
+	var keywords string
+
+	cleaned := parser.CleanCommons(promo.Title)
+	for i, word := range cleaned {
+		if i < len(cleaned)-2 {
+			keywords += fmt.Sprintf("%s|", word)
+		} else {
+			keywords += fmt.Sprintf("%s", word)
+		}
+	}
 
 	query := db.
 		Table("promos").
 		Select("*").
 		Not(*uniqueIds).
-		Where("category = ?", promo.Category)
+		Where(fmt.Sprintf("category = ? AND lower(title) similar to '%%(%s)%%'", keywords), promo.Category)
 
 	err := query.First(&p).Error
+
+	fmt.Println(err, keywords)
 
 	if err == gorm.ErrRecordNotFound {
 		return nil, ErrNotFound

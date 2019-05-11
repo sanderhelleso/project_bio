@@ -38,6 +38,7 @@ type PromoDB interface {
 	Update(promo *Promo) error
 	Delete(id uint) error
 	FindRecomendations(history []*PromoFromHist) ([]*Promo, error)
+	Seed()
 }
 
 // PromoService is a set of methods used to mainpulate
@@ -233,4 +234,45 @@ func (pg *promoGorm) FindRecomendations(history []*PromoFromHist) ([]*Promo, err
 	}
 
 	return recomendations, nil
+}
+
+// Seed creates test data for promo
+func (pg *promoGorm) Seed() {
+
+	/*for i := 0; i < 0; i++ {
+		promo := &Promo{
+			UserID:      1,
+			Title:       fmt.Sprintf("I haz some Taco nr %d", i+1),
+			Description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas posuere diam justo, sed mattis odio imperdiet sit amet. Fusce semper ultrices neque ac semper.",
+			Category:    "Food, Beverages & Tobacco",
+			Code:        "TEST35",
+			Discount:    50,
+			ExpiresAt:   time.Date(2019, 10, 1, 12, 30, 0, 0, time.UTC),
+		}
+
+		pg.Create(promo)
+	}*/
+
+	promo1 := &Promo{
+		UserID:      1,
+		Title:       "I haz some Taco",
+		Description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas posuere diam justo, sed mattis odio imperdiet sit amet. Fusce semper ultrices neque ac semper.",
+		Category:    "Food, Beverages & Tobacco",
+		Code:        "TEST35",
+		Discount:    50,
+		ExpiresAt:   time.Date(2019, 10, 1, 12, 30, 0, 0, time.UTC),
+	}
+
+	promo2 := &Promo{
+		UserID:      1,
+		Title:       "xxxxxxxxxxxxxtacoxxxxxxxxxx",
+		Description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas posuere diam justo, sed mattis odio imperdiet sit amet. Fusce semper ultrices neque ac semper.",
+		Category:    "Food, Beverages & Tobacco",
+		Code:        "TEST35",
+		Discount:    50,
+		ExpiresAt:   time.Date(2019, 10, 1, 12, 30, 0, 0, time.UTC),
+	}
+
+	pg.Create(promo1)
+	pg.Create(promo2)
 }
