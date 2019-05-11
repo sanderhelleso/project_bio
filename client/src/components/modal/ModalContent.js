@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import ModalShare from './ModalShare';
+import ModalShare from './share/ModalShare';
 import ModalClose from './ModalClose';
 
 const ModalContent = ({ close, content }) => {

@@ -14,7 +14,7 @@ const SharePromo = () => {
 			<span onClick={() => setModalState(true)}>
 				<Share />
 			</span>
-			{isOpen && <Modal close={close} content="share" />}
+			{isOpen && <Modal close={close} content="share" active={isOpen} />}
 		</Fragment>
 	);
 };
