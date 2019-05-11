@@ -5,12 +5,13 @@ import Queue from '../lib/queue';
 const LEN = 5;
 const initialState = { history: new Queue(LEN) };
 
-export default ({ history } = initialState, action) => {
+export default (state = initialState, action) => {
 	switch (action.type) {
 		case ADD_TO_HISTORY: {
-			history.add(action.payload);
+			state.history.add(action.payload);
 			return {
-				history: history.makeCopy(history)
+				...state,
+				history: state.history.makeCopy(state.history)
 			};
 		}
 
