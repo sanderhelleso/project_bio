@@ -9,6 +9,7 @@ const ENDPOINTS = {
 	checkFavorite: 'favorites/check',
 	createFavorite: 'favorites/new',
 	removeFavorite: 'favorites/delete',
+	findRecomendations: 'promos/recomendations',
 
 	// dynamic endpoints with params
 	getPromo: (handle, id) => `promos/${handle}/${id}`,

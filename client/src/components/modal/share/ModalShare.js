@@ -40,7 +40,7 @@ const ModalShare = () => {
 	];
 
 	const renderIcons = () => {
-		return actions.map((action) => <ModalShareAction {...action} />);
+		return actions.map((action) => <ModalShareAction key={action.icon} {...action} />);
 	};
 
 	return (
