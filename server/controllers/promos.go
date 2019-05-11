@@ -296,6 +296,7 @@ func (p *Promos) FindRecomendations(c *gin.Context) {
 		}
 	}
 
+	// get recomendations based on users history
 	recomendations, err := p.ps.FindRecomendations(history)
 	if err != nil {
 		response.RespondWithError(
@@ -303,6 +304,13 @@ func (p *Promos) FindRecomendations(c *gin.Context) {
 			http.StatusOK,
 			"Unable to find any recomendations based on the provided history.")
 		return
+	}
+
+	// find the promos products preview by the promos id
+	for _, rec := range recomendations {
+		if previews, err := p.pps.PreviewByPromoID(rec.ID); err == nil {
+			rec.Previews = previews
+		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{

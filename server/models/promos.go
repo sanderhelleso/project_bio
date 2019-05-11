@@ -22,10 +22,12 @@ type Promo struct {
 
 // Recomendation represents a promo recomendation in the application
 type Recomendation struct {
-	ID          uint   `json:"promoID"`
-	Handle      string `json:"handle"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
+	ID          uint            `json:"promoID"`
+	Handle      string          `json:"handle"`
+	Avatar      string          `json:"avatar"`
+	Title       string          `json:"title"`
+	Description string          `json:"description"`
+	Previews    []*PromoProduct `json:"previews"`
 }
 
 // PromoFromHist represents a promotion from a users viewed history

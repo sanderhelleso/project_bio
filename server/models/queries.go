@@ -165,7 +165,7 @@ func findRecomendation(db *gorm.DB, promo *PromoFromHist, uniqueIds *[]uint) (*R
 
 	query := db.
 		Table("promos").
-		Select("promos.id, promos.title, promos.description, profiles.handle").
+		Select("promos.id, promos.title, promos.description, profiles.handle, profiles.avatar").
 		Joins("JOIN profiles ON profiles.id = promos.user_id").
 		Not(*uniqueIds).
 		Where(where, promo.Category)
@@ -188,7 +188,7 @@ func findRandomRecomendation(db *gorm.DB, uniqueIds *[]uint) (*Recomendation, er
 		Order(gorm.Expr("random()")).
 		Limit(1).
 		Table("promos").
-		Select("promos.id, promos.title, promos.description, profiles.handle").
+		Select("promos.id, promos.title, promos.description, profiles.handle, profiles.avatar").
 		Joins("JOIN profiles ON profiles.id = promos.user_id").
 		Not(*uniqueIds)
 
@@ -199,4 +199,23 @@ func findRandomRecomendation(db *gorm.DB, uniqueIds *[]uint) (*Recomendation, er
 	}
 
 	return &p, nil
+}
+
+// findProductsPreviews finds a promos products images
+func findProductsPreview(db *gorm.DB, id uint) ([]*PromoProduct, error) {
+
+	var previews []*PromoProduct
+
+	query := db.
+		Table("promo_products").
+		Select("image").
+		Where("promo_id = ?", id)
+
+	err := query.Find(&previews).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return nil, ErrNotFound
+	}
+
+	return previews, nil
 }

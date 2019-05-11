@@ -29,6 +29,7 @@ type PromoProductDB interface {
 	// methods for quering specific promo products
 	ByID(id uint) (*PromoProduct, error)
 	ByPromoID(id uint) ([]*PromoProduct, error)
+	PreviewByPromoID(id uint) ([]*PromoProduct, error)
 
 	// methods for altering promo products
 	Create(promoProduct *PromoProduct) error
@@ -211,6 +212,11 @@ func (ppg *promoProductGorm) ByPromoID(id uint) ([]*PromoProduct, error) {
 	db := ppg.db.Where("promo_id = ?", id)
 	err := all(db, &promoProducts)
 	return promoProducts, err
+}
+
+// ByPromoID will look up a promo product with the provided promos id
+func (ppg *promoProductGorm) PreviewByPromoID(id uint) ([]*PromoProduct, error) {
+	return findProductsPreview(ppg.db, id)
 }
 
 // Create will create the provided promo product
