@@ -1,8 +1,9 @@
 package models
 
 import (
-	"time"
 	"strings"
+	"time"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
@@ -10,13 +11,20 @@ import (
 // Promo represents a promotion in the application
 type Promo struct {
 	gorm.Model
-	UserID			uint 		`gorm:"not null;index" json:"-"`
-	Title			string 		`gorm:"not null;size:100" json:"title"`
-	Description		string		`gorm:"not null;size:500" json:"description"`
-	Category		string  	`gorm:"not null" json:"category"`
-	Code			string  	`json:"code"`
-	Discount		uint		`json:"discount"`
-	ExpiresAt		time.Time	`json:"expires"`
+	UserID      uint      `gorm:"not null;index" json:"-"`
+	Title       string    `gorm:"not null;size:100" json:"title"`
+	Description string    `gorm:"not null;size:500" json:"description"`
+	Category    string    `gorm:"not null" json:"category"`
+	Code        string    `json:"code"`
+	Discount    uint      `json:"discount"`
+	ExpiresAt   time.Time `json:"expires"`
+}
+
+// PromoFromHist represents a promotion from a users viewed history
+type PromoFromHist struct {
+	ID       uint
+	Title    string `json:"title"`
+	Category string `json:"category"`
 }
 
 // PromoDB is used to interact with the promos database
@@ -29,6 +37,7 @@ type PromoDB interface {
 	Create(promo *Promo) (uint, error)
 	Update(promo *Promo) error
 	Delete(id uint) error
+	FindRecomendations(history []*PromoFromHist) ([]*Promo, error)
 }
 
 // PromoService is a set of methods used to mainpulate
@@ -50,7 +59,7 @@ func NewPromoService(db *gorm.DB) PromoService {
 	pg := &promoGorm{db}
 	pv := newPromoValidator(pg)
 
-	return &promoService {
+	return &promoService{
 		PromoDB: pv,
 	}
 }
@@ -74,7 +83,7 @@ func runPromosValFunc(promo *Promo, fns ...promoValFunc) error {
 }
 
 func newPromoValidator(pdb PromoDB) *promoValidator {
-	return &promoValidator {
+	return &promoValidator{
 		PromoDB: pdb,
 	}
 }
@@ -86,14 +95,15 @@ func (pv *promoValidator) validateLength(field string) promoValFunc {
 		var e error
 		min, max := 2, 100
 		switch field {
-			case "title":
-				s = promo.Title
-				e = ErrPromoTitleInvalid
-			case "description":
-				s = promo.Description
-				e = ErrPromoDescriptionInvalid
-				max = 500
-			default: break;
+		case "title":
+			s = promo.Title
+			e = ErrPromoTitleInvalid
+		case "description":
+			s = promo.Description
+			e = ErrPromoDescriptionInvalid
+			max = 500
+		default:
+			break
 		}
 
 		sLen := len(strings.TrimSpace(s))
@@ -146,10 +156,10 @@ func (pv *promoValidator) validateExpiresAt() promoValFunc {
 // Create will validate and and backfill data
 func (pv *promoValidator) Create(promo *Promo) (uint, error) {
 	err := runPromosValFunc(promo,
-	pv.validateLength("title"),
-	pv.validateLength("description"),
-	pv.discountBetween(),
-	pv.validateExpiresAt())
+		pv.validateLength("title"),
+		pv.validateLength("description"),
+		pv.discountBetween(),
+		pv.validateExpiresAt())
 
 	if err != nil {
 		return 0, err
@@ -161,12 +171,12 @@ func (pv *promoValidator) Create(promo *Promo) (uint, error) {
 // Update will validate update promo
 func (pv *promoValidator) Update(promo *Promo) error {
 	err := runPromosValFunc(promo,
-	pv.idGreaterThan(0),
-	pv.validateLength("title"),
-	pv.validateLength("brand"),
-	pv.validateLength("description"),
-	pv.discountBetween(),
-	pv.validateExpiresAt())
+		pv.idGreaterThan(0),
+		pv.validateLength("title"),
+		pv.validateLength("brand"),
+		pv.validateLength("description"),
+		pv.discountBetween(),
+		pv.validateExpiresAt())
 
 	if err != nil {
 		return err
@@ -174,7 +184,6 @@ func (pv *promoValidator) Update(promo *Promo) error {
 
 	return pv.PromoDB.Update(promo)
 }
-
 
 /****************************************************************/
 
@@ -201,17 +210,22 @@ func (pg *promoGorm) Create(promo *Promo) (uint, error) {
 
 // Update will update the releated promo with all of the data
 // in the provided promo object.
-func (pg *promoGorm) Update(promo *Promo) error {	
+func (pg *promoGorm) Update(promo *Promo) error {
 	return pg.db.Save(promo).Error
 }
-
 
 // Delete will delete the promo with the provided ID
 func (pg *promoGorm) Delete(id uint) error {
 	if id <= 0 {
 		return ErrIDInvalid
 	}
-	
+
 	promo := Promo{Model: gorm.Model{ID: id}}
 	return pg.db.Delete(&promo).Error
+}
+
+// FindRecomendations ...
+func (pg *promoGorm) FindRecomendations(history []*PromoFromHist) ([]*Promo, error) {
+	recomendations := make([]*Promo, 0)
+	return recomendations, nil
 }

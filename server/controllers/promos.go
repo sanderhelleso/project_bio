@@ -265,3 +265,48 @@ func (p *Promos) ByID(c *gin.Context) {
 		},
 	})
 }
+
+// FindRecomendations attempts to find matching and accurate
+// promotion recomendation based on the users previously
+// watched history of promotions
+//
+// METHOD: 	POST
+// ROUTE:	/promos/recomendations
+func (p *Promos) FindRecomendations(c *gin.Context) {
+
+	var t []*UpdatePromoForm
+
+	if c.Bind(&t) != nil {
+		response.RespondWithError(
+			c,
+			http.StatusUnprocessableEntity,
+			"Unable to process form data due to invalid format")
+		return
+	}
+
+	history := make([]*models.PromoFromHist, len(t))
+	for i, promo := range t {
+		history[i] = &models.PromoFromHist{
+			ID:       promo.ID,
+			Title:    promo.Title,
+			Category: promo.Category,
+		}
+	}
+
+	recomendations, err := p.ps.FindRecomendations(history)
+	if err != nil {
+		response.RespondWithError(
+			c,
+			http.StatusOK,
+			"Unable to find any recomendations based on the provided history.")
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Recomendations successfully fetched",
+		"status":  http.StatusOK,
+		"payload": gin.H{
+			"recomendations": recomendations,
+		},
+	})
+}
