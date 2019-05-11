@@ -123,18 +123,27 @@ func findRecomendations(db *gorm.DB, history []*PromoFromHist) ([]*Promo, error)
 	uniqueIds := make([]uint, 0)
 	uniqueIds = append(uniqueIds, history[0].ID)
 
+	// iterate over users history and find matches
 	for _, promo := range history {
 
-		if p, err := findRecomendation(db, promo, &uniqueIds); err == nil {
-			uniqueIds = append(uniqueIds, p.ID)
-			recomendations = append(recomendations, p)
+		// attempt to find matching
+		p, err := findRecomendation(db, promo, &uniqueIds)
+
+		// if unable to find, select random
+		if err != nil {
+			p, _ = findRandomRecomendation(db, &uniqueIds)
 		}
+
+		// add to map to preserve unique recomendations
+		uniqueIds = append(uniqueIds, p.ID)
+		recomendations = append(recomendations, p)
 	}
 
 	return recomendations, nil
 }
 
-// findCommentReply finds a comment replied to a given comments ID
+// findRecomendations finds a recomendation similar to a promo
+// the user previously watched based on their last viewed history
 func findRecomendation(db *gorm.DB, promo *PromoFromHist, uniqueIds *[]uint) (*Promo, error) {
 
 	var p Promo
@@ -149,15 +158,36 @@ func findRecomendation(db *gorm.DB, promo *PromoFromHist, uniqueIds *[]uint) (*P
 		}
 	}
 
+	where := fmt.Sprintf("category = ? AND lower(title) similar to '%%(%s)%%'", keywords)
+
 	query := db.
 		Table("promos").
 		Select("*").
 		Not(*uniqueIds).
-		Where(fmt.Sprintf("category = ? AND lower(title) similar to '%%(%s)%%'", keywords), promo.Category)
+		Where(where, promo.Category)
 
 	err := query.First(&p).Error
 
-	fmt.Println(err, keywords)
+	if err == gorm.ErrRecordNotFound {
+		return nil, ErrNotFound
+	}
+
+	return &p, nil
+}
+
+// findRandomRecomendation finds a random recomendation
+func findRandomRecomendation(db *gorm.DB, uniqueIds *[]uint) (*Promo, error) {
+
+	var p Promo
+
+	query := db.
+		Order(gorm.Expr("random()")).
+		Limit(1).
+		Table("promos").
+		Select("*").
+		Not(*uniqueIds)
+
+	err := query.First(&p).Error
 
 	if err == gorm.ErrRecordNotFound {
 		return nil, ErrNotFound
