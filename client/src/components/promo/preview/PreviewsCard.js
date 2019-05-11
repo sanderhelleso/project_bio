@@ -5,7 +5,9 @@ import Preview from './Preview';
 
 import { findRecomendations } from '../../../api/promo/recomendation';
 
-const PreviewsCard = () => {
+import { connect } from 'react-redux';
+
+const PreviewsCard = ({ history }) => {
 	const [ loading, setLoading ] = useState(true);
 	const [ recomendations, setRecomendations ] = useState([]);
 
@@ -16,7 +18,7 @@ const PreviewsCard = () => {
 	// attempt to find recomendations based on the users
 	// preivious viewed promotion history
 	const loadRecomendations = async () => {
-		const response = await findRecomendations();
+		const response = await findRecomendations(history);
 		if (response.status < 400) {
 			// todo...
 		}
@@ -49,7 +51,11 @@ const PreviewsCard = () => {
 	);
 };
 
-export default PreviewsCard;
+const mapStateToProps = ({ promosHistory: { history } }) => {
+	return { history };
+};
+
+export default connect(mapStateToProps, null)(PreviewsCard);
 
 const StyledHeader = styled.div`
 	margin-bottom: 4rem;
