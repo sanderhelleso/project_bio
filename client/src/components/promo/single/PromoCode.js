@@ -10,6 +10,7 @@ const PromoCode = ({ code }) => {
 	const { tooltip } = state;
 
 	const copyToClipboard = () => {
+		navigator.clipboard.writeText(code);
 		updateState({ tooltip: 'Copied! 👌' });
 		ReactTooltip.rebuild();
 
