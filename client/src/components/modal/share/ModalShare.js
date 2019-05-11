@@ -3,23 +3,40 @@ import styled from 'styled-components';
 import ModalShareAction from './ModalShareAction';
 
 const ModalShare = () => {
+	const URL = window.location.href;
+
+	// list of share actions
 	const actions = [
 		{
-			icon: 'facebook'
+			icon: 'facebook',
+			props: {
+				href: `http://www.facebook.com/sharer.php?u=${URL}`,
+				target: '_blank'
+			}
 		},
 		{
-			icon: 'twitter'
+			icon: 'twitter',
+			props: {
+				href: `https://twitter.com/share?url=${URL}`,
+				target: '_blank'
+			}
 		},
 		{
-			icon: 'mail'
+			icon: 'mail',
+			props: {
+				href: `mailto:?Subject=${URL}`
+			}
 		},
 		{
-			icon: 'copy'
+			icon: 'copy',
+			props: {
+				onClick: () => navigator.clipboard.writeText(URL)
+			}
 		}
 	];
 
 	const renderIcons = () => {
-		return actions.map((action) => <ModalShareAction icon={action.icon} />);
+		return actions.map((action) => <ModalShareAction {...action} />);
 	};
 
 	return (
@@ -50,4 +67,8 @@ const StyledCont = styled.div`
 const StyledIcons = styled.div`
 	text-align: center;
 	margin-top: 2rem;
+
+	@media screen and (max-width: 600px) {
+		margin-top: 4.5rem;
+	}
 `;

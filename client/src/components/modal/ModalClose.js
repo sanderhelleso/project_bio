@@ -12,8 +12,8 @@ export default ModalClose;
 
 const StyledIcon = styled.span`
 	position: absolute;
-	top: 5%;
-	right: 3%;
+	top: 1.25rem;
+	right: 1.25rem;
 	cursor: pointer;
 
 	svg {

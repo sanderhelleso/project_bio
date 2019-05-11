@@ -19,7 +19,7 @@ export default Modal;
 const StyledOverlay = styled.div`
 	animation: ${(props) => (props.active ? fadeIn : fadeOut)} 0.3s ease-in-out;
 	z-index: 100;
-	background-color: rgba(20, 20, 20, 0.7);
+	background-color: rgba(20, 20, 20, 0.8);
 	position: fixed;
 	top: 0;
 	left: 0;

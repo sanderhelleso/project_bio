@@ -1,18 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
 import FeatherIcon from 'feather-icons-react';
+import ReactTooltip from 'react-tooltip';
 
-const ModalShareAction = ({ action, icon }) => {
+const ModalShareAction = ({ props, icon }) => {
+	const id = `${icon}-tooltip`;
 	return (
-		<StyledAction>
-			<FeatherIcon icon={icon} />
+		<StyledAction {...props}>
+			<FeatherIcon icon={icon} data-tip={icon} data-for={id} />
+			<Tooltip id={id} place="bottom" type="dark" effect="solid" />
 		</StyledAction>
 	);
 };
 
 export default ModalShareAction;
 
-const StyledAction = styled.div`
+const StyledAction = styled.a`
 	display: inline-block;
 	svg {
 		stroke: #9e9e9e;
@@ -21,4 +24,14 @@ const StyledAction = styled.div`
 		margin: 1.5rem;
 		cursor: pointer;
 	}
+
+	@media screen and (max-width: 600px) {
+		display: block;
+	}
+`;
+
+const Tooltip = styled(ReactTooltip)`
+	text-align: center !important;
+	min-width: 100px !important;
+    text-transform: capitalize;
 `;
