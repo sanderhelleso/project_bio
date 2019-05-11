@@ -20,6 +20,14 @@ type Promo struct {
 	ExpiresAt   time.Time `json:"expires"`
 }
 
+// Recomendation represents a promo recomendation in the application
+type Recomendation struct {
+	ID          uint   `json:"promoID"`
+	Handle      string `json:"handle"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+}
+
 // PromoFromHist represents a promotion from a users viewed history
 type PromoFromHist struct {
 	ID       uint
@@ -37,7 +45,7 @@ type PromoDB interface {
 	Create(promo *Promo) (uint, error)
 	Update(promo *Promo) error
 	Delete(id uint) error
-	FindRecomendations(history []*PromoFromHist) ([]*Promo, error)
+	FindRecomendations(history []*PromoFromHist) ([]*Recomendation, error)
 	Seed()
 }
 
@@ -226,7 +234,7 @@ func (pg *promoGorm) Delete(id uint) error {
 }
 
 // FindRecomendations ...
-func (pg *promoGorm) FindRecomendations(history []*PromoFromHist) ([]*Promo, error) {
+func (pg *promoGorm) FindRecomendations(history []*PromoFromHist) ([]*Recomendation, error) {
 	recomendations, err := findRecomendations(pg.db, history)
 
 	if err != nil {
@@ -251,7 +259,7 @@ func (pg *promoGorm) Seed() {
 		}
 
 		pg.Create(promo)
-	}*/
+	}
 
 	promo1 := &Promo{
 		UserID:      1,
@@ -274,5 +282,5 @@ func (pg *promoGorm) Seed() {
 	}
 
 	pg.Create(promo1)
-	pg.Create(promo2)
+	pg.Create(promo2)*/
 }

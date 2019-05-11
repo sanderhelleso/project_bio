@@ -117,9 +117,9 @@ func findCommentReply(db *gorm.DB, id uint) (*PromoCommentWithUser, error) {
 }
 
 // findCommentReply finds a comment replied to a given comments ID
-func findRecomendations(db *gorm.DB, history []*PromoFromHist) ([]*Promo, error) {
+func findRecomendations(db *gorm.DB, history []*PromoFromHist) ([]*Recomendation, error) {
 
-	recomendations := make([]*Promo, 0)
+	recomendations := make([]*Recomendation, 0)
 	uniqueIds := make([]uint, 0)
 	uniqueIds = append(uniqueIds, history[0].ID)
 
@@ -131,7 +131,10 @@ func findRecomendations(db *gorm.DB, history []*PromoFromHist) ([]*Promo, error)
 
 		// if unable to find, select random
 		if err != nil {
-			p, _ = findRandomRecomendation(db, &uniqueIds)
+			p, err = findRandomRecomendation(db, &uniqueIds)
+			if err != nil {
+				continue
+			}
 		}
 
 		// add to map to preserve unique recomendations
@@ -144,9 +147,9 @@ func findRecomendations(db *gorm.DB, history []*PromoFromHist) ([]*Promo, error)
 
 // findRecomendations finds a recomendation similar to a promo
 // the user previously watched based on their last viewed history
-func findRecomendation(db *gorm.DB, promo *PromoFromHist, uniqueIds *[]uint) (*Promo, error) {
+func findRecomendation(db *gorm.DB, promo *PromoFromHist, uniqueIds *[]uint) (*Recomendation, error) {
 
-	var p Promo
+	var p Recomendation
 	var keywords string
 
 	cleaned := parser.CleanCommons(promo.Title)
@@ -158,11 +161,12 @@ func findRecomendation(db *gorm.DB, promo *PromoFromHist, uniqueIds *[]uint) (*P
 		}
 	}
 
-	where := fmt.Sprintf("category = ? AND lower(title) similar to '%%(%s)%%'", keywords)
+	where := fmt.Sprintf("promos.category = ? AND lower(title) similar to '%%(%s)%%'", keywords)
 
 	query := db.
 		Table("promos").
-		Select("*").
+		Select("promos.id, promos.title, promos.description, profiles.handle").
+		Joins("JOIN profiles ON profiles.id = promos.user_id").
 		Not(*uniqueIds).
 		Where(where, promo.Category)
 
@@ -176,15 +180,16 @@ func findRecomendation(db *gorm.DB, promo *PromoFromHist, uniqueIds *[]uint) (*P
 }
 
 // findRandomRecomendation finds a random recomendation
-func findRandomRecomendation(db *gorm.DB, uniqueIds *[]uint) (*Promo, error) {
+func findRandomRecomendation(db *gorm.DB, uniqueIds *[]uint) (*Recomendation, error) {
 
-	var p Promo
+	var p Recomendation
 
 	query := db.
 		Order(gorm.Expr("random()")).
 		Limit(1).
 		Table("promos").
-		Select("*").
+		Select("promos.id, promos.title, promos.description, profiles.handle").
+		Joins("JOIN profiles ON profiles.id = promos.user_id").
 		Not(*uniqueIds)
 
 	err := query.First(&p).Error

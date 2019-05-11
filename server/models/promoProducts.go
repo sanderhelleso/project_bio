@@ -1,8 +1,11 @@
 package models
 
 import (
+	"fmt"
+	"math/rand"
 	"net/url"
 	"strings"
+	"time"
 
 	"../lib/parser"
 	"github.com/jinzhu/gorm"
@@ -31,6 +34,7 @@ type PromoProductDB interface {
 	Create(promoProduct *PromoProduct) error
 	Update(promoProduct *PromoProduct) error
 	Delete(id uint) error
+	Seed()
 }
 
 // PromoProductService is a set of methods used to manipulate
@@ -229,4 +233,28 @@ func (ppg *promoProductGorm) Delete(id uint) error {
 
 	promoProduct := PromoProduct{Model: gorm.Model{ID: id}}
 	return ppg.db.Delete(&promoProduct).Error
+}
+
+// Seed creates test data for promo product
+func (ppg *promoProductGorm) Seed() {
+	for i := 2; i < 103; i++ {
+
+		// create between 1 - 3 products for eaach promotion
+		rand.Seed(time.Now().UnixNano())
+		n := rand.Intn(3-1) + 1
+
+		for j := 0; j < n; j++ {
+			p := &PromoProduct{
+				PromoID:  uint(i),
+				Name:     fmt.Sprintf("Product nr %d", j+1),
+				Brand:    "Wooble",
+				Link:     "https://golang.cafe/blog/golang-random-number-generator.html",
+				Image:    "https://www.tacobueno.com/assets/food/tacos/Taco_Crispy_Beef_990x725.jpg",
+				Price:    20,
+				Currency: "USD",
+			}
+
+			ppg.Create(p)
+		}
+	}
 }
