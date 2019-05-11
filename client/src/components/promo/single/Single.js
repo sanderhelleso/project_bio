@@ -6,6 +6,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import viewPromoAction from '../../../actions/promoActions/viewPromoAction';
+import addToHistoryAction from '../../../actions/promoHistoryActions/addToHistoryAction';
+
 import Container from '../../styles/Container';
 import PromoCard from './PromoCard';
 import Comments from '../comments/Comments';
@@ -14,7 +16,7 @@ import PromoLoader from './PromoLoader';
 import CommentsLoader from '../comments/CommentsLoader';
 import PreviewLoader from '../preview/PreviewLoader';
 
-const Single = ({ viewPromoAction, match: { params } }) => {
+const Single = ({ viewPromoAction, addToHistoryAction, match: { params } }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		loading: true,
 		error: false
@@ -28,7 +30,7 @@ const Single = ({ viewPromoAction, match: { params } }) => {
 			// attempt to load promo by the given handler and param ID
 			const { handle, id } = params;
 			const response = await getPromo(handle, id);
-			//console.log(response);
+			console.log(response);
 
 			// successfully found promotion
 			if (response.status > 400) {
@@ -38,10 +40,11 @@ const Single = ({ viewPromoAction, match: { params } }) => {
 				});
 			}
 
-			viewPromoAction({
-				...response.payload,
-				comments: [] //data
-			});
+			// set current viewing promo
+			viewPromoAction(response.payload);
+
+			// add promo to history queue
+			addToHistoryAction(response.payload.promo);
 
 			updateState({ loading: false });
 		}
@@ -80,7 +83,7 @@ const Single = ({ viewPromoAction, match: { params } }) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-	return bindActionCreators({ viewPromoAction }, dispatch);
+	return bindActionCreators({ viewPromoAction, addToHistoryAction }, dispatch);
 };
 
 export default connect(null, mapDispatchToProps)(Single);

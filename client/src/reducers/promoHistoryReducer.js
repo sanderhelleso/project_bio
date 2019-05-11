@@ -1,17 +1,21 @@
 import { ADD_TO_HISTORY } from '../actions/actionTypes';
 
-import Queue from '../lib/queue';
-
-const LEN = 5;
-const initialState = { history: new Queue(LEN) };
+const MAX_LEN = 5;
+const initialState = { history: [] };
 
 export default (state = initialState, action) => {
 	switch (action.type) {
 		case ADD_TO_HISTORY: {
-			state.history.add(action.payload);
+			const history = state.history;
+			if (history.length + 1 > MAX_LEN) {
+				history.pop();
+			}
+
+			history.unshift(action.payload);
+
 			return {
 				...state,
-				history: state.history.makeCopy(state.history)
+				history
 			};
 		}
 
