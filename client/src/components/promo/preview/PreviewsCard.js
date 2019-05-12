@@ -20,10 +20,10 @@ const PreviewsCard = ({ history }) => {
 	const loadRecomendations = async () => {
 		const response = await findRecomendations(history);
 		if (response.status < 400) {
-			// todo...
+			setRecomendations(response.payload);
 		}
 
-		console.log(response);
+		console.log(response.payload);
 		setLoading(false);
 	};
 
@@ -31,7 +31,7 @@ const PreviewsCard = ({ history }) => {
 		if (loading) return <p>Loading...</p>;
 		if (!recomendations.length) return null;
 
-		return recomendations.map((rec, i) => <Preview key={i} />);
+		return recomendations.map((rec, i) => <Preview {...rec} key={i} />);
 	};
 
 	return (
@@ -39,14 +39,7 @@ const PreviewsCard = ({ history }) => {
 			<StyledHeader>
 				<h2>Similar promotions</h2>
 			</StyledHeader>
-			<StyledCont>
-				{renderRecommendations()}
-				<Preview />
-				<Preview />
-				<Preview />
-				<Preview />
-				<Preview />
-			</StyledCont>
+			<StyledCont>{renderRecommendations()}</StyledCont>
 		</PreviewsCardSingle>
 	);
 };

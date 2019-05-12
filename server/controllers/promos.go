@@ -316,8 +316,6 @@ func (p *Promos) FindRecomendations(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Recomendations successfully fetched",
 		"status":  http.StatusOK,
-		"payload": gin.H{
-			"recomendations": recomendations,
-		},
+		"payload":  recomendations,
 	})
 }

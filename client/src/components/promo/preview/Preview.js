@@ -6,7 +6,7 @@ import { Button, FlatButton } from '../../styles/Button';
 import PreviewImage from './PreviewImage';
 import PreviewImages from './PreviewImages';
 
-const Preview = () => {
+const Preview = ({ promoID, title, description, avatar, handle, previews }) => {
 	const data = {
 		title: 'Taco Sale',
 		images: [
@@ -20,8 +20,8 @@ const Preview = () => {
 
 	return (
 		<PreviewCard>
-			<PreviewInfo title={data.title} description={data.description} />
-			<PreviewImages images={data.images} />
+			<PreviewInfo title={title} description={description} />
+			<PreviewImages images={previews.map((p) => p.image)} />
 			<Button size="small">See Promo</Button>
 		</PreviewCard>
 	);
