@@ -17,5 +17,5 @@ export default styled.div`
 	}
 
 	margin: 0 auto;
-	animation: ${fadeIn} 0.5s ease-in-out;
+	animation: ${fadeIn} 0.7s ease-in-out;
 `;

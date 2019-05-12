@@ -16,13 +16,19 @@ import PromoLoader from './PromoLoader';
 import CommentsLoader from '../comments/CommentsLoader';
 import PreviewLoader from '../preview/PreviewLoader';
 
-const Single = ({ viewPromoAction, addToHistoryAction, match: { params } }) => {
+import { withRouter } from 'react-router-dom';
+
+const Single = ({ viewPromoAction, addToHistoryAction, match: { params }, history, location }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		loading: true,
 		error: false
 	});
 
 	const { loading, error } = state;
+
+	const back = () => {
+		window.onpopstate = () => history.go(1);
+	};
 
 	useEffect(() => {
 		// TODO: check if same promo is already loaded
@@ -48,7 +54,9 @@ const Single = ({ viewPromoAction, addToHistoryAction, match: { params } }) => {
 
 			updateState({ loading: false });
 		}
+
 		loadPromo();
+		window.onpopstate = back;
 	}, []);
 
 	const renderPromo = () => {
@@ -86,7 +94,7 @@ const mapDispatchToProps = (dispatch) => {
 	return bindActionCreators({ viewPromoAction, addToHistoryAction }, dispatch);
 };
 
-export default connect(null, mapDispatchToProps)(Single);
+export default connect(null, mapDispatchToProps)(withRouter(Single));
 
 const StyledPromoGrid = styled.div`
 	display: grid;

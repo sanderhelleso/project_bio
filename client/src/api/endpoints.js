@@ -12,6 +12,7 @@ const ENDPOINTS = {
 	findRecomendations: 'promos/recomendations',
 
 	// dynamic endpoints with params
+	getHandle: (handle) => `profiles/${handle}`,
 	getPromo: (handle, id) => `promos/${handle}/${id}`,
 	getPromos: (handle) => `promos/${handle}`,
 	getComments: (id) => `comments/${id}`,

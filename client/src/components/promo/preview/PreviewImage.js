@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import Lightbox from 'react-image-lightbox';
 
-const PreviewImage = ({ image, zindex, i }) => (
-	<StyledImage zindex={zindex} i={i}>
-		<img src={`http://localhost:5000/${image}`} onError={(e) => (e.target.src = image)} />
-	</StyledImage>
-);
+const PreviewImage = ({ image, zindex, i }) => {
+	const [ isOpen, modifyLightbox ] = useState(false);
+	const [ imageSrc, setImageSrc ] = useState(`http://localhost:5000/${image}`);
+
+	return (
+		<StyledImage zindex={zindex} i={i}>
+			<img src={imageSrc} onClick={() => modifyLightbox(!isOpen)} onError={() => setImageSrc(image)} />
+			{isOpen && <Lightbox mainSrc={imageSrc} onCloseRequest={() => modifyLightbox(!isOpen)} />}
+		</StyledImage>
+	);
+};
 
 export default PreviewImage;
 
@@ -16,6 +23,7 @@ const StyledImage = styled.div`
 	margin-left: ${(props) => (props.i === 0 ? 0 : props.i * 2.5)}rem;
 
 	img {
+		cursor: pointer;
 		max-height: 3.5rem;
 		max-width: 3.5rem;
 		min-height: 3.5rem;
