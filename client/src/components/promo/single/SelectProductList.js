@@ -12,11 +12,11 @@ const SelectProductList = ({ products, active, updateState }) => {
 	return (
 		<StyledList>
 			{renderProducts().map((product, id) => {
-				if (product === -1) return <SelectProductPlaceholder key={Math.random()} />;
+				if (product === -1) return <SelectProductPlaceholder key={id * 2} />;
 
 				return (
 					<li
-						key={product.image}
+						key={id}
 						onClick={() =>
 							updateState({
 								active: {

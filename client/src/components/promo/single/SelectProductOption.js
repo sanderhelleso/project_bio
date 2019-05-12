@@ -7,7 +7,7 @@ const SelectProductOption = ({ product, active }) => {
 	return (
 		<Fragment>
 			<StyledOption data-tip={product.name} data-for={product.name} active={active}>
-				<img src={`http://localhost:5000/${product.image}`} />
+				<img src={`http://localhost:5000/${product.image}`} onError={(e) => (e.target.src = product.image)} />
 			</StyledOption>
 			<ReactTooltip id={product.name} place="right" type="dark" effect="solid" />
 		</Fragment>
@@ -32,8 +32,8 @@ const StyledOption = styled.div`
 	img {
 		width: 100%;
 		height: 100%;
+		min-height: 4.8rem;
 		object-fit: cover;
-		border-radius: 50%;
 	}
 
 	@media screen and (max-width: 600px) {

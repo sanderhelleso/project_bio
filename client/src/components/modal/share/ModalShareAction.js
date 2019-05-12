@@ -23,6 +23,11 @@ const StyledAction = styled.a`
 		width: 3.05rem;
 		margin: 1.5rem;
 		cursor: pointer;
+		transition: 0.3s ease-in-out;
+
+		&:hover {
+			stroke: ${(props) => props.color};
+		}
 	}
 
 	@media screen and (max-width: 600px) {

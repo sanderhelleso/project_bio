@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"bytes"
+	"encoding/binary"
 	"fmt"
 	"math"
 	"net/http"
@@ -9,10 +11,9 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
-	"bytes"
-	"encoding/binary"
 	"time"
 
+	"github.com/bbalet/stopwords"
 	"github.com/gin-gonic/gin"
 )
 
@@ -33,7 +34,7 @@ func IntToStrBytes(n int) []byte {
 func MakeIntBytes(n int) []byte {
 	buffer := new(bytes.Buffer)
 	_ = binary.Write(buffer, binary.LittleEndian, n)
-	
+
 	return buffer.Bytes()
 }
 
@@ -134,5 +135,11 @@ func takeArg(arg interface{}, kind reflect.Kind) (val reflect.Value, ok bool) {
 
 // TsToTime converts a int64 timetamp to time format
 func TsToTime(ts int64) time.Time {
-	return time.Unix(ts / 1000, 0)
+	return time.Unix(ts/1000, 0)
+}
+
+// CleanCommons removes stop words from a string
+// and returns a list of remaining words
+func CleanCommons(s string) []string {
+	return strings.Split(stopwords.CleanString(strings.TrimSpace(s), "en", false), " ")
 }

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const PreviewImage = ({ image, zindex, i }) => (
 	<StyledImage zindex={zindex} i={i}>
-		<img src={`http://localhost:5000/${image}`} />
+		<img src={`http://localhost:5000/${image}`} onError={(e) => (e.target.src = image)} />
 	</StyledImage>
 );
 

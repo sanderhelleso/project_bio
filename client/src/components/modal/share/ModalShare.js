@@ -11,32 +11,36 @@ const ModalShare = () => {
 			icon: 'facebook',
 			props: {
 				href: `http://www.facebook.com/sharer.php?u=${URL}`,
-				target: '_blank'
+				target: '_blank',
+				color: '#3C5A99'
 			}
 		},
 		{
 			icon: 'twitter',
 			props: {
 				href: `https://twitter.com/share?url=${URL}`,
-				target: '_blank'
+				target: '_blank',
+				color: '#38A1F3'
 			}
 		},
 		{
 			icon: 'mail',
 			props: {
-				href: `mailto:?Subject=${URL}`
+				href: `mailto:?Subject=${URL}`,
+				color: '#BD081C'
 			}
 		},
 		{
 			icon: 'copy',
 			props: {
-				onClick: () => navigator.clipboard.writeText(URL)
+				onClick: () => navigator.clipboard.writeText(URL),
+				color: '#757575'
 			}
 		}
 	];
 
 	const renderIcons = () => {
-		return actions.map((action) => <ModalShareAction {...action} />);
+		return actions.map((action) => <ModalShareAction key={action.icon} {...action} />);
 	};
 
 	return (

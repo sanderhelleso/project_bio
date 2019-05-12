@@ -1,6 +1,9 @@
 package models
 
 import (
+	"fmt"
+
+	"../lib/parser"
 	"github.com/jinzhu/gorm"
 )
 
@@ -86,7 +89,7 @@ func findCommentsAndUser(db *gorm.DB, id, offset, limit uint) ([]*PromoCommentWi
 
 	// check if comment has a reply, if found - add to model
 	for _, comment := range comments {
-		if reply, err := findCommentReply(db, comment.ID); err == nil  {
+		if reply, err := findCommentReply(db, comment.ID); err == nil {
 			comment.Reply = reply
 		}
 	}
@@ -111,4 +114,108 @@ func findCommentReply(db *gorm.DB, id uint) (*PromoCommentWithUser, error) {
 	}
 
 	return &reply, nil
+}
+
+// findCommentReply finds a comment replied to a given comments ID
+func findRecomendations(db *gorm.DB, history []*PromoFromHist) ([]*Recomendation, error) {
+
+	recomendations := make([]*Recomendation, 0)
+	uniqueIds := make([]uint, 0)
+	uniqueIds = append(uniqueIds, history[0].ID)
+
+	// iterate over users history and find matches
+	for _, promo := range history {
+
+		// attempt to find matching
+		p, err := findRecomendation(db, promo, &uniqueIds)
+
+		// if unable to find, select random
+		if err != nil {
+			p, err = findRandomRecomendation(db, &uniqueIds)
+			if err != nil {
+				continue
+			}
+		}
+
+		// add to map to preserve unique recomendations
+		uniqueIds = append(uniqueIds, p.ID)
+		recomendations = append(recomendations, p)
+	}
+
+	return recomendations, nil
+}
+
+// findRecomendations finds a recomendation similar to a promo
+// the user previously watched based on their last viewed history
+func findRecomendation(db *gorm.DB, promo *PromoFromHist, uniqueIds *[]uint) (*Recomendation, error) {
+
+	var p Recomendation
+	var keywords string
+
+	cleaned := parser.CleanCommons(promo.Title)
+	for i, word := range cleaned {
+		if i < len(cleaned)-2 {
+			keywords += fmt.Sprintf("%s|", word)
+		} else {
+			keywords += fmt.Sprintf("%s", word)
+		}
+	}
+
+	where := fmt.Sprintf("promos.category = ? AND lower(title) similar to '%%(%s)%%'", keywords)
+
+	query := db.
+		Table("promos").
+		Select("promos.id, promos.title, promos.description, profiles.handle, profiles.avatar").
+		Joins("JOIN profiles ON profiles.id = promos.user_id").
+		Not(*uniqueIds).
+		Where(where, promo.Category)
+
+	err := query.First(&p).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return nil, ErrNotFound
+	}
+
+	return &p, nil
+}
+
+// findRandomRecomendation finds a random recomendation
+func findRandomRecomendation(db *gorm.DB, uniqueIds *[]uint) (*Recomendation, error) {
+
+	var p Recomendation
+
+	query := db.
+		Order(gorm.Expr("random()")).
+		Limit(1).
+		Table("promos").
+		Select("promos.id, promos.title, promos.description, profiles.handle, profiles.avatar").
+		Joins("JOIN profiles ON profiles.id = promos.user_id").
+		Not(*uniqueIds)
+
+	err := query.First(&p).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return nil, ErrNotFound
+	}
+
+	return &p, nil
+}
+
+// findProductsPreviews finds a promos products images
+func findProductsPreview(db *gorm.DB, id uint) ([]*PromoProduct, error) {
+
+	var previews []*PromoProduct
+
+	query := db.
+		Table("promo_products").
+		Select("image").
+		Where("promo_id = ?", id)
+
+	err := query.Find(&previews).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return nil, ErrNotFound
+	}
+
+	return previews, nil
 }

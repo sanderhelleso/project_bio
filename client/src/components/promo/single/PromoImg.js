@@ -5,12 +5,12 @@ import Lightbox from 'react-image-lightbox';
 import { fadeIn } from '../../styles/Keyframes';
 
 const PromoImg = ({ image }) => {
-	const imageSrc = `http://localhost:5000/${image}`;
 	const [ isOpen, modifyLightbox ] = useState(false);
+	const [ imageSrc, setImageSrc ] = useState(`http://localhost:5000/${image}`);
 
 	return (
 		<StyledImgCont>
-			<img src={imageSrc} onClick={() => modifyLightbox(!isOpen)} />
+			<img src={imageSrc} onClick={() => modifyLightbox(!isOpen)} onError={() => setImageSrc(image)} />
 			<span className="no-select">
 				<FeaterIcons icon="zoom-in" /> Click image to enlarge
 			</span>
