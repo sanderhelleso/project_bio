@@ -10,7 +10,7 @@ const PromoImg = ({ image }) => {
 
 	return (
 		<StyledImgCont>
-			<img src={imageSrc} onClick={() => modifyLightbox(!isOpen)} />
+			<img src={imageSrc} onError={(e) => (e.target.src = image)} onClick={() => modifyLightbox(!isOpen)} />
 			<span className="no-select">
 				<FeaterIcons icon="zoom-in" /> Click image to enlarge
 			</span>
