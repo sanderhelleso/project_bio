@@ -45,7 +45,7 @@ const FavoritePromo = ({ userID, ID }) => {
 
 	return (
 		<span className="no-select" disabled={loading} onClick={() => favoriteAction()}>
-			<Favorite favorited={favorited} message={favorited ? 'Unfavorite' : 'Favorite'} />
+			{!loading && <Favorite favorited={favorited} message={favorited ? 'Unfavorite' : 'Favorite'} />}
 		</span>
 	);
 };

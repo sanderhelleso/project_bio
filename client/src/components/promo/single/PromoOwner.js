@@ -10,9 +10,10 @@ const PromoOwner = ({ avatar, handle, postedAt, history }) => (
 	<StyledOwnerCont>
 		<img
 			src={`http://localhost:5000/${avatar || 'images/avatars/default.jpg'}`}
+			alt={`${handle}'s avatar`}
 			onClick={() => history.push(`/${handle}`)}
 		/>
-		<span>
+		<span id="handle" onClick={() => history.push(`/${handle}`)}>
 			<span>{tsToDate(postedAt)}</span>
 			{handle}
 		</span>
@@ -29,6 +30,10 @@ const StyledOwnerCont = styled.div`
 	display: grid;
 	grid-template-columns: 3rem 85%;
 	margin-bottom: 2rem;
+
+	#handle {
+		cursor: pointer;
+	}
 
 	img {
 		min-width: 2.35rem;

@@ -1,6 +1,7 @@
 const ENDPOINTS = {
 	login: 'users/login',
 	profileByID: 'profiles/get',
+	profileByHandle: 'profiles/handle',
 	newProfile: 'profiles/new',
 	uploadAvatar: 'profiles/avatar',
 	createPromo: 'promos/new',

@@ -3,11 +3,12 @@ package controllers
 import (
 	"net/http"
 
+	"fmt"
+
 	"../lib/parser"
 	"../lib/response"
 	"../models"
 	"github.com/gin-gonic/gin"
-	"fmt"
 )
 
 // ProfileForm represents the request body to the endpoint /new and /update
@@ -108,7 +109,7 @@ func (p *Profiles) AvatarUpload(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusCreated,
 		"message": "Avatar successfully uploaded!",
-		"payload": gin.H {
+		"payload": gin.H{
 			"avatar": avatar,
 		},
 	})
@@ -143,7 +144,35 @@ func (p *Profiles) ByUserID(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
 		"message": "Profile successfully fetched!",
-		"payload": gin.H {
+		"payload": gin.H{
+			"profile": profile,
+		},
+	})
+}
+
+// ByHandle fetches the profile data for a user
+// matching the provided handle
+func (p *Profiles) ByHandle(c *gin.Context) {
+
+	// fetch required params
+	q := c.Request.URL.Query()
+	handle := q["handle"][0] // handle of profile
+
+	// attempt to load profile with provided handle
+	profile, err := p.ps.ByHandle(handle)
+
+	if err != nil {
+		response.RespondWithError(
+			c,
+			http.StatusNotFound,
+			fmt.Sprintf("Could not find any profiles with the handle: %s", handle))
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  http.StatusOK,
+		"message": "Profile successfully fetched!",
+		"payload": gin.H{
 			"profile": profile,
 		},
 	})

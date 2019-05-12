@@ -9,7 +9,7 @@ import { withRouter } from 'react-router-dom';
 const Preview = ({ promoID, title, description, avatar, handle, previews, history }) => {
 	return (
 		<PreviewCard>
-			<PreviewInfo title={title} description={description} />
+			<PreviewInfo title={title} description={description} avatar={avatar} handle={handle} />
 			<PreviewImages images={previews.map((p) => p.image)} />
 			<Button
 				size="small"
