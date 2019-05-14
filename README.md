@@ -8,7 +8,7 @@ Project Bio is a platform currently in development, serving as a "middleman" for
 <img src="https://github.com/sanderhelleso/project_bio/blob/master/screenshots/newProfile.jpg" />
 
 ## Status
-In development
+In active development
 
 ## Copyright
 Sander Hellesø
