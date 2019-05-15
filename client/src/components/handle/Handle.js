@@ -2,16 +2,19 @@ import React, { useReducer, useEffect } from 'react';
 
 import { getHandle } from '../../api/handle/handle';
 
+import Container from '../styles/Container';
+import ProfileInfo from './ProfileInfo';
+
 import { withRouter } from 'react-router-dom';
 
 const Handle = ({ match: { params } }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		loading: true,
 		error: false,
-		data: null
+		profile: null
 	});
 
-	const { loading, error, data } = state;
+	const { loading, error, profile } = state;
 	const { handle } = params;
 
 	useEffect(() => {
@@ -20,11 +23,13 @@ const Handle = ({ match: { params } }) => {
 
 	const loadHandle = async () => {
 		const response = await getHandle(handle);
+		console.log(response);
+
 		if (response.status < 400) {
+			return updateState({ loading: false, profile: response.payload });
 		}
 
-		updateState({ loading: false, error: response.status > 400 });
-		console.log(response);
+		updateState({ loading: false, error: response.message });
 	};
 
 	const renderHandle = () => {
@@ -33,13 +38,13 @@ const Handle = ({ match: { params } }) => {
 		}
 
 		if (error) {
-			return <p>Unable to fetch</p>;
+			return <p>{error}</p>;
 		}
 
-		return <p>Fetched</p>;
+		return <ProfileInfo {...profile} />;
 	};
 
-	return renderHandle();
+	return <Container max={70}>{renderHandle()}</Container>;
 };
 
 export default withRouter(Handle);
