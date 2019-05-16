@@ -6,6 +6,7 @@ import { getHandle } from '../../api/handle/handle';
 import { mainGridStyles, HandleProfileCard, HandleRecentPromoCard, HandleSeeMorePromosCard } from '../styles/Card';
 import Container from '../styles/Container';
 import ProfileInfo from './profile/ProfileInfo';
+import Interact from './interact/Interact';
 
 import { withRouter } from 'react-router-dom';
 
@@ -50,7 +51,10 @@ const Handle = ({ match: { params } }) => {
 		<Container max={85}>
 			<StyledHandleGrid>
 				<HandleRecentPromoCard />
-				<HandleProfileCard>{renderHandle()}</HandleProfileCard>
+				<HandleProfileCard>
+					{renderHandle()}
+					<Interact />
+				</HandleProfileCard>
 				<HandleSeeMorePromosCard />
 			</StyledHandleGrid>
 		</Container>
