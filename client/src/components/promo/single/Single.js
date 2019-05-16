@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import viewPromoAction from '../../../actions/promoActions/viewPromoAction';
 import addToHistoryAction from '../../../actions/promoHistoryActions/addToHistoryAction';
 
+import { mainGridStyles } from '../../styles/Card';
 import Container from '../../styles/Container';
 import PromoCard from './PromoCard';
 import Comments from '../comments/Comments';
@@ -97,14 +98,8 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(null, mapDispatchToProps)(withRouter(Single));
 
 const StyledPromoGrid = styled.div`
-	display: grid;
+	${mainGridStyles};
 	grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-	grid-row-gap: 4rem;
-	grid-column-gap: 3rem;
-	margin-bottom: 3rem;
-	min-height: 90vh;
-	margin-top: 5rem;
-	margin-bottom: 5rem;
 
 	/* prettier-ignore */
 	grid-template-areas:
