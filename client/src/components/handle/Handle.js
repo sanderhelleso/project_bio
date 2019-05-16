@@ -5,7 +5,7 @@ import { getHandle } from '../../api/handle/handle';
 
 import { mainGridStyles, HandleProfileCard, HandleRecentPromoCard, HandleSeeMorePromosCard } from '../styles/Card';
 import Container from '../styles/Container';
-import ProfileInfo from './ProfileInfo';
+import ProfileInfo from './profile/ProfileInfo';
 
 import { withRouter } from 'react-router-dom';
 
