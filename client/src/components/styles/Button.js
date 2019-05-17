@@ -66,11 +66,13 @@ export const Button = styled.button`
 `;
 
 export const FlatButton = styled.button`
-	${buttonStyles} background-color: #bdbdbd;
+	${buttonStyles};
 	color: #616161;
 	font-size: ${(props) => (props.size === 'small' ? 0.7 : 0.9)}rem;
 	min-width: ${(props) => (props.size === 'small' ? 125 : 225)}px;
 	min-height: ${(props) => (props.size === 'small' ? 35 : 55)}px;
+	background-color: ${(props) => (props.transparent ? 'transparent' : '#bdbdbd')};
+	border: ${(props) => (props.border ? '1px solid #9e9e9e' : 'none')};
 
 	&:disabled {
 		${disabledStyles};

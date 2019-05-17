@@ -2,16 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import { FlatButton, Button } from '../../styles/Button';
 
-const Connect = () => {
+const Follow = () => {
 	return (
-		<StyledConnect>
+		<StyledFollow>
 			<Button size="small" transparent={true} border={true}>
-				Connect
+				Follow
 			</Button>
-		</StyledConnect>
+		</StyledFollow>
 	);
 };
 
-export default Connect;
+export default Follow;
 
-const StyledConnect = styled.div`grid-area: connect;`;
+const StyledFollow = styled.div`grid-area: follow;`;
