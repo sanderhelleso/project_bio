@@ -12,17 +12,14 @@ const ProfileImg = ({ avatar }) => {
 export default ProfileImg;
 
 const StyledImgCont = styled.div`
-	float: left;
-	margin-right: 1.25rem;
-
 	img {
 		object-fit: cover;
-		min-height: 70px;
-		min-width: 70px;
-		max-height: 70px;
-		max-width: 70px;
+		min-height: 60px;
+		min-width: 60px;
+		max-height: 60px;
+		max-width: 60px;
 
 		border-radius: 50%;
-		box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+		box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.10);
 	}
 `;

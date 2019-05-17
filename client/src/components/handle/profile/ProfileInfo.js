@@ -15,4 +15,4 @@ const ProfileInfo = ({ handle, avatar, name, bio }) => {
 
 export default ProfileInfo;
 
-const StyledProfileCont = styled.div`margin-top: 10vh;`;
+const StyledProfileCont = styled.div`text-align: center;`;

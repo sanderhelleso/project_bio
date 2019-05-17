@@ -12,6 +12,20 @@ const promoCardStyles = `
 	padding: 2rem 0;
 `;
 
+const handleCardStyles = `
+	padding: 3rem;
+`;
+
+export const mainGridStyles = `
+	display: grid;
+	grid-row-gap: 4rem;
+	grid-column-gap: 3rem;
+	margin-bottom: 3rem;
+	min-height: 90vh;
+	margin-top: 5rem;
+	margin-bottom: 5rem;
+`;
+
 export const PromoCardSingle = styled.div`
 	${cardStyles};
 	${promoCardStyles};
@@ -111,4 +125,26 @@ export const PreviewCard = styled.div`
 	}
 
 	border-bottom: 1px solid #eeeeee;
+`;
+
+export const HandleProfileCard = styled.div`
+	${cardStyles};
+	${handleCardStyles};
+	padding-bottom: 0.5rem;
+	display: grid;
+	grid-area: profile;
+`;
+
+export const HandleRecentPromoCard = styled.div`
+	${cardStyles};
+	${handleCardStyles};
+	display: grid;
+	grid-area: recentPromo;
+`;
+
+export const HandleSeeMorePromosCard = styled.div`
+	${cardStyles};
+	${handleCardStyles};
+	display: grid;
+	grid-area: seeMorePromos;
 `;
