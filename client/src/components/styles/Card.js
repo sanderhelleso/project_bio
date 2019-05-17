@@ -13,7 +13,7 @@ const promoCardStyles = `
 `;
 
 const handleCardStyles = `
-	padding: 3rem 2rem;
+	padding: 3rem;
 `;
 
 export const mainGridStyles = `
@@ -130,6 +130,7 @@ export const PreviewCard = styled.div`
 export const HandleProfileCard = styled.div`
 	${cardStyles};
 	${handleCardStyles};
+	padding-bottom: 0.5rem;
 	display: grid;
 	grid-area: profile;
 `;

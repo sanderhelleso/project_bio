@@ -24,7 +24,7 @@ const StyledInteractCont = styled.div`
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 	grid-row-gap: 1rem;
-	grid-column-gap: 1rem;
+	grid-column-gap: 1.25rem;
 
 	button {
 		min-width: 100%;

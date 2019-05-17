@@ -6,7 +6,10 @@ const ProfileDetails = ({ handle, name, bio }) => {
 		<StyledInfoCont>
 			<span>{name}</span>
 			<h5>{handle}</h5>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum porta pharetra</p>
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum porta pharetra.Lorem ipsum dolor sit
+				amet, consectetur adipiscing elit. Vestibulum porta.
+			</p>
 		</StyledInfoCont>
 	);
 };
@@ -28,7 +31,7 @@ const StyledInfoCont = styled.div`
 	}
 
 	p {
-		font-size: 0.75rem;
+		font-size: 0.7rem;
 		margin-top: 1.25rem;
 		margin-bottom: 0;
 	}
