@@ -44,21 +44,21 @@ const Handle = ({ match: { params } }) => {
 			return <p>{error}</p>;
 		}
 
-		return <ProfileInfo {...profile} />;
+		return (
+			<Container max={85}>
+				<StyledHandleGrid>
+					<HandleRecentPromoCard />
+					<HandleProfileCard>
+						<ProfileInfo {...profile} />
+						<Interact />
+					</HandleProfileCard>
+					<HandleSeeMorePromosCard />
+				</StyledHandleGrid>
+			</Container>
+		);
 	};
 
-	return (
-		<Container max={85}>
-			<StyledHandleGrid>
-				<HandleRecentPromoCard />
-				<HandleProfileCard>
-					{renderHandle()}
-					<Interact />
-				</HandleProfileCard>
-				<HandleSeeMorePromosCard />
-			</StyledHandleGrid>
-		</Container>
-	);
+	return renderHandle();
 };
 
 export default withRouter(Handle);

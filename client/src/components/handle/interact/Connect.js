@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FlatButton, Button } from '../../styles/Button';
+import { Button } from '../../styles/Button';
 
 const Connect = () => {
 	return (
 		<StyledConnect>
-			<Button size="small" transparent={true} border={true}>
+			<Button size="small" border={true}>
 				Connect
 			</Button>
 		</StyledConnect>
