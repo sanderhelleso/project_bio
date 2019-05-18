@@ -8,6 +8,13 @@ const Follow = () => {
 	const [ following, setFollowing ] = useState(false);
 	const [ loading, setLoading ] = useState(false);
 
+	const sharedBtnProps = {
+		size: 'small',
+		border: true,
+		disabled: loading,
+		onClick: () => followAction()
+	};
+
 	const followAction = async () => {
 		setLoading(true);
 
@@ -20,17 +27,13 @@ const Follow = () => {
 	const renderButton = () => {
 		if (following) {
 			return (
-				<FlatButton size="small" transparent={true} border={true} onClick={() => followAction()}>
+				<FlatButton {...sharedBtnProps} transparent={true}>
 					Following
 				</FlatButton>
 			);
 		}
 
-		return (
-			<Button size="small" border={true} onClick={() => followAction()}>
-				Follow
-			</Button>
-		);
+		return <Button {...sharedBtnProps}>Follow</Button>;
 	};
 
 	return <StyledFollow>{renderButton()}</StyledFollow>;
