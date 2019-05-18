@@ -3,7 +3,7 @@ import API from '../api';
 
 export async function follow(data) {
 	try {
-		const response = await API.post(ENDPOINTS.unfollowProfile, data);
+		const response = await API.post(ENDPOINTS.followProfile, data);
 		return response.data;
 	} catch (error) {
 		console.log(error.response);
