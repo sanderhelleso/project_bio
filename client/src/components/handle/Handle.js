@@ -10,7 +10,12 @@ import Interact from './interact/Interact';
 
 import { withRouter } from 'react-router-dom';
 
-const Handle = ({ match: { params } }) => {
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+import viewProfileAction from '../../actions/profileActions/viewProfileAction';
+
+const Handle = ({ viewProfileAction, match: { params } }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		loading: true,
 		error: false,
@@ -29,6 +34,9 @@ const Handle = ({ match: { params } }) => {
 		console.log(response);
 
 		if (response.status < 400) {
+			// set currently watching profile
+			viewProfileAction(response.payload);
+
 			return updateState({ loading: false, profile: response.payload });
 		}
 
@@ -61,7 +69,11 @@ const Handle = ({ match: { params } }) => {
 	return renderHandle();
 };
 
-export default withRouter(Handle);
+const mapDispatchToProps = (dispatch) => {
+	return bindActionCreators({ viewProfileAction }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(withRouter(Handle));
 
 const StyledHandleGrid = styled.div`
 	${mainGridStyles};
