@@ -54,6 +54,7 @@ export const Button = styled.button`
 	font-size: ${(props) => (props.size === 'small' ? 0.7 : 0.9)}rem;
 	min-width: ${(props) => (props.size === 'small' ? 125 : 225)}px;
 	min-height: ${(props) => (props.size === 'small' ? 35 : 55)}px;
+	border: ${(props) => (props.border ? `1px solid ${props.theme.primaryColor}` : 'none')};
 
 	&:hover {
 		opacity: 0.8;
