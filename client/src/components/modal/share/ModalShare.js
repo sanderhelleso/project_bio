@@ -55,13 +55,6 @@ const ModalShare = () => {
 export default ModalShare;
 
 const StyledCont = styled.div`
-	padding: 2rem;
-
-	h5 {
-		margin: 0;
-		font-size: 1.5rem;
-	}
-
 	p {
 		font-size: 0.9rem;
 		color: #757575;
