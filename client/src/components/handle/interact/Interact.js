@@ -4,11 +4,17 @@ import styled from 'styled-components';
 import Follow from './Follow';
 import Connect from './Connect';
 
-const Interact = () => {
+import { connect } from 'react-redux';
+
+const Interact = ({ userID, userFollowingID }) => {
+	// if ids are the same, we disallow some features like following urself
+	// aswell as modifying the grid layout to accomendate the changes in the layout
+	const isSame = userID === userFollowingID;
+
 	return (
 		<div>
-			<StyledInteractCont>
-				<Follow />
+			<StyledInteractCont isSame={isSame}>
+				{!isSame && <Follow {...{ userID, userFollowingID }} />}
 				<Connect />
 			</StyledInteractCont>
 			<StyledSeeAllCont>
@@ -18,10 +24,14 @@ const Interact = () => {
 	);
 };
 
-export default Interact;
+const mapStateToProps = ({ profile }) => {
+	return { userID: profile.viewing.userID, userFollowingID: profile.userID };
+};
+
+export default connect(mapStateToProps, null)(Interact);
 
 const StyledInteractCont = styled.div`
-	display: grid;
+	display: ${(props) => (props.isSame ? 'block' : 'grid')};
 	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 	grid-row-gap: 1rem;
 	grid-column-gap: 1.25rem;
@@ -42,7 +52,7 @@ const StyledInteractCont = styled.div`
             "connect connect"
         ;
 
-		margin-top: 1.5rem;
+		margin-top: ${(props) => (props.isSame ? '-1rem' : '1.5rem')};
 	}
 `;
 
