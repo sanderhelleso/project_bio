@@ -99,7 +99,7 @@ func (f *Followers) Delete(c *gin.Context) {
 		return
 	}
 
-	err := f.fs.Delete(form.UserID, form.UserFollowingID); if err != nil {
+	if err := f.fs.Delete(form.UserID, form.UserFollowingID); err != nil {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
@@ -180,4 +180,31 @@ func (f *Followers) ByUserFollowingID(c *gin.Context) {
 		http.StatusOK,
 		"Followers successfully fetched",
 		following)
+}
+
+// ByReleationship look up a specific follower releationship between two users
+// returns the conditon if a releationship between the two is present or not
+//
+// METHOD: 	POST
+// ROUTE:	/followers/releationship
+//
+// BODY:	FollowForm
+func (f *Followers) ByReleationship(c *gin.Context) {
+
+	var form FollowingForm
+	if c.Bind(&form) != nil {
+		response.RespondWithError(
+			c, 
+			http.StatusUnprocessableEntity, 
+			"Unable to process form data due to invalid format")
+		return
+	}
+
+	have := f.fs.ByReleationship(form.UserID, form.UserFollowingID);
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  http.StatusOK,
+		"message": "Follower Releationship successfully checked!",
+		"payload": have,
+	})
 }

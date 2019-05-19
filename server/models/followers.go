@@ -20,6 +20,7 @@ type FollowerDB interface {
 	// methods for quering follower(s)
 	ByUserID(id uint) (*[]UserData, error)
 	ByUserFollowingID(id uint) (*[]UserData, error)
+	ByReleationship(userID, userFollowingID uint) bool
 
 	// methods for altering followers
 	Create(follower *Follower) error
@@ -131,6 +132,22 @@ func (fg *followerGorm) ByUserFollowingID(id uint) (*[]UserData, error) {
 	var user User
 	following, err := findFollowers(fg.db, user, id)
 	return following, err
+}
+
+// ByReleationship will look up a specific follower releationship between two users
+// returns the conditon if a releationship between the two is present or not
+func (fg *followerGorm) ByReleationship(userID, userFollowingID uint) bool {
+	var follower Follower
+	err := fg.db.Where(
+		"user_id = ? AND user_following_id = ?", 
+		userID, userFollowingID).
+		First(&follower).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return false;
+	}
+
+	return true;
 }
 
 // Create will create the provided follower releationship
