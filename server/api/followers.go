@@ -6,7 +6,7 @@ import (
 	"../lib/middleware"
 )
 
-// FollowerRoutes controll the grouping of auth releated aspects of the app
+// FollowersRoutes controll the grouping of auth releated aspects of the app
 func FollowersRoutes(router *gin.Engine, fc *controllers.Followers) {
 	v1 := router.Group("/api/v1/followers")
 	{

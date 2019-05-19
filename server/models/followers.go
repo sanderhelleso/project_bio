@@ -141,5 +141,19 @@ func (fg *followerGorm) Create(follower *Follower) error {
 
 //Delete will delete the follower with the provided props
 func (fg *followerGorm) Delete(follower *Follower) error {
+	
+	err := fg.db.Where(
+		"userID = ? AND userFollowingID = ?", 
+		follower.UserID, follower.UserFollowingID).
+		First(&follower).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return ErrNotFound
+	}
+
+	if follower.ID == 0 {
+		return ErrIDInvalid
+	}
+
 	return fg.db.Delete(&follower).Error
 }
