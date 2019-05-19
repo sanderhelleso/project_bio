@@ -90,12 +90,12 @@ func (f *Followers) Delete(c *gin.Context) {
 		return
 	}
 
-	follower := models.Follower{ 
-		UserID: form.UserID, 
-		UserFollowingID: form.UserFollowingID,
+	// equal ids not allowed
+	if form.UserID == form.UserFollowingID {
+		return models.ErrIDMissmatch
 	}
 
-	err := f.fs.Delete(&follower); if err != nil {
+	err := f.fs.Delete(form.UserID, form.UserFollowingID); if err != nil {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 

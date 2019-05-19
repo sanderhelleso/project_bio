@@ -23,7 +23,7 @@ type FollowerDB interface {
 
 	// methods for altering followers
 	Create(follower *Follower) error
-	Delete(follower *Follower) error
+	Delete(userID, userFollowingID uint) error
 }
 
 // FollowerService is a set of methods used to mainpulate
@@ -140,20 +140,10 @@ func (fg *followerGorm) Create(follower *Follower) error {
 }
 
 //Delete will delete the follower with the provided props
-func (fg *followerGorm) Delete(follower *Follower) error {
-	
-	err := fg.db.Where(
-		"userID = ? AND userFollowingID = ?", 
-		follower.UserID, follower.UserFollowingID).
-		First(&follower).Error
+func (fg *followerGorm) Delete(userID, userFollowingID uint) error {
 
-	if err == gorm.ErrRecordNotFound {
-		return ErrNotFound
-	}
-
-	if follower.ID == 0 {
-		return ErrIDInvalid
-	}
-
-	return fg.db.Delete(&follower).Error
+	return fg.db.Where(
+		"user_id = ? AND user_following_id = ?", 
+		userID, userFollowingID).
+		Delete(Follower{}).Error
 }
