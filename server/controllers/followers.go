@@ -92,7 +92,11 @@ func (f *Followers) Delete(c *gin.Context) {
 
 	// equal ids not allowed
 	if form.UserID == form.UserFollowingID {
-		return models.ErrIDMissmatch
+		response.RespondWithError(
+			c, 
+			http.StatusBadRequest, 
+			models.ErrIDMissmatch)
+		return
 	}
 
 	err := f.fs.Delete(form.UserID, form.UserFollowingID); if err != nil {
