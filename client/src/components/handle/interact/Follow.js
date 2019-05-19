@@ -4,15 +4,18 @@ import { FlatButton, Button } from '../../styles/Button';
 
 import { follow, unfollow } from '../../../api/profile/interact';
 
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
 import followProfileAction from '../../../actions/followerActions/followProfileAction';
 import unfollowProfileAction from '../../../actions/followerActions/unfollowProfileAction';
 
-const Follow = ({ followProfileAction, unfollowProfileAction, handle, myHandle }) => {
+const Follow = ({ followProfileAction, unfollowProfileAction, userID, userFollowingID }) => {
 	const [ following, setFollowing ] = useState(false);
 	const [ loading, setLoading ] = useState(false);
 
 	// data for performing follow/unfollow actions
-	const data = { handle, myHandle };
+	const data = { userID, userFollowingID };
 
 	const sharedBtnProps = {
 		size: 'small',
@@ -50,7 +53,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = ({ profile }) => {
-	return { handle: profile.viewing.handle, myHandle: profile.handle };
+	return { userID: profile.viewing.userID, userFollowingID: profile.userID };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Follow);

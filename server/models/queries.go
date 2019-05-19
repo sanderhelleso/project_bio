@@ -132,9 +132,7 @@ func findRecomendations(db *gorm.DB, history []*PromoFromHist) ([]*Recomendation
 		// if unable to find, select random
 		if err != nil {
 			p, err = findRandomRecomendation(db, &uniqueIds)
-			if err != nil {
-				continue
-			}
+			if err != nil { continue }
 		}
 
 		// add to map to preserve unique recomendations

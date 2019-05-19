@@ -15,7 +15,7 @@ type FollowingForm struct {
 }
 
 // FollowerForm represents the request body to the endpoints
-// /followers/all - /followes/delete - /followers/following
+// /followers/all - /followers/following
 type FollowerForm struct {
 	UserID	uint `form:"userID"`
 }
@@ -53,7 +53,7 @@ func (f *Followers) Create(c *gin.Context) {
 	}
 
 	follow := models.Follower {
-		UserID: 		 form.UserFollowingID,
+		UserID: 		 form.UserID,
 		UserFollowingID: form.UserFollowingID,
 	}
 
@@ -81,7 +81,7 @@ func (f *Followers) Create(c *gin.Context) {
 //BODY:		FollowForm
 func (f *Followers) Delete(c *gin.Context) {
 
-	var form FollowerForm
+	var form FollowingForm
 	if c.Bind(&form) != nil {
 		response.RespondWithError(
 			c, 
@@ -90,7 +90,12 @@ func (f *Followers) Delete(c *gin.Context) {
 		return
 	}
 
-	err := f.fs.Delete(form.UserID); if err != nil {
+	follower := models.Follower{ 
+		UserID: form.UserID, 
+		UserFollowingID: form.UserFollowingID,
+	}
+
+	err := f.fs.Delete(&follower); if err != nil {
 		response.RespondWithError(
 			c, 
 			http.StatusInternalServerError, 
