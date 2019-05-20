@@ -13,6 +13,7 @@ const ENDPOINTS = {
 	findRecomendations: 'promos/recomendations',
 	followProfile: 'followers/new',
 	unfollowProfile: 'followers/delete',
+	releationship: 'followers/releationship',
 
 	// dynamic endpoints with params
 	getPromo: (handle, id) => `promos/${handle}/${id}`,

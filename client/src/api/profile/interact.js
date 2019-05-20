@@ -20,3 +20,13 @@ export async function unfollow(data) {
 		return error.response.data;
 	}
 }
+
+export async function checkReleationship(data) {
+	try {
+		const response = await API.post(ENDPOINTS.releationship, data);
+		return response.data;
+	} catch (error) {
+		console.log(error.response);
+		return error.response.data;
+	}
+}

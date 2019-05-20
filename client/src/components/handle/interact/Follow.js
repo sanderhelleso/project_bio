@@ -1,22 +1,11 @@
-import React, { useState } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import styled from 'styled-components';
 import { FlatButton, Button } from '../../styles/Button';
 
-import { follow, unfollow } from '../../../api/profile/interact';
+import { follow, unfollow, checkReleationship } from '../../../api/profile/interact';
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-
-import followProfileAction from '../../../actions/followerActions/followProfileAction';
-import unfollowProfileAction from '../../../actions/followerActions/unfollowProfileAction';
-
-const Follow = ({ followProfileAction, unfollowProfileAction, userID, userFollowingID }) => {
-	const [ following, setFollowing ] = useState(false);
-	const [ loading, setLoading ] = useState(false);
-
-	// data for performing follow/unfollow actions
-	const data = { userID, userFollowingID };
-
+const Follow = ({ userID, userFollowingID }) => {
+	// shared props for both buttons of component
 	const sharedBtnProps = {
 		size: 'small',
 		border: true,
@@ -24,13 +13,43 @@ const Follow = ({ followProfileAction, unfollowProfileAction, userID, userFollow
 		onClick: () => followAction()
 	};
 
+	// data for performing follow/unfollow actions
+	const data = { userID, userFollowingID };
+
+	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
+		loading: true,
+		following: false,
+		checkedReleationship: false
+	});
+
+	const { loading, following, checkedReleationship } = state;
+
+	// check releationship on load and determine state
+	useEffect(() => {
+		isFollowing();
+	}, []);
+
+	const isFollowing = async () => {
+		// check if the follower releationship is present
+		// eg user with userFollowingID follows user with userID
+		const response = await checkReleationship(data);
+
+		let have = false;
+		if (response.status < 400) have = response.payload;
+
+		updateState({
+			loading: false,
+			following: have,
+			checkedReleationship: true
+		});
+	};
+
 	const followAction = async () => {
-		setLoading(true);
+		updateState({ loading: false, following: !following });
 
 		await (following ? unfollow(data) : follow(data));
 
-		setFollowing(!following);
-		setLoading(false);
+		updateState({ loading: false });
 	};
 
 	const renderButton = () => {
@@ -45,17 +64,9 @@ const Follow = ({ followProfileAction, unfollowProfileAction, userID, userFollow
 		return <Button {...sharedBtnProps}>Follow</Button>;
 	};
 
-	return <StyledFollow>{renderButton()}</StyledFollow>;
+	return <StyledFollow>{checkedReleationship && renderButton()}</StyledFollow>;
 };
 
-const mapDispatchToProps = (dispatch) => {
-	return bindActionCreators({ followProfileAction, unfollowProfileAction }, dispatch);
-};
-
-const mapStateToProps = ({ profile }) => {
-	return { userID: profile.viewing.userID, userFollowingID: profile.userID };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Follow);
+export default Follow;
 
 const StyledFollow = styled.div`grid-area: follow;`;

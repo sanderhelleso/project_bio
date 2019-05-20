@@ -130,7 +130,7 @@ export const PreviewCard = styled.div`
 export const HandleProfileCard = styled.div`
 	${cardStyles};
 	${handleCardStyles};
-	padding-bottom: 0.5rem;
+	padding-bottom: 1.75rem;
 	display: grid;
 	grid-area: profile;
 `;

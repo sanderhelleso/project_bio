@@ -20,10 +20,11 @@ type FollowerDB interface {
 	// methods for quering follower(s)
 	ByUserID(id uint) (*[]UserData, error)
 	ByUserFollowingID(id uint) (*[]UserData, error)
+	ByReleationship(userID, userFollowingID uint) bool
 
 	// methods for altering followers
 	Create(follower *Follower) error
-	Delete(follower *Follower) error
+	Delete(userID, userFollowingID uint) error
 }
 
 // FollowerService is a set of methods used to mainpulate
@@ -133,6 +134,22 @@ func (fg *followerGorm) ByUserFollowingID(id uint) (*[]UserData, error) {
 	return following, err
 }
 
+// ByReleationship will look up a specific follower releationship between two users
+// returns the conditon if a releationship between the two is present or not
+func (fg *followerGorm) ByReleationship(userID, userFollowingID uint) bool {
+	var follower Follower
+	err := fg.db.Where(
+		"user_id = ? AND user_following_id = ?", 
+		userID, userFollowingID).
+		First(&follower).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return false;
+	}
+
+	return true;
+}
+
 // Create will create the provided follower releationship
 func (fg *followerGorm) Create(follower *Follower) error {
 	err := fg.db.Create(&follower).Error
@@ -140,20 +157,10 @@ func (fg *followerGorm) Create(follower *Follower) error {
 }
 
 //Delete will delete the follower with the provided props
-func (fg *followerGorm) Delete(follower *Follower) error {
-	
-	err := fg.db.Where(
-		"userID = ? AND userFollowingID = ?", 
-		follower.UserID, follower.UserFollowingID).
-		First(&follower).Error
+func (fg *followerGorm) Delete(userID, userFollowingID uint) error {
 
-	if err == gorm.ErrRecordNotFound {
-		return ErrNotFound
-	}
-
-	if follower.ID == 0 {
-		return ErrIDInvalid
-	}
-
-	return fg.db.Delete(&follower).Error
+	return fg.db.Where(
+		"user_id = ? AND user_following_id = ?", 
+		userID, userFollowingID).
+		Delete(Follower{}).Error
 }
