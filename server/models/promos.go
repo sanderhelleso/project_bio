@@ -42,9 +42,9 @@ type PromoDB interface {
 
 	// methods for quering promos
 	ByID(id uint) (*Promo, error)
-	ByUserID(id, offset, limit uint) ([]*Promo, error)
+	ByUserID(userID, offset, limit uint) ([]*Promo, error)
+	RecentByUserID(userID uint) (*Promo, error)
 	FindRecomendations(history []*PromoFromHist) ([]*Recomendation, error)
-
 
 	// methods for altering promos
 	Create(promo *Promo) (uint, error)
@@ -249,8 +249,13 @@ func (pg *promoGorm) FindRecomendations(history []*PromoFromHist) ([]*Recomendat
 }
 
 // ByUserID will attempt to fetch a profiles promos within a given offset range
-func (pg *promoGorm) ByUserID(id, offset, limit uint) ([]*Promo, error) {
-	return findPromosByUserID(pg.db, id, offset, limit)
+func (pg *promoGorm) ByUserID(userID, offset, limit uint) ([]*Promo, error) {
+	return findPromosByUserID(pg.db, userID, offset, limit)
+}
+
+// RecentByUser will attempt to find the first and most recently posted promo for a given user
+func (pg *promoGorm) RecentByUserID(userID uint) (*Promo, error) {
+	return findRecentPromoByUserID(pg.db, userID)
 }
 
 // Seed creates test data for promo

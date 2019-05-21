@@ -16,6 +16,7 @@ func PromosRoutes(router *gin.Engine, pc *controllers.Promos) {
 		v1.POST("/recomendations", pc.FindRecomendations)
 		v1.DELETE("/delete", pc.Delete)
 		v1.GET("/single/:handle/:id", pc.ByID)
+		v1.GET("/recent/:userID", pc.RecentByUserID)
 		v1.GET("/multiple/:userID", pc.ByUserID)
 	}
 }

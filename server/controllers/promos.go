@@ -316,14 +316,14 @@ func (p *Promos) FindRecomendations(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Recomendations successfully fetched",
 		"status":  http.StatusOK,
-		"payload":  recomendations,
+		"payload": recomendations,
 	})
 }
 
 // ByUserID is used to fetch promos releated to the passed in profile ID.
 //
 // METHOD: GET
-// ROUTE: /promos/:handle
+// ROUTE: /promos/multiple/:userID
 //
 // Takes in args of limit and offset to accomendate the query to fetch from
 func (p *Promos) ByUserID(c *gin.Context) {
@@ -332,8 +332,8 @@ func (p *Promos) ByUserID(c *gin.Context) {
 	q := c.Request.URL.Query()
 
 	userID, err := parser.StrToInt(c.Params.ByName("userID")) // user ID
-	offset, oErr := parser.StrToInt(q["offset"][0])  // offset start
-	limit, lErr := parser.StrToInt(q["limit"][0])   // limit after offset (eg : 1 + 9)
+	offset, oErr := parser.StrToInt(q["offset"][0])           // offset start
+	limit, lErr := parser.StrToInt(q["limit"][0])             // limit after offset (eg : 1 + 9)
 
 	if err != nil || oErr != nil || lErr != nil {
 		response.RespondWithError(
@@ -357,5 +357,34 @@ func (p *Promos) ByUserID(c *gin.Context) {
 		"message": "Promotions successfully fetched",
 		"status":  http.StatusOK,
 		"payload": promos,
+	})
+}
+
+// RecentByUserID is used to fetch the latest promo releated to the passed in profile ID.
+//
+// METHOD: GET
+// ROUTE: /promos/recent/:userID
+//
+// Takes in args of limit and offset to accomendate the query to fetch from
+func (p *Promos) RecentByUserID(c *gin.Context) {
+
+	// fetch required params
+	q := c.Request.URL.Query()
+
+	userID, err := parser.StrToInt(c.Params.ByName("userID")) // user ID
+
+	if err != nil {
+		response.RespondWithError(
+			c,
+			http.StatusInternalServerError,
+			"Unable to load promotion",
+		)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Promotions successfully fetched",
+		"status":  http.StatusOK,
+		"payload": nil,
 	})
 }
