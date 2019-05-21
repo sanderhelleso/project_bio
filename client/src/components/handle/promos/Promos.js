@@ -8,7 +8,7 @@ import { getPromos } from '../../../api/promo/promo';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-const Promos = ({ handle }) => {
+const Promos = ({ userID }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		loading: true,
 		promos: [],
@@ -25,20 +25,25 @@ const Promos = ({ handle }) => {
 	const loadPromos = async () => {
 		updateState({ loading: true });
 
-		const response = await getPromos(handle, offset, limit);
+		const response = await getPromos(userID, offset, limit);
 
 		updateState({ loading: false });
 	};
 
+	const renderPromos = () => {
+		return promos.map((promo) => null);
+	};
+
 	return (
 		<HandleSeeMorePromosCard>
-			<p>more</p>
+			{renderPromos()}
+			{loading && <p>Loading...</p>}
 		</HandleSeeMorePromosCard>
 	);
 };
 
-const mapStateToProps = ({ profile: { viewing: { handle } } }) => {
-	return { handle };
+const mapStateToProps = ({ profile: { viewing: { userID } } }) => {
+	return { userID };
 };
 
 export default connect(mapStateToProps, null)(Promos);

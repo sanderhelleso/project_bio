@@ -16,8 +16,8 @@ const ENDPOINTS = {
 	releationship: 'followers/releationship',
 
 	// dynamic endpoints with params
-	getPromo: (handle, id) => `promos/${handle}/${id}`,
-	getPromos: (handle) => `promos/${handle}`,
+	getPromo: (handle, id) => `promos/single/${handle}/${id}`,
+	getPromos: (userID) => `promos/multiple/${userID}`,
 	getComments: (id) => `comments/${id}`,
 	getCommentsCount: (id) => `comments/${id}/count`
 };

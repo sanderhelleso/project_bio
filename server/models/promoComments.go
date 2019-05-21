@@ -106,10 +106,9 @@ type promoCommentGorm struct {
 // ensure interface is matching
 var _ PromoCommentDB = &promoCommentGorm{}
 
-// ByPromoID will look up a promo comment with the provided promo id
+// ByPromoID will attempt to find comments and releated user within a given offset range
 func (pcg *promoCommentGorm) ByPromoID(id, offset, limit uint) ([]*PromoCommentWithUser, error) {
-	comments, err := findCommentsAndUser(pcg.db, id, offset, limit)
-	return comments, err
+	return findCommentsAndUser(pcg.db, id, offset, limit)
 }
 
 // ByResponseID will look up a promo comment with the provided responseTo promo id
