@@ -44,22 +44,15 @@ const ModalShare = () => {
 	};
 
 	return (
-		<StyledCont>
+		<div>
 			<h5>Share</h5>
 			<p>Spread the word! Share this promotion to the world.</p>
 			<StyledIcons>{renderIcons()}</StyledIcons>
-		</StyledCont>
+		</div>
 	);
 };
 
 export default ModalShare;
-
-const StyledCont = styled.div`
-	p {
-		font-size: 0.9rem;
-		color: #757575;
-	}
-`;
 
 const StyledIcons = styled.div`
 	text-align: center;

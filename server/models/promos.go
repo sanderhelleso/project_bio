@@ -42,12 +42,14 @@ type PromoDB interface {
 
 	// methods for quering promos
 	ByID(id uint) (*Promo, error)
+	ByUserID(id, offset, limit uint) ([]*Promo, error)
+	FindRecomendations(history []*PromoFromHist) ([]*Recomendation, error)
+
 
 	// methods for altering promos
 	Create(promo *Promo) (uint, error)
 	Update(promo *Promo) error
 	Delete(id uint) error
-	FindRecomendations(history []*PromoFromHist) ([]*Recomendation, error)
 	Seed()
 }
 
@@ -244,6 +246,11 @@ func (pg *promoGorm) FindRecomendations(history []*PromoFromHist) ([]*Recomendat
 	}
 
 	return recomendations, nil
+}
+
+// ByUserID will attempt to fetch a profiles promos within a given offset range
+func (pg *promoGorm) ByUserID(id, offset, limit uint) ([]*Promo, error) {
+	return findPromosByUserID(pg.db, id, offset, limit)
 }
 
 // Seed creates test data for promo

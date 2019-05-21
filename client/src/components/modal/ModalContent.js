@@ -44,6 +44,11 @@ const StyledContent = styled.div`
 		font-size: 1.5rem;
 	}
 
+	p {
+		font-size: 0.9rem;
+		color: #757575;
+	}
+
 	@media screen and (max-width: 600px) {
 		min-width: 90%;
 		min-height: 90vh;

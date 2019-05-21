@@ -32,6 +32,7 @@ const ModalConnect = () => {
 	return (
 		<StyledCont>
 			<h5>Connect</h5>
+			<p>Connect with 'user'</p>
 			<div id="connections">{renderConnections()}</div>
 		</StyledCont>
 	);

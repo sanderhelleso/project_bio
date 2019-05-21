@@ -217,3 +217,25 @@ func findProductsPreview(db *gorm.DB, id uint) ([]*PromoProduct, error) {
 
 	return previews, nil
 }
+
+// findPromos will find  promos with within the offset -> limit range
+// for a given profile provided with the ID
+func findPromosByUserID(db *gorm.DB, userID, offset, limit uint) ([]*Promo, error) {
+	promos := []*Promo{}
+
+	query := db.
+		Offset(offset).
+		Limit(limit).
+		Table("promos").
+		Select("*").
+		Where("user_id = ?", userID).
+		Order("created_at desc")
+
+	err := query.Find(&promos).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return nil, ErrNotFound
+	}
+
+	return promos, nil
+}
