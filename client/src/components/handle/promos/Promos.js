@@ -4,8 +4,6 @@ import styled from 'styled-components';
 import { HandleSeeMorePromosCard } from '../../styles/Card';
 
 import { getPromos } from '../../../api/promo/promo';
-
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 const Promos = ({ userID }) => {
@@ -23,8 +21,6 @@ const Promos = ({ userID }) => {
 	}, []);
 
 	const loadPromos = async () => {
-		updateState({ loading: true });
-
 		const response = await getPromos(userID, offset, limit);
 
 		updateState({ loading: false });

@@ -373,7 +373,7 @@ func (p *Promos) RecentByUserID(c *gin.Context) {
 		response.RespondWithError(
 			c,
 			http.StatusInternalServerError,
-			"Unable to load promotion",
+			"Unable to load recent promotion",
 		)
 		return
 	}
@@ -388,7 +388,7 @@ func (p *Promos) RecentByUserID(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Promotions successfully fetched",
+		"message": "Recent promotion successfully fetched",
 		"status":  http.StatusOK,
 		"payload": promo,
 	})
