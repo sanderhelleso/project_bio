@@ -367,10 +367,6 @@ func (p *Promos) ByUserID(c *gin.Context) {
 //
 // Takes in args of limit and offset to accomendate the query to fetch from
 func (p *Promos) RecentByUserID(c *gin.Context) {
-
-	// fetch required params
-	q := c.Request.URL.Query()
-
 	userID, err := parser.StrToInt(c.Params.ByName("userID")) // user ID
 
 	if err != nil {
@@ -382,9 +378,18 @@ func (p *Promos) RecentByUserID(c *gin.Context) {
 		return
 	}
 
+	promo, err := p.ps.RecentByUserID(userID)
+	if err != nil {
+		response.RespondWithError(
+			c,
+			http.StatusInternalServerError,
+			err.Error())
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Promotions successfully fetched",
 		"status":  http.StatusOK,
-		"payload": nil,
+		"payload": promo,
 	})
 }
