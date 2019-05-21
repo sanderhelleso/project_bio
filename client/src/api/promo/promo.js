@@ -35,9 +35,11 @@ export async function getPromo(handle, id) {
 	}
 }
 
-export async function getPromos(handle) {
+export async function getPromos(handle, offset, limit) {
+	const params = { offset, limit };
+
 	try {
-		const response = await API.get(ENDPOINTS.getPromos(handle));
+		const response = await API.get(ENDPOINTS.getPromos(handle), { params });
 		return response.data;
 	} catch (error) {
 		console.log(error.response);

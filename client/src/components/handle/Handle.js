@@ -3,10 +3,11 @@ import styled from 'styled-components';
 
 import { getHandle } from '../../api/handle/handle';
 
-import { mainGridStyles, HandleProfileCard, HandleRecentPromoCard, HandleSeeMorePromosCard } from '../styles/Card';
+import { mainGridStyles, HandleProfileCard, HandleRecentPromoCard } from '../styles/Card';
 import Container from '../styles/Container';
 import ProfileInfo from './profile/ProfileInfo';
 import Interact from './interact/Interact';
+import Promos from './promos/Promos';
 
 import { withRouter } from 'react-router-dom';
 
@@ -60,7 +61,7 @@ const Handle = ({ viewProfileAction, match: { params } }) => {
 						<ProfileInfo {...profile} />
 						<Interact />
 					</HandleProfileCard>
-					<HandleSeeMorePromosCard />
+					<Promos />
 				</StyledHandleGrid>
 			</Container>
 		);
