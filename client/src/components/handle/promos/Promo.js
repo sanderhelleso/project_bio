@@ -2,11 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { HandlePromoCard } from '../../styles/Card';
+import PromoImages from './PromoImages';
+import PromoInfo from './PromoInfo';
 
-const Promo = ({ title }) => {
+const Promo = ({ promo }) => {
 	return (
 		<HandlePromoCard>
-			<h5>{title}</h5>
+			<PromoImages images={[ 1, 2, 3 ]} />
+			<PromoInfo {...promo} />
 		</HandlePromoCard>
 	);
 };

@@ -151,5 +151,7 @@ export const HandleSeeMorePromosCard = styled.div`
 
 export const HandlePromoCard = styled.div`
 	${cardStyles};
-	padding: 2rem;
+
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
 `;
