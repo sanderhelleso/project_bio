@@ -3,11 +3,12 @@ import styled from 'styled-components';
 
 import { getHandle } from '../../api/handle/handle';
 
-import { mainGridStyles, HandleProfileCard, HandleRecentPromoCard } from '../styles/Card';
+import { mainGridStyles, HandleProfileCard } from '../styles/Card';
 import Container from '../styles/Container';
 import ProfileInfo from './profile/ProfileInfo';
 import Interact from './interact/Interact';
 import Promos from './promos/Promos';
+import Recent from '../promo/recent/Recent';
 
 import { withRouter } from 'react-router-dom';
 
@@ -56,7 +57,7 @@ const Handle = ({ viewProfileAction, match: { params } }) => {
 		return (
 			<Container max={85}>
 				<StyledHandleGrid>
-					<HandleRecentPromoCard />
+					<Recent />
 					<HandleProfileCard>
 						<ProfileInfo {...profile} />
 						<Interact />

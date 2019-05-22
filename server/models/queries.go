@@ -132,7 +132,9 @@ func findRecomendations(db *gorm.DB, history []*PromoFromHist) ([]*Recomendation
 		// if unable to find, select random
 		if err != nil {
 			p, err = findRandomRecomendation(db, &uniqueIds)
-			if err != nil { continue }
+			if err != nil {
+				continue
+			}
 		}
 
 		// add to map to preserve unique recomendations
@@ -238,4 +240,24 @@ func findPromosByUserID(db *gorm.DB, userID, offset, limit uint) ([]*Promo, erro
 	}
 
 	return promos, nil
+}
+
+// findRecentPromoByUserID finds the first and most recently posted promo
+// for a given user identified by the passed in user ID
+func findRecentPromoByUserID(db *gorm.DB, userID uint) (*Promo, error) {
+	var promo Promo
+
+	query := db.
+		Table("promos").
+		Select("*").
+		Where("user_id = ?", userID).
+		Order("created_at desc")
+
+	err := query.First(&promo).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return nil, ErrNotFound
+	}
+
+	return &promo, nil
 }

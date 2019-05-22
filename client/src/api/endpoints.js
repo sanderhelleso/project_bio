@@ -18,6 +18,7 @@ const ENDPOINTS = {
 	// dynamic endpoints with params
 	getPromo: (handle, id) => `promos/single/${handle}/${id}`,
 	getPromos: (userID) => `promos/multiple/${userID}`,
+	getRecentPromo: (userID) => `promos/recent/${userID}`,
 	getComments: (id) => `comments/${id}`,
 	getCommentsCount: (id) => `comments/${id}/count`
 };

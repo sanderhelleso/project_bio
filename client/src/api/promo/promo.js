@@ -46,3 +46,13 @@ export async function getPromos(userID, offset, limit) {
 		return error.response.data;
 	}
 }
+
+export async function getRecentPromo(userID) {
+	try {
+		const response = await API.get(ENDPOINTS.getRecentPromo(userID));
+		return response.data;
+	} catch (error) {
+		console.log(error.response);
+		return error.response.data;
+	}
+}
