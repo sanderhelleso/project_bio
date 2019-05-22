@@ -148,3 +148,8 @@ export const HandleSeeMorePromosCard = styled.div`
 	display: grid;
 	grid-area: seeMorePromos;
 `;
+
+export const HandlePromoCard = styled.div`
+	${cardStyles};
+	padding: 2rem;
+`;
