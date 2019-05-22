@@ -2,11 +2,12 @@ import React, { useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 
 import { HandleSeeMorePromosCard } from '../../styles/Card';
+import Promo from './Promo';
 
 import { getPromos } from '../../../api/promo/promo';
 import { connect } from 'react-redux';
 
-const Promos = ({ userID }) => {
+const Promos = ({ userID, handle }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		loading: true,
 		promos: [],
@@ -22,24 +23,49 @@ const Promos = ({ userID }) => {
 
 	const loadPromos = async () => {
 		const response = await getPromos(userID, offset, limit);
+		if (response.status < 400) {
+			return updateState({
+				loading: false,
+				promos: response.payload,
+				offset: offset + limit
+			});
+		}
 
 		updateState({ loading: false });
 	};
 
 	const renderPromos = () => {
-		return promos.map((promo) => null);
+		return promos.map((promo) => <Promo key={promo.ID} {...promo} />);
 	};
 
 	return (
-		<HandleSeeMorePromosCard>
-			{renderPromos()}
+		<StyledCont>
+			<h3>More from {handle}</h3>
+			<StyledPromosCont>{renderPromos()}</StyledPromosCont>
 			{loading && <p>Loading...</p>}
-		</HandleSeeMorePromosCard>
+		</StyledCont>
 	);
 };
 
-const mapStateToProps = ({ profile: { viewing: { userID } } }) => {
-	return { userID };
+const mapStateToProps = ({ profile: { viewing: { userID, handle } } }) => {
+	return { userID, handle };
 };
 
 export default connect(mapStateToProps, null)(Promos);
+
+const StyledCont = styled.div`grid-area: seeMorePromos;`;
+
+const StyledPromosCont = styled.div`
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	grid-row-gap: 4rem;
+	grid-column-gap: 3rem;
+
+	@media screen and (max-width: 1000px) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	@media screen and (max-width: 600px) {
+		grid-template-columns: minmax(0, 1fr);
+	}
+`;
