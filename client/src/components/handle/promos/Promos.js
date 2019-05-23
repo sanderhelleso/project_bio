@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, Fragment } from 'react';
 import styled from 'styled-components';
 
 import { HandleSeeMorePromosCard } from '../../styles/Card';
@@ -38,13 +38,20 @@ const Promos = ({ userID, handle }) => {
 		return promos.map((promo) => <Promo key={promo.ID} promo={promo} />);
 	};
 
-	return (
-		<StyledCont>
-			<h3>More from {handle}</h3>
-			<StyledPromosCont>{renderPromos()}</StyledPromosCont>
-			{loading && <p>Loading...</p>}
-		</StyledCont>
-	);
+	const render = () => {
+		if (loading) return <p>Loading...</p>;
+
+		if (promos.length) {
+			return (
+				<Fragment>
+					<StyledHeading>More from {handle}</StyledHeading>
+					<StyledPromosCont>{renderPromos()}</StyledPromosCont>
+				</Fragment>
+			);
+		}
+	};
+
+	return <StyledCont>{render()}</StyledCont>;
 };
 
 const mapStateToProps = ({ profile: { viewing: { userID, handle } } }) => {
@@ -68,4 +75,13 @@ const StyledPromosCont = styled.div`
 	@media screen and (max-width: 600px) {
 		grid-template-columns: minmax(0, 1fr);
 	}
+`;
+
+const StyledHeading = styled.h5`
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	margin-bottom: 5rem;
+	font-size: 1.5rem;
+	color: #253858;
 `;

@@ -8,7 +8,7 @@ const theme = {
 	borderColor: '#E0E0E0',
 	disabledBg: '#E0E0E0',
 	disabledColor: '#9E9E9E',
-	weakerTxt: ' #253858'
+	weakerTxt: '#253858'
 };
 
 export default theme;
