@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const PromoImage = () => {
+import Lightbox from 'react-image-lightbox';
+
+const PromoImage = ({ image }) => {
 	const setSrc = () => {
 		const n = Math.floor(Math.random() * 3);
 
@@ -14,9 +16,13 @@ const PromoImage = () => {
 		return 'https://d5dnlg5k9nac9.cloudfront.net/processed/thumbs/1be59757014205d43bfa5f60e9ad17a6ce12474b_r791_530.png';
 	};
 
+	const [ isOpen, modifyLightbox ] = useState(false);
+	const [ imageSrc, setImageSrc ] = useState(setSrc());
+
 	return (
 		<StyledImgParent>
-			<StyledImgChild src={setSrc()} />
+			<StyledImgChild src={imageSrc} onClick={() => modifyLightbox(!isOpen)} />
+			{isOpen && <Lightbox mainSrc={imageSrc} onCloseRequest={() => modifyLightbox(!isOpen)} />}
 		</StyledImgParent>
 	);
 };
@@ -33,6 +39,7 @@ const StyledImgChild = styled.div`
 	transition: all 0.5s ease;
 	min-width: 100%;
 	min-height: 100%;
+	cursor: pointer;
 
 	&:hover,
 	&:focus {
