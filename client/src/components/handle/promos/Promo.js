@@ -6,9 +6,13 @@ import PromoImages from './PromoImages';
 import PromoInfo from './PromoInfo';
 
 const Promo = ({ promo }) => {
+	const setImgs = () => {
+		return new Array(Math.floor(Math.random() * 3) + 1).fill(0);
+	};
+
 	return (
 		<HandlePromoCard>
-			<PromoImages images={[ 1, 2, 3 ]} />
+			<PromoImages images={setImgs()} />
 			<PromoInfo {...promo} />
 		</HandlePromoCard>
 	);

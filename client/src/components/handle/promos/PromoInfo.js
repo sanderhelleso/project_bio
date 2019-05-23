@@ -11,4 +11,7 @@ const PromoInfo = ({ title }) => {
 
 export default PromoInfo;
 
-const StyledInfo = styled.div`padding: 1rem;`;
+const StyledInfo = styled.div`
+	padding: 1rem;
+	min-height: 150px;
+`;
