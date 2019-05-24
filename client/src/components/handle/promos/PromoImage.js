@@ -19,9 +19,13 @@ const PromoImage = ({ image }) => {
 	const [ isOpen, modifyLightbox ] = useState(false);
 	const [ imageSrc, setImageSrc ] = useState(setSrc());
 
+	const setRot = () => {
+		return Math.floor(Math.random() * 2);
+	};
+
 	return (
 		<StyledImgParent>
-			<StyledImgChild src={imageSrc} onClick={() => modifyLightbox(!isOpen)} />
+			<StyledImgChild rot={setRot()} src={imageSrc} onClick={() => modifyLightbox(!isOpen)} />
 			{isOpen && <Lightbox mainSrc={imageSrc} onCloseRequest={() => modifyLightbox(!isOpen)} />}
 		</StyledImgParent>
 	);
@@ -43,6 +47,6 @@ const StyledImgChild = styled.div`
 
 	&:hover,
 	&:focus {
-		transform: scale(1.2);
+		transform: ${(props) => `rotate(${props.rot ? 5 : -5}deg)`} scale(1.2);
 	}
 `;

@@ -34,6 +34,8 @@ const Single = ({ viewPromoAction, addToHistoryAction, match: { params }, histor
 	useEffect(() => {
 		// TODO: check if same promo is already loaded
 		async function loadPromo() {
+			window.scrollTo(0, 0);
+
 			// attempt to load promo by the given handler and param ID
 			const { handle, id } = params;
 			const response = await getPromo(handle, id);

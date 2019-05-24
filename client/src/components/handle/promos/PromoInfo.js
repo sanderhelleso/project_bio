@@ -2,13 +2,24 @@ import React from 'react';
 import styled from 'styled-components';
 import FeatherIcons from 'feather-icons-react';
 
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+
 import { getFormatedDateAndTime } from '../../../lib/format';
 
-const PromoInfo = ({ title, description, CreatedAt, discount }) => {
+const PromoInfo = ({ handle, title, description, CreatedAt, discount, ID, history }) => {
+	const formatTitle = () => {
+		if (title.length > 20) {
+			return `${title.substring(0, 20)}...`;
+		}
+
+		return title;
+	};
+
 	return (
 		<StyledInfo>
 			<div className="info-cont">
-				<h5>{title}</h5>
+				<h5>{formatTitle()}</h5>
 				<span className="posted-at">{getFormatedDateAndTime(new Date(CreatedAt).getTime())}</span>
 				<p>{description}</p>
 			</div>
@@ -16,7 +27,7 @@ const PromoInfo = ({ title, description, CreatedAt, discount }) => {
 				<span className="discount">
 					<span>{discount}% OFF</span>
 				</span>
-				<span className="to-promo">
+				<span className="to-promo" onClick={() => history.push(`/${handle}/promos/${ID}`)}>
 					<FeatherIcons icon="arrow-right-circle" />
 				</span>
 			</StyledCont>
@@ -24,7 +35,11 @@ const PromoInfo = ({ title, description, CreatedAt, discount }) => {
 	);
 };
 
-export default PromoInfo;
+const mapStateToProps = ({ profile: { viewing: { handle } } }) => {
+	return { handle };
+};
+
+export default connect(mapStateToProps, null)(withRouter(PromoInfo));
 
 const StyledInfo = styled.div`
 	.info-cont {
@@ -56,6 +71,7 @@ const StyledCont = styled.div`
 	min-height: 60px;
 	min-width: 100%;
 	position: relative;
+	margin-top: 1rem;
 
 	.discount {
 		border-radius: 0% 100% 16% 84% / 100% 34% 66% 0%;
