@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import { getFormatedDateAndTime } from '../../../lib/format';
 
-const PromoInfo = ({ handle, title, description, CreatedAt, discount, ID, history }) => {
+const PromoInfo = ({ handle, title, description, createdAt, discount, ID, history }) => {
 	const formatTitle = () => {
 		if (title.length > 20) {
 			return `${title.substring(0, 20)}...`;
@@ -20,7 +20,7 @@ const PromoInfo = ({ handle, title, description, CreatedAt, discount, ID, histor
 		<StyledInfo>
 			<div className="info-cont">
 				<h5>{formatTitle()}</h5>
-				<span className="posted-at">{getFormatedDateAndTime(new Date(CreatedAt).getTime())}</span>
+				<span className="posted-at">{getFormatedDateAndTime(new Date(createdAt).getTime())}</span>
 				<p>{description}</p>
 			</div>
 			<StyledCont>
