@@ -5,15 +5,15 @@ import { HandlePromoCard } from '../../styles/Card';
 import PromoImages from './PromoImages';
 import PromoInfo from './PromoInfo';
 
-const Promo = ({ promo }) => {
-	const setImgs = () => {
-		return new Array(Math.floor(Math.random() * 3) + 1).fill(0);
+const Promo = ({ title, description, discount, createdAt, promoID, previews }) => {
+	const formatImages = () => {
+		return previews.map((preview) => preview.image);
 	};
 
 	return (
 		<HandlePromoCard>
-			<PromoImages images={setImgs()} />
-			<PromoInfo {...promo} />
+			<PromoImages images={formatImages()} />
+			<PromoInfo {...{ title, description, discount, createdAt, promoID }} />
 		</HandlePromoCard>
 	);
 };

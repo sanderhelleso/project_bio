@@ -4,24 +4,10 @@ import styled from 'styled-components';
 import Lightbox from 'react-image-lightbox';
 
 const PromoImage = ({ image }) => {
-	const setSrc = () => {
-		const n = Math.floor(Math.random() * 3);
-
-		if (n === 0) {
-			return 'https://s23209.pcdn.co/wp-content/uploads/2018/10/Korean-Beef-TacosIMG_6959.jpg';
-		} else if (n === 1) {
-			return 'https://cdn-image.foodandwine.com/sites/default/files/texas-chile-short-rib-tacos-xl-recipe0317.jpg';
-		}
-
-		return 'https://d5dnlg5k9nac9.cloudfront.net/processed/thumbs/1be59757014205d43bfa5f60e9ad17a6ce12474b_r791_530.png';
-	};
-
 	const [ isOpen, modifyLightbox ] = useState(false);
-	const [ imageSrc, setImageSrc ] = useState(setSrc());
+	const [ imageSrc, setImageSrc ] = useState(image);
 
-	const setRot = () => {
-		return Math.floor(Math.random() * 2);
-	};
+	const setRot = () => Math.floor(Math.random() * 2);
 
 	return (
 		<StyledImgParent>

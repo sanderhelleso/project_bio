@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import { getFormatedDateAndTime } from '../../../lib/format';
 
-const PromoInfo = ({ handle, title, description, createdAt, discount, ID, history }) => {
+const PromoInfo = ({ title, description, createdAt, discount, promoID, handle, history }) => {
 	const formatTitle = () => {
 		if (title.length > 20) {
 			return `${title.substring(0, 20)}...`;
@@ -27,7 +27,7 @@ const PromoInfo = ({ handle, title, description, createdAt, discount, ID, histor
 				<span className="discount">
 					<span>{discount}% OFF</span>
 				</span>
-				<span className="to-promo" onClick={() => history.push(`/${handle}/promos/${ID}`)}>
+				<span className="to-promo" onClick={() => history.push(`/${handle}/promos/${promoID}`)}>
 					<FeatherIcons icon="arrow-right-circle" />
 				</span>
 			</StyledCont>

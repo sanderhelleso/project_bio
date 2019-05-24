@@ -35,7 +35,7 @@ const Promos = ({ userID, handle }) => {
 	};
 
 	const renderPromos = () => {
-		return promos.map((promo) => <Promo key={promo.promoID} promo={promo} />);
+		return promos.map((promo) => <Promo key={promo.promoID} {...promo} />);
 	};
 
 	const render = () => {

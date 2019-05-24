@@ -6,7 +6,7 @@ import PromoImage from './PromoImage';
 const PromoImages = ({ images }) => {
 	const renderImages = () => {
 		return images.map((image, i) => {
-			return <PromoImage key={i} />;
+			return <PromoImage key={i} image={image} />;
 		});
 	};
 
