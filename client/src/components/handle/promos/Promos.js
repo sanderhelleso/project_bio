@@ -11,22 +11,34 @@ const Promos = ({ userID, handle }) => {
 	const [ state, updateState ] = useReducer((state, newState) => ({ ...state, ...newState }), {
 		loading: true,
 		promos: [],
+		endReached: false, // set to true if all promos are loaded
 		offset: 1, // keep tracks of where to fetch next batch from, start at 1 to exclude most recent
 		limit: 9 // num of promos to fetch at a time
 	});
 
-	const { loading, promos, limit, offset } = state;
+	const { loading, promos, endReached, limit, offset } = state;
 
 	useEffect(() => {
 		loadPromos();
 	}, []);
 
+	// infinite scroll, loads more promos on page end
+	window.onscroll = () => {
+		const inner = window.innerHeight + document.documentElement.scrollTop;
+		const outer = document.documentElement.offsetHeight;
+		if (inner >= outer - 200 && !loading && !endReached) {
+			loadPromos();
+		}
+	};
+
 	const loadPromos = async () => {
+		updateState({ loading: true });
 		const response = await getPromos(userID, offset, limit);
 		if (response.status < 400) {
 			return updateState({
 				loading: false,
-				promos: response.payload,
+				endReached: response.payload.length < limit,
+				promos: [ ...promos, ...response.payload ],
 				offset: offset + limit
 			});
 		}
@@ -39,8 +51,6 @@ const Promos = ({ userID, handle }) => {
 	};
 
 	const render = () => {
-		if (loading) return <p>Loading...</p>;
-
 		if (promos.length) {
 			return (
 				<Fragment>
@@ -49,9 +59,17 @@ const Promos = ({ userID, handle }) => {
 				</Fragment>
 			);
 		}
+
+		return null;
 	};
 
-	return <StyledCont>{render()}</StyledCont>;
+	return (
+		<StyledCont>
+			{render()}
+			{loading && <p>Loading...</p>}
+			{endReached && <h5>You reached the end</h5>}
+		</StyledCont>
+	);
 };
 
 const mapStateToProps = ({ profile: { viewing: { userID, handle } } }) => {

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { fadeIn } from './Keyframes';
 
 const cardStyles = `
     box-shadow: 0px 7.5px 15px rgba(0,0,0,0.1);
@@ -151,6 +152,7 @@ export const HandleSeeMorePromosCard = styled.div`
 
 export const HandlePromoCard = styled.div`
 	${cardStyles};
+	animation: ${fadeIn} 0.3s ease-in-out;
 
 	display: grid;
 	grid-template-columns: minmax(0, 1fr);
