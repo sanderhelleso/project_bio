@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { fadeIn } from './Keyframes';
 
 const cardStyles = `
     box-shadow: 0px 7.5px 15px rgba(0,0,0,0.1);
@@ -130,6 +131,8 @@ export const PreviewCard = styled.div`
 export const HandleProfileCard = styled.div`
 	${cardStyles};
 	${handleCardStyles};
+	animation: ${fadeIn} 0.6s ease-in-out;
+
 	padding-bottom: 1.75rem;
 	display: grid;
 	grid-area: profile;
@@ -138,6 +141,8 @@ export const HandleProfileCard = styled.div`
 export const HandleRecentPromoCard = styled.div`
 	${cardStyles};
 	${handleCardStyles};
+	animation: ${fadeIn} 0.6s ease-in-out;
+
 	display: grid;
 	grid-area: recentPromo;
 `;
@@ -145,11 +150,15 @@ export const HandleRecentPromoCard = styled.div`
 export const HandleSeeMorePromosCard = styled.div`
 	${cardStyles};
 	${handleCardStyles};
+	animation: ${fadeIn} 0.6s ease-in-out;
 	display: grid;
 	grid-area: seeMorePromos;
 `;
 
 export const HandlePromoCard = styled.div`
 	${cardStyles};
-	padding: 2rem;
+	animation: ${fadeIn} 0.6s ease-in-out;
+
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
 `;

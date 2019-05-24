@@ -222,8 +222,8 @@ func findProductsPreview(db *gorm.DB, id uint) ([]*PromoProduct, error) {
 
 // findPromos will find  promos with within the offset -> limit range
 // for a given profile provided with the ID
-func findPromosByUserID(db *gorm.DB, userID, offset, limit uint) ([]*Promo, error) {
-	promos := []*Promo{}
+func findPromosByUserID(db *gorm.DB, userID, offset, limit uint) ([]*PromoPreview, error) {
+	promos := []*PromoPreview{}
 
 	query := db.
 		Offset(offset).
@@ -239,13 +239,19 @@ func findPromosByUserID(db *gorm.DB, userID, offset, limit uint) ([]*Promo, erro
 		return nil, ErrNotFound
 	}
 
+	for _, promo := range promos {
+		if previews, err := findProductsPreview(db, promo.ID); err == nil {
+			promo.Previews = previews;
+		}
+	}
+
 	return promos, nil
 }
 
 // findRecentPromoByUserID finds the first and most recently posted promo
 // for a given user identified by the passed in user ID
-func findRecentPromoByUserID(db *gorm.DB, userID uint) (*Promo, error) {
-	var promo Promo
+func findRecentPromoByUserID(db *gorm.DB, userID uint) (*PromoPreview, error) {
+	var promo PromoPreview
 
 	query := db.
 		Table("promos").
@@ -257,6 +263,10 @@ func findRecentPromoByUserID(db *gorm.DB, userID uint) (*Promo, error) {
 
 	if err == gorm.ErrRecordNotFound {
 		return nil, ErrNotFound
+	}
+
+	if previews, err := findProductsPreview(db, promo.ID); err == nil {
+		promo.Previews = previews;
 	}
 
 	return &promo, nil

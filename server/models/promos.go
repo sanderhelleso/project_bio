@@ -37,13 +37,23 @@ type PromoFromHist struct {
 	Category string `json:"category"`
 }
 
+// PromoPreview represents a promotion preview for a users handle profile
+type PromoPreview struct {
+	ID          uint            `json:"promoID"`
+	CreatedAt   time.Time		`json:"createdAt"`
+	Title       string    		`json:"title"`
+	Description string    		`json:"description"`
+	Discount    uint      		`json:"discount"`
+	Previews    []*PromoProduct `json:"previews"`
+}
+
 // PromoDB is used to interact with the promos database
 type PromoDB interface {
 
 	// methods for quering promos
 	ByID(id uint) (*Promo, error)
-	ByUserID(userID, offset, limit uint) ([]*Promo, error)
-	RecentByUserID(userID uint) (*Promo, error)
+	ByUserID(userID, offset, limit uint) ([]*PromoPreview, error)
+	RecentByUserID(userID uint) (*PromoPreview, error)
 	FindRecomendations(history []*PromoFromHist) ([]*Recomendation, error)
 
 	// methods for altering promos
@@ -249,12 +259,12 @@ func (pg *promoGorm) FindRecomendations(history []*PromoFromHist) ([]*Recomendat
 }
 
 // ByUserID will attempt to fetch a profiles promos within a given offset range
-func (pg *promoGorm) ByUserID(userID, offset, limit uint) ([]*Promo, error) {
+func (pg *promoGorm) ByUserID(userID, offset, limit uint) ([]*PromoPreview, error) {
 	return findPromosByUserID(pg.db, userID, offset, limit)
 }
 
 // RecentByUser will attempt to find the first and most recently posted promo for a given user
-func (pg *promoGorm) RecentByUserID(userID uint) (*Promo, error) {
+func (pg *promoGorm) RecentByUserID(userID uint) (*PromoPreview, error) {
 	return findRecentPromoByUserID(pg.db, userID)
 }
 
