@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer, useEffect, Fragment } from 'react';
 import styled from 'styled-components';
 
 import { getHandle } from '../../api/handle/handle';
@@ -9,6 +9,8 @@ import ProfileInfo from './profile/ProfileInfo';
 import Interact from './interact/Interact';
 import Promos from './promos/Promos';
 import Recent from '../promo/recent/Recent';
+import HandleLoader from './HandleLoader';
+import { load } from '../styles/Keyframes';
 
 import { withRouter } from 'react-router-dom';
 
@@ -47,7 +49,7 @@ const Handle = ({ viewProfileAction, match: { params } }) => {
 
 	const renderHandle = () => {
 		if (loading) {
-			return <p>Loading</p>;
+			return <HandleLoader />;
 		}
 
 		if (error) {
@@ -55,20 +57,22 @@ const Handle = ({ viewProfileAction, match: { params } }) => {
 		}
 
 		return (
-			<Container max={85}>
-				<StyledHandleGrid>
-					<Recent />
-					<HandleProfileCard>
-						<ProfileInfo {...profile} />
-						<Interact />
-					</HandleProfileCard>
-					<Promos />
-				</StyledHandleGrid>
-			</Container>
+			<Fragment>
+				<Recent />
+				<HandleProfileCard>
+					<ProfileInfo {...profile} />
+					<Interact />
+				</HandleProfileCard>
+				<Promos />
+			</Fragment>
 		);
 	};
 
-	return renderHandle();
+	return (
+		<Container max={85}>
+			<StyledHandleGrid>{renderHandle()}</StyledHandleGrid>
+		</Container>
+	);
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -86,4 +90,11 @@ const StyledHandleGrid = styled.div`
 		"recentPromo profile"
 		"seeMorePromos seeMorePromos"
 	;
+
+	.loader {
+		background-color: #e0e0e0;
+		border-radius: 4px;
+		min-height: 500px;
+		animation: ${load} 2s infinite;
+	}
 `;

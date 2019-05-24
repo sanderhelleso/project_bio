@@ -131,6 +131,8 @@ export const PreviewCard = styled.div`
 export const HandleProfileCard = styled.div`
 	${cardStyles};
 	${handleCardStyles};
+	animation: ${fadeIn} 0.6s ease-in-out;
+
 	padding-bottom: 1.75rem;
 	display: grid;
 	grid-area: profile;
@@ -139,6 +141,8 @@ export const HandleProfileCard = styled.div`
 export const HandleRecentPromoCard = styled.div`
 	${cardStyles};
 	${handleCardStyles};
+	animation: ${fadeIn} 0.6s ease-in-out;
+
 	display: grid;
 	grid-area: recentPromo;
 `;
@@ -146,6 +150,7 @@ export const HandleRecentPromoCard = styled.div`
 export const HandleSeeMorePromosCard = styled.div`
 	${cardStyles};
 	${handleCardStyles};
+	animation: ${fadeIn} 0.6s ease-in-out;
 	display: grid;
 	grid-area: seeMorePromos;
 `;
