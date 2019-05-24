@@ -152,7 +152,7 @@ export const HandleSeeMorePromosCard = styled.div`
 
 export const HandlePromoCard = styled.div`
 	${cardStyles};
-	animation: ${fadeIn} 0.3s ease-in-out;
+	animation: ${fadeIn} 0.6s ease-in-out;
 
 	display: grid;
 	grid-template-columns: minmax(0, 1fr);

@@ -22,7 +22,7 @@ export default PromoImage;
 const StyledImgParent = styled.div`overflow: hidden;`;
 
 const StyledImgChild = styled.div`
-	background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.3)), url(${(props) => props.src});
+	background: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url(${(props) => props.src});
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;

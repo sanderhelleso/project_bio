@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { HandleSeeMorePromosCard } from '../../styles/Card';
 import Promo from './Promo';
+import PromosLoader from './PromosLoader';
 
 import { getPromos } from '../../../api/promo/promo';
 import { connect } from 'react-redux';
@@ -26,7 +27,7 @@ const Promos = ({ userID, handle }) => {
 	window.onscroll = () => {
 		const inner = window.innerHeight + document.documentElement.scrollTop;
 		const outer = document.documentElement.offsetHeight;
-		if (inner >= outer - 200 && !loading && !endReached) {
+		if (inner >= outer - 100 && !loading && !endReached) {
 			loadPromos();
 		}
 	};
@@ -66,8 +67,7 @@ const Promos = ({ userID, handle }) => {
 	return (
 		<StyledCont>
 			{render()}
-			{loading && <p>Loading...</p>}
-			{endReached && <h5>You reached the end</h5>}
+			{loading && <PromosLoader />}
 		</StyledCont>
 	);
 };
