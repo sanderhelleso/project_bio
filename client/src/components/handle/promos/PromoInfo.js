@@ -42,9 +42,10 @@ const mapStateToProps = ({ profile: { viewing: { handle } } }) => {
 export default connect(mapStateToProps, null)(withRouter(PromoInfo));
 
 const StyledInfo = styled.div`
+	position: relative;
 	.info-cont {
 		padding: 1rem;
-		min-height: 150px;
+		min-height: 265px;
 	}
 
 	h5 {
@@ -70,7 +71,8 @@ const StyledInfo = styled.div`
 const StyledCont = styled.div`
 	min-height: 60px;
 	min-width: 100%;
-	position: relative;
+	position: absolute;
+	bottom: 0;
 	margin-top: 1rem;
 
 	.discount {

@@ -134,12 +134,11 @@ export const HandleProfileCard = styled.div`
 	animation: ${fadeIn} 0.6s ease-in-out;
 
 	padding-bottom: 1.75rem;
-	display: grid;
+	max-height: 500px;
 	grid-area: profile;
 `;
 
 export const HandleRecentPromoCard = styled.div`
-	${cardStyles};
 	${handleCardStyles};
 	animation: ${fadeIn} 0.6s ease-in-out;
 
